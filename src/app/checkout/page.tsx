@@ -34,18 +34,18 @@ export default function CheckoutPage() {
     // Only allow digits
     const digits = value.replace(/\D/g, "");
 
-    // Format as +7 (XXX) XXX-XX-XX
+    // Format as +992 XX XXX-XX-XX
     let formatted = "";
     if (digits.length > 0) {
-      formatted = "+7";
-      if (digits.length > 1) {
-        formatted += " (" + digits.slice(1, 4);
-        if (digits.length > 4) {
-          formatted += ") " + digits.slice(4, 7);
-          if (digits.length > 7) {
-            formatted += "-" + digits.slice(7, 9);
-            if (digits.length > 9) {
-              formatted += "-" + digits.slice(9, 11);
+      formatted = "+992";
+      if (digits.length > 3) {
+        formatted += " " + digits.slice(3, 5);
+        if (digits.length > 5) {
+          formatted += " " + digits.slice(5, 8);
+          if (digits.length > 8) {
+            formatted += "-" + digits.slice(8, 10);
+            if (digits.length > 10) {
+              formatted += "-" + digits.slice(10, 12);
             }
           }
         }
@@ -56,14 +56,14 @@ export default function CheckoutPage() {
 
   const handlePhoneChange = (value: string) => {
     const digits = value.replace(/\D/g, "");
-    if (digits.length <= 11) {
-      setPhone(formatPhone(digits));
+    if (digits.length <= 12) {
+      setPhone(formatPhone(digits.startsWith("992") ? digits : "992" + digits));
     }
   };
 
   const handleSendOtp = async () => {
     const digits = phone.replace(/\D/g, "");
-    if (digits.length !== 11) return;
+    if (digits.length !== 12) return;
 
     clearError();
     try {
@@ -185,7 +185,7 @@ export default function CheckoutPage() {
               type="tel"
               value={phone}
               onChange={(e) => handlePhoneChange(e.target.value)}
-              placeholder="+7 (___) ___-__-__"
+              placeholder="+992 __ ___-__-__"
               className="text-center text-xl"
               error={error || undefined}
             />
@@ -195,7 +195,7 @@ export default function CheckoutPage() {
               className="w-full"
               size="lg"
               isLoading={isLoading}
-              disabled={phone.replace(/\D/g, "").length !== 11}
+              disabled={phone.replace(/\D/g, "").length !== 12}
             >
               Получить код
             </Button>
