@@ -23,7 +23,9 @@ function HomeContent() {
             router.replace("/menu");
           })
           .catch(() => {
-            // Table not found, redirect to menu anyway
+            // API failed, but still save table number for later
+            // Use table number as temporary ID
+            setTable(`table-${tableNumber}`, tableNumber);
             router.replace("/menu");
           });
         return;
