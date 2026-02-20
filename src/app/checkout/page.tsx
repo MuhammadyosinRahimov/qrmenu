@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useTableStore } from "@/stores/tableStore";
-import { createOrder } from "@/lib/api";
+import { createOrder, getTableByNumber } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
@@ -17,7 +17,7 @@ export default function CheckoutPage() {
   const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
   const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError } =
     useAuthStore();
-  const { tableId } = useTableStore();
+  const { tableId, tableNumber } = useTableStore();
 
   const [step, setStep] = useState<Step>(isAuthenticated ? "confirm" : "phone");
   const [phone, setPhone] = useState("");
@@ -88,7 +88,7 @@ export default function CheckoutPage() {
   };
 
   const handleSubmitOrder = async () => {
-    if (!tableId) {
+    if (!tableId && !tableNumber) {
       setSubmitError("Стол не определён. Отсканируйте QR-код.");
       return;
     }
@@ -97,6 +97,26 @@ export default function CheckoutPage() {
     setSubmitError(null);
 
     try {
+      // Resolve real table ID if we have a fallback ID
+      let resolvedTableId = tableId;
+
+      if (!tableId || tableId.startsWith("table-")) {
+        if (!tableNumber) {
+          setSubmitError("Стол не определён. Отсканируйте QR-код.");
+          setIsSubmitting(false);
+          return;
+        }
+        // Get real table ID from API
+        try {
+          const table = await getTableByNumber(tableNumber);
+          resolvedTableId = table.id;
+        } catch {
+          setSubmitError("Не удалось найти стол. Попробуйте отсканировать QR-код снова.");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const orderItems = items.map((item) => ({
         productId: item.productId,
         sizeId: item.sizeId,
@@ -105,7 +125,7 @@ export default function CheckoutPage() {
       }));
 
       await createOrder({
-        tableId,
+        tableId: resolvedTableId!,
         specialInstructions: specialInstructions || undefined,
         items: orderItems,
       });
