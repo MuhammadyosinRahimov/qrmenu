@@ -8,7 +8,7 @@ import type {
   AuthResponse,
 } from "@/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL||"yalla-co-menu-beckend-dev-47c9.twc1.net";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://yalla-co-menu-beckend-dev-47c9.twc1.net";
 
 // Helper to build full image URL from relative path
 export const getImageUrl = (imageUrl: string | null | undefined): string | null => {
