@@ -12,7 +12,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "QR Menu",
-  description: "Scan QR code to view restaurant menu",
+  description: "Scan QR code to view restaurant menu ",
 };
 
 export const viewport: Viewport = {
