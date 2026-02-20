@@ -225,7 +225,7 @@ export default function CheckoutPage() {
             />
 
             <p className="text-center text-sm text-muted">
-              Тестовый код: <span className="text-orange-500 font-bold">1234</span>
+              Код придёт по SMS в течение минуты
             </p>
 
             <div className="space-y-3">
