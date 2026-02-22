@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useTableStore } from "@/stores/tableStore";
-import { createOrder, getTableByNumber } from "@/lib/api";
+import { createOrder, getTableByNumber, getRestaurantStatus } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
@@ -17,7 +17,7 @@ export default function CheckoutPage() {
   const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
   const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError } =
     useAuthStore();
-  const { tableId, tableNumber } = useTableStore();
+  const { tableId, tableNumber, restaurantId } = useTableStore();
 
   const [step, setStep] = useState<Step>(isAuthenticated ? "confirm" : "phone");
   const [phone, setPhone] = useState("");
@@ -25,6 +25,28 @@ export default function CheckoutPage() {
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Pause modal state
+  const [showPauseModal, setShowPauseModal] = useState(false);
+  const [pauseMessage, setPauseMessage] = useState("");
+
+  // Check restaurant status
+  useEffect(() => {
+    const checkRestaurantStatus = async () => {
+      if (restaurantId) {
+        try {
+          const status = await getRestaurantStatus(restaurantId);
+          if (!status.acceptingOrders) {
+            setShowPauseModal(true);
+            setPauseMessage(status.pauseMessage || "");
+          }
+        } catch (error) {
+          console.error("Error checking restaurant status:", error);
+        }
+      }
+    };
+    checkRestaurantStatus();
+  }, [restaurantId]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -301,7 +323,7 @@ export default function CheckoutPage() {
                   <span>{formatPrice(getSubtotal())} TJS</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted">
-                  <span>Налог (10%)</span>
+                  <span>Обслуживание (10%)</span>
                   <span>{formatPrice(getTax())} TJS</span>
                 </div>
                 <div className="flex justify-between font-bold text-foreground">
@@ -340,6 +362,39 @@ export default function CheckoutPage() {
           </div>
         )}
       </div>
+
+      {/* Pause modal */}
+      {showPauseModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-sm p-6 text-center">
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Icon name="pause_circle" size={40} className="text-orange-500" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground mb-2">
+              Приём заказов приостановлен
+            </h2>
+            <p className="text-muted mb-4">
+              {pauseMessage || "Ресторан временно не принимает заказы. Пожалуйста, попробуйте позже."}
+            </p>
+            <div className="space-y-3">
+              <Button
+                onClick={() => setShowPauseModal(false)}
+                variant="outline"
+                className="w-full"
+              >
+                Понятно
+              </Button>
+              <Button
+                onClick={() => router.push("/menu")}
+                variant="secondary"
+                className="w-full"
+              >
+                Вернуться в меню
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

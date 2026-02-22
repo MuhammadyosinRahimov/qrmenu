@@ -121,7 +121,7 @@ export default function CartPage() {
             <span>{formatPrice(getSubtotal())}TJS</span>
           </div>
           <div className="flex justify-between text-muted">
-            <span>Налог (10%)</span>
+            <span>Обслуживание (10%)</span>
             <span>{formatPrice(getTax())}TJS</span>
           </div>
           <div className="flex justify-between text-lg font-bold text-foreground">

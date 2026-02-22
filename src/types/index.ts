@@ -68,14 +68,21 @@ export interface Order {
   userId: string;
   tableId: string;
   tableNumber: number;
+  tableName?: string;
+  tableTypeName?: string;
+  restaurantId?: string;
+  restaurantName?: string;
   createdAt: string;
   status: OrderStatus;
   subtotal: number;
-  tax: number;
+  serviceFee: number;
   total: number;
   specialInstructions?: string;
   items: OrderItem[];
+  hasPendingItems?: boolean;
 }
+
+export type OrderItemStatus = 'Pending' | 'Active' | 'Cancelled';
 
 export interface OrderItem {
   id: string;
@@ -86,6 +93,9 @@ export interface OrderItem {
   quantity: number;
   totalPrice: number;
   selectedAddons?: string[];
+  status: OrderItemStatus;
+  createdAt?: string;
+  cancelReason?: string;
 }
 
 export type OrderStatus =

@@ -135,3 +135,46 @@ export const getOrder = async (id: string): Promise<Order> => {
   const { data } = await api.get<Order>(`/orders/${id}`);
   return data;
 };
+
+// Get active order for table
+export const getActiveOrder = async (tableId: string): Promise<Order | null> => {
+  try {
+    const { data } = await api.get<Order>(`/orders/active`, { params: { tableId } });
+    return data;
+  } catch {
+    return null;
+  }
+};
+
+// Add items to existing order
+export const addItemsToOrder = async (
+  orderId: string,
+  items: {
+    productId: string;
+    sizeId?: string;
+    quantity: number;
+    addonIds?: string[];
+  }[]
+): Promise<Order> => {
+  const { data } = await api.post<Order>(`/orders/${orderId}/items`, { items });
+  return data;
+};
+
+// Cancel order item
+export const cancelOrderItem = async (
+  orderId: string,
+  itemId: string,
+  reason?: string
+): Promise<Order> => {
+  const { data } = await api.post<Order>(`/orders/${orderId}/items/${itemId}/cancel`, { reason });
+  return data;
+};
+
+// Get restaurant status (accepting orders)
+export const getRestaurantStatus = async (restaurantId: string): Promise<{
+  acceptingOrders: boolean;
+  pauseMessage?: string;
+}> => {
+  const { data } = await api.get(`/restaurants/${restaurantId}/status`);
+  return data;
+};
