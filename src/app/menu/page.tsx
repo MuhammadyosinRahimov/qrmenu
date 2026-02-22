@@ -21,13 +21,16 @@ function MenuContent() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Обработать table и menu параметры из QR-кода
-  useEffect(() => {
-    const tableParam = searchParams.get("table");
-    const menuParam = searchParams.get("menu");
+  const urlMenuId = searchParams.get("menu");
+  const urlTableParam = searchParams.get("table");
 
-    // Если есть table параметр и стол ещё не загружен
-    if (tableParam && !tableId) {
-      const tableNumber = parseInt(tableParam, 10);
+  // Используем menuId из URL если есть, иначе из store
+  const effectiveMenuId = urlMenuId || menuId;
+
+  useEffect(() => {
+    // Если есть параметры в URL - обновить store
+    if (urlTableParam) {
+      const tableNumber = parseInt(urlTableParam, 10);
       if (!isNaN(tableNumber)) {
         getTableByNumber(tableNumber)
           .then((table) => {
@@ -37,31 +40,30 @@ function MenuContent() {
               restaurantId: table.restaurantId,
               restaurantName: table.restaurantName,
               // Приоритет: menuId из URL, затем из таблицы
-              menuId: menuParam || table.menuId,
-              menuName: menuParam ? undefined : table.menuName,
+              menuId: urlMenuId || table.menuId,
+              menuName: urlMenuId ? undefined : table.menuName,
             });
           })
           .catch((err) => {
             console.error("Failed to load table:", err);
-            // Сохранить хотя бы номер стола и menuId из URL
             setTable({
               id: `table-${tableNumber}`,
               number: tableNumber,
-              menuId: menuParam || undefined,
+              menuId: urlMenuId || undefined,
             });
           });
       }
     }
-  }, [searchParams, setTable, tableId]);
+  }, [urlTableParam, urlMenuId, setTable]);
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({
-    queryKey: ["categories", menuId],
-    queryFn: () => getCategories(menuId || undefined),
+    queryKey: ["categories", effectiveMenuId],
+    queryFn: () => getCategories(effectiveMenuId || undefined),
   });
 
   const { data: products = [], isLoading: productsLoading } = useQuery({
-    queryKey: ["products", selectedCategory, menuId],
-    queryFn: () => getProducts(selectedCategory || undefined, menuId || undefined),
+    queryKey: ["products", selectedCategory, effectiveMenuId],
+    queryFn: () => getProducts(selectedCategory || undefined, effectiveMenuId || undefined),
   });
 
   const filteredProducts = useMemo(() => {
