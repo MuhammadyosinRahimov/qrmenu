@@ -112,7 +112,7 @@ export default function OrdersPage() {
 
       <div className="p-4 space-y-4">
         {orders.map((order) => {
-          const status = statusConfig[order.status];
+          const status = statusConfig[order.status] || { label: order.status || "Неизвестно", variant: "default" as const };
           return (
             <div key={order.id} className="bg-white rounded-xl p-4 space-y-3 border border-border shadow-sm">
               <div className="flex items-center justify-between">
