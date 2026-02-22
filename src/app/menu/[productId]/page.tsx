@@ -145,7 +145,7 @@ export default function ProductPage() {
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-2xl font-bold text-foreground">{product.name}</h1>
             <span className="text-xl font-bold text-orange-500">
-              {formatPrice(product.basePrice)} ₽
+              {formatPrice(product.basePrice)} TJS
             </span>
           </div>
           <p className="text-muted mt-2">{product.description}</p>
@@ -195,7 +195,7 @@ export default function ProductPage() {
                   <span className="text-sm font-medium">{size.name}</span>
                   {size.priceModifier > 0 && (
                     <span className="text-xs ml-1">
-                      (+{formatPrice(size.priceModifier)} ₽)
+                      (+{formatPrice(size.priceModifier)} TJS)
                     </span>
                   )}
                 </button>
@@ -229,7 +229,7 @@ export default function ProductPage() {
                 >
                   <span className="text-foreground">{addon.name}</span>
                   <span className="text-orange-500 font-medium">
-                    +{formatPrice(addon.price)} ₽
+                    +{formatPrice(addon.price)} TJS
                   </span>
                 </button>
               ))}
@@ -263,7 +263,7 @@ export default function ProductPage() {
       {/* Add to cart button */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-border shadow-lg">
         <Button onClick={handleAddToCart} className="w-full" size="lg">
-          Добавить в корзину — {formatPrice(totalPrice)} ₽
+          Добавить в корзину — {formatPrice(totalPrice)} TJS
         </Button>
       </div>
     </div>

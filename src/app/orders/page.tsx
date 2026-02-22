@@ -139,7 +139,7 @@ export default function OrdersPage() {
                       {item.productName} x{item.quantity}
                     </span>
                     <span className="text-foreground">
-                      {formatPrice(item.totalPrice)} ₽
+                      {formatPrice(item.totalPrice)} TJS
                     </span>
                   </div>
                 ))}
@@ -148,7 +148,7 @@ export default function OrdersPage() {
               <div className="flex items-center justify-between pt-2 border-t border-border">
                 <span className="text-muted">Итого</span>
                 <span className="text-orange-500 font-bold text-lg">
-                  {formatPrice(order.total)} ₽
+                  {formatPrice(order.total)} TJS
                 </span>
               </div>
             </div>

@@ -289,22 +289,22 @@ export default function CheckoutPage() {
                     {item.sizeName && ` (${item.sizeName})`}
                   </span>
                   <span className="text-foreground">
-                    {formatPrice(item.totalPrice)} ₽
+                    {formatPrice(item.totalPrice)} TJS
                   </span>
                 </div>
               ))}
               <div className="border-t border-border pt-4 space-y-2">
                 <div className="flex justify-between text-sm text-muted">
                   <span>Подитог</span>
-                  <span>{formatPrice(getSubtotal())} ₽</span>
+                  <span>{formatPrice(getSubtotal())} TJS</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted">
                   <span>Налог (10%)</span>
-                  <span>{formatPrice(getTax())} ₽</span>
+                  <span>{formatPrice(getTax())} TJS</span>
                 </div>
                 <div className="flex justify-between font-bold text-foreground">
                   <span>Итого</span>
-                  <span className="text-orange-500">{formatPrice(getTotal())} ₽</span>
+                  <span className="text-orange-500">{formatPrice(getTotal())} TJS</span>
                 </div>
               </div>
             </div>

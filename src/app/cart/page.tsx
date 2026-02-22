@@ -81,7 +81,7 @@ export default function CartPage() {
 
               <div className="flex items-center justify-between mt-3">
                 <span className="text-primary font-bold">
-                  {formatPrice(item.totalPrice)} ₽
+                  {formatPrice(item.totalPrice)}TJS
                 </span>
 
                 <div className="flex items-center gap-2">
@@ -118,15 +118,15 @@ export default function CartPage() {
         <div className="space-y-2 mb-4">
           <div className="flex justify-between text-muted">
             <span>Подитог</span>
-            <span>{formatPrice(getSubtotal())} ₽</span>
+            <span>{formatPrice(getSubtotal())}TJS</span>
           </div>
           <div className="flex justify-between text-muted">
             <span>Налог (10%)</span>
-            <span>{formatPrice(getTax())} ₽</span>
+            <span>{formatPrice(getTax())}TJS</span>
           </div>
           <div className="flex justify-between text-lg font-bold text-foreground">
             <span>Итого</span>
-            <span className="text-orange-500">{formatPrice(getTotal())} ₽</span>
+            <span className="text-orange-500">{formatPrice(getTotal())}TJS</span>
           </div>
         </div>
 
