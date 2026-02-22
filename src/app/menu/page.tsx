@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
@@ -11,7 +11,7 @@ import { SearchBar } from "@/components/menu/SearchBar";
 import { getCategories, getProducts, getTableByNumber } from "@/lib/api";
 import { useTableStore } from "@/stores/tableStore";
 
-export default function MenuPage() {
+function MenuContent() {
   const searchParams = useSearchParams();
   const setTable = useTableStore((state) => state.setTable);
   const tableId = useTableStore((state) => state.tableId);
@@ -95,5 +95,13 @@ export default function MenuPage() {
 
       <BottomNav />
     </div>
+  );
+}
+
+export default function MenuPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <MenuContent />
+    </Suspense>
   );
 }
