@@ -20,9 +20,10 @@ function MenuContent() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Обработать table параметр из QR-кода
+  // Обработать table и menu параметры из QR-кода
   useEffect(() => {
     const tableParam = searchParams.get("table");
+    const menuParam = searchParams.get("menu");
 
     // Если есть table параметр и стол ещё не загружен
     if (tableParam && !tableId) {
@@ -35,14 +36,19 @@ function MenuContent() {
               number: table.number,
               restaurantId: table.restaurantId,
               restaurantName: table.restaurantName,
-              menuId: table.menuId,
-              menuName: table.menuName,
+              // Приоритет: menuId из URL, затем из таблицы
+              menuId: menuParam || table.menuId,
+              menuName: menuParam ? undefined : table.menuName,
             });
           })
           .catch((err) => {
             console.error("Failed to load table:", err);
-            // Сохранить хотя бы номер стола
-            setTable({ id: `table-${tableNumber}`, number: tableNumber });
+            // Сохранить хотя бы номер стола и menuId из URL
+            setTable({
+              id: `table-${tableNumber}`,
+              number: tableNumber,
+              menuId: menuParam || undefined,
+            });
           });
       }
     }

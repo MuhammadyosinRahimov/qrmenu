@@ -12,6 +12,7 @@ function HomeContent() {
 
   useEffect(() => {
     const tableParam = searchParams.get("table");
+    const menuParam = searchParams.get("menu"); // Параметр menu из QR-кода
 
     if (tableParam) {
       const tableNumber = parseInt(tableParam, 10);
@@ -24,15 +25,19 @@ function HomeContent() {
               number: table.number,
               restaurantId: table.restaurantId,
               restaurantName: table.restaurantName,
-              menuId: table.menuId,
-              menuName: table.menuName,
+              // Приоритет: menuId из URL, затем из таблицы
+              menuId: menuParam || table.menuId,
+              menuName: menuParam ? undefined : table.menuName,
             });
             router.replace("/menu");
           })
           .catch(() => {
             // API failed, but still save table number for later
-            // Use table number as temporary ID
-            setTable({ id: `table-${tableNumber}`, number: tableNumber });
+            setTable({
+              id: `table-${tableNumber}`,
+              number: tableNumber,
+              menuId: menuParam || undefined,
+            });
             router.replace("/menu");
           });
         return;
