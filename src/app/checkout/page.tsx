@@ -132,8 +132,10 @@ export default function CheckoutPage() {
 
       clearCart();
       router.push("/checkout/success");
-    } catch {
-      setSubmitError("Ошибка создания заказа. Попробуйте снова.");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } }; message?: string };
+      const errorMsg = error.response?.data?.error || error.message || "Неизвестная ошибка";
+      setSubmitError(`Ошибка: ${errorMsg}`);
     } finally {
       setIsSubmitting(false);
     }
