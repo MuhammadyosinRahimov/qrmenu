@@ -15,6 +15,7 @@ function MenuContent() {
   const searchParams = useSearchParams();
   const setTable = useTableStore((state) => state.setTable);
   const tableId = useTableStore((state) => state.tableId);
+  const menuId = useTableStore((state) => state.menuId);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,13 +49,13 @@ function MenuContent() {
   }, [searchParams, setTable, tableId]);
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
+    queryKey: ["categories", menuId],
+    queryFn: () => getCategories(menuId || undefined),
   });
 
   const { data: products = [], isLoading: productsLoading } = useQuery({
-    queryKey: ["products", selectedCategory],
-    queryFn: () => getProducts(selectedCategory || undefined),
+    queryKey: ["products", selectedCategory, menuId],
+    queryFn: () => getProducts(selectedCategory || undefined, menuId || undefined),
   });
 
   const filteredProducts = useMemo(() => {

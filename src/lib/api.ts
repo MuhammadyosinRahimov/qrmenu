@@ -57,14 +57,17 @@ api.interceptors.response.use(
 );
 
 // Categories
-export const getCategories = async (): Promise<Category[]> => {
-  const { data } = await api.get<Category[]>("/categories");
+export const getCategories = async (menuId?: string): Promise<Category[]> => {
+  const params = menuId ? { menuId } : {};
+  const { data } = await api.get<Category[]>("/categories", { params });
   return data;
 };
 
 // Products
-export const getProducts = async (categoryId?: string): Promise<Product[]> => {
-  const params = categoryId ? { categoryId } : {};
+export const getProducts = async (categoryId?: string, menuId?: string): Promise<Product[]> => {
+  const params: Record<string, string> = {};
+  if (categoryId) params.categoryId = categoryId;
+  if (menuId) params.menuId = menuId;
   const { data } = await api.get<Product[]>("/products", { params });
   return data;
 };
