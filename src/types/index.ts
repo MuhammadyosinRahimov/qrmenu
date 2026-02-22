@@ -107,6 +107,39 @@ export type OrderStatus =
   | "Completed"
   | "Cancelled";
 
+// Map numeric status to string status
+export const OrderStatusMap: Record<number, OrderStatus> = {
+  0: "Pending",
+  1: "Confirmed",
+  2: "Preparing",
+  3: "Ready",
+  4: "Delivered",
+  5: "Completed",
+  6: "Cancelled",
+};
+
+// Map numeric item status to string status
+export const OrderItemStatusMap: Record<number, OrderItemStatus> = {
+  0: "Pending",
+  1: "Active",
+  2: "Cancelled",
+};
+
+// Helper to normalize status (handles both number and string)
+export const normalizeOrderStatus = (status: number | string): OrderStatus => {
+  if (typeof status === "number") {
+    return OrderStatusMap[status] || "Pending";
+  }
+  return status as OrderStatus;
+};
+
+export const normalizeItemStatus = (status: number | string): OrderItemStatus => {
+  if (typeof status === "number") {
+    return OrderItemStatusMap[status] || "Active";
+  }
+  return status as OrderItemStatus;
+};
+
 export interface AuthResponse {
   token: string;
   userId: string;

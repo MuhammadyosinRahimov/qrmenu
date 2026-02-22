@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import type { OrderStatus, OrderItemStatus, Order } from "@/types";
+import { normalizeOrderStatus, normalizeItemStatus } from "@/types";
 
 const statusConfig: Record<
   OrderStatus,
@@ -145,7 +146,8 @@ export default function OrdersPage() {
 
       <div className="p-4 space-y-4">
         {orders.map((order) => {
-          const status = statusConfig[order.status] || { label: order.status || "Неизвестно", variant: "default" as const };
+          const normalizedStatus = normalizeOrderStatus(order.status);
+          const status = statusConfig[normalizedStatus] || { label: String(order.status) || "Неизвестно", variant: "default" as const };
           return (
             <div
               key={order.id}
@@ -178,8 +180,9 @@ export default function OrdersPage() {
 
               <div className="border-t border-border pt-3 space-y-1">
                 {order.items.slice(0, 3).map((item) => {
-                  const itemStatus = itemStatusConfig[item.status] || { label: "Активно", variant: "success" as const };
-                  const isCancelled = item.status === "Cancelled";
+                  const normalizedItemStatus = normalizeItemStatus(item.status);
+                  const itemStatus = itemStatusConfig[normalizedItemStatus] || { label: "Активно", variant: "success" as const };
+                  const isCancelled = normalizedItemStatus === "Cancelled";
                   return (
                     <div
                       key={item.id}
@@ -188,8 +191,8 @@ export default function OrdersPage() {
                       <span className={`text-muted ${isCancelled ? "line-through" : ""}`}>
                         {item.productName} x{item.quantity}
                         <span className={`ml-2 text-xs px-1 rounded ${
-                          item.status === "Pending" ? "bg-orange-100 text-orange-600" :
-                          item.status === "Cancelled" ? "bg-red-100 text-red-600" :
+                          normalizedItemStatus === "Pending" ? "bg-orange-100 text-orange-600" :
+                          normalizedItemStatus === "Cancelled" ? "bg-red-100 text-red-600" :
                           "bg-green-100 text-green-600"
                         }`}>
                           {itemStatus.label}
@@ -236,8 +239,8 @@ export default function OrdersPage() {
                   )}
                   <p className="text-sm text-muted">{formatDate(selectedOrder.createdAt)}</p>
                 </div>
-                <Badge variant={statusConfig[selectedOrder.status]?.variant || "default"}>
-                  {statusConfig[selectedOrder.status]?.label || selectedOrder.status}
+                <Badge variant={statusConfig[normalizeOrderStatus(selectedOrder.status)]?.variant || "default"}>
+                  {statusConfig[normalizeOrderStatus(selectedOrder.status)]?.label || String(selectedOrder.status)}
                 </Badge>
               </div>
             </div>
@@ -245,9 +248,11 @@ export default function OrdersPage() {
             <div className="p-4 space-y-4">
               <h3 className="font-semibold text-foreground">Позиции заказа</h3>
               {selectedOrder.items.map((item) => {
-                const isCancelled = item.status === "Cancelled";
-                const isPending = item.status === "Pending";
-                const canCancel = (isPending || selectedOrder.status === "Pending") && !isCancelled;
+                const normalizedItemStatus = normalizeItemStatus(item.status);
+                const normalizedOrderStatus = normalizeOrderStatus(selectedOrder.status);
+                const isCancelled = normalizedItemStatus === "Cancelled";
+                const isPending = normalizedItemStatus === "Pending";
+                const canCancel = (isPending || normalizedOrderStatus === "Pending") && !isCancelled;
 
                 return (
                   <div
@@ -269,7 +274,7 @@ export default function OrdersPage() {
                             isPending ? "bg-orange-100 text-orange-600" :
                             "bg-green-100 text-green-600"
                           }`}>
-                            {itemStatusConfig[item.status]?.label || "Активно"}
+                            {itemStatusConfig[normalizedItemStatus]?.label || "Активно"}
                           </span>
                         </div>
                         {item.sizeName && (
@@ -321,7 +326,7 @@ export default function OrdersPage() {
               </div>
 
               {/* Add more items button */}
-              {selectedOrder.status !== "Completed" && selectedOrder.status !== "Cancelled" && (
+              {normalizeOrderStatus(selectedOrder.status) !== "Completed" && normalizeOrderStatus(selectedOrder.status) !== "Cancelled" && (
                 <Button
                   onClick={() => router.push("/menu")}
                   variant="outline"

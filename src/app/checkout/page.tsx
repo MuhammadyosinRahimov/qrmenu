@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useTableStore } from "@/stores/tableStore";
-import { createOrder, getTableByNumber, getRestaurantStatus } from "@/lib/api";
+import { createOrder, getTableByNumber, getRestaurantStatus, getActiveOrder, addItemsToOrder } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Icon } from "@/components/ui/Icon";
+import type { Order } from "@/types";
 
 type Step = "phone" | "otp" | "confirm";
 
@@ -146,11 +147,25 @@ export default function CheckoutPage() {
         addonIds: item.addonIds.length > 0 ? item.addonIds : undefined,
       }));
 
-      await createOrder({
-        tableId: resolvedTableId!,
-        specialInstructions: specialInstructions || undefined,
-        items: orderItems,
-      });
+      // Check for existing active order on this table
+      let activeOrder: Order | null = null;
+      try {
+        activeOrder = await getActiveOrder(resolvedTableId!);
+      } catch {
+        // No active order or error - will create new
+      }
+
+      if (activeOrder && activeOrder.status !== "Completed" && activeOrder.status !== "Cancelled") {
+        // Add items to existing order
+        await addItemsToOrder(activeOrder.id, orderItems);
+      } else {
+        // Create new order
+        await createOrder({
+          tableId: resolvedTableId!,
+          specialInstructions: specialInstructions || undefined,
+          items: orderItems,
+        });
+      }
 
       clearCart();
       router.push("/checkout/success");
