@@ -35,6 +35,27 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Auto-logout on expired token (401)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 && typeof window !== "undefined") {
+      // Clear expired token
+      localStorage.removeItem("token");
+      localStorage.removeItem("auth-storage");
+
+      // Redirect to checkout to re-authenticate
+      if (!window.location.pathname.includes("/checkout")) {
+        window.location.href = "/checkout";
+      } else {
+        // If already on checkout, reload to show login form
+        window.location.reload();
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Categories
 export const getCategories = async (): Promise<Category[]> => {
   const { data } = await api.get<Category[]>("/categories");
