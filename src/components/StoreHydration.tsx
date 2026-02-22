@@ -3,10 +3,12 @@
 import { useEffect } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
+import { useTableStore } from "@/stores/tableStore";
 
 export function StoreHydration() {
   useEffect(() => {
-    // tableStore теперь гидрируется автоматически (skipHydration убран)
+    // Явная гидрация всех stores из localStorage
+    useTableStore.persist.rehydrate();
     useCartStore.persist.rehydrate();
     useAuthStore.persist.rehydrate();
   }, []);
