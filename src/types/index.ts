@@ -43,6 +43,10 @@ export interface Table {
   number: number;
   qrCode: string;
   isActive: boolean;
+  menuId?: string;
+  menuName?: string;
+  restaurantId: string;
+  restaurantName: string;
 }
 
 export interface CartItem {

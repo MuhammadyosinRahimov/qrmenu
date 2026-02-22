@@ -19,13 +19,20 @@ function HomeContent() {
         // Validate table and save to store
         getTableByNumber(tableNumber)
           .then((table) => {
-            setTable(table.id, table.number);
+            setTable({
+              id: table.id,
+              number: table.number,
+              restaurantId: table.restaurantId,
+              restaurantName: table.restaurantName,
+              menuId: table.menuId,
+              menuName: table.menuName,
+            });
             router.replace("/menu");
           })
           .catch(() => {
             // API failed, but still save table number for later
             // Use table number as temporary ID
-            setTable(`table-${tableNumber}`, tableNumber);
+            setTable({ id: `table-${tableNumber}`, number: tableNumber });
             router.replace("/menu");
           });
         return;

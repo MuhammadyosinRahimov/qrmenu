@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 
 export function StoreHydration() {
   useEffect(() => {
-    useTableStore.persist.rehydrate();
+    // tableStore теперь гидрируется автоматически (skipHydration убран)
     useCartStore.persist.rehydrate();
     useAuthStore.persist.rehydrate();
   }, []);
