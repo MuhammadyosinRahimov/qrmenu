@@ -15,7 +15,7 @@ export function Header({ title, showTable = true }: HeaderProps) {
     <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-border z-40 safe-area-inset-top">
       <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
         <h1 className="text-lg font-bold text-foreground">
-          {title || restaurantName || "QR Menu"}
+          {restaurantName || title || "QR Menu"}
         </h1>
         {showTable && tableNumber && (
           <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
