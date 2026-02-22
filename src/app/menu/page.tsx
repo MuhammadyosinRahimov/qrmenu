@@ -8,7 +8,7 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { CategoryList } from "@/components/menu/CategoryList";
 import { ProductGrid } from "@/components/menu/ProductGrid";
 import { SearchBar } from "@/components/menu/SearchBar";
-import { getCategories, getProducts, getTableByNumber } from "@/lib/api";
+import { getCategories, getProducts, getTableByNumber, getMenu } from "@/lib/api";
 import { useTableStore } from "@/stores/tableStore";
 
 function MenuContent() {
@@ -28,32 +28,46 @@ function MenuContent() {
   const effectiveMenuId = urlMenuId || menuId;
 
   useEffect(() => {
-    // Если есть параметры в URL - обновить store
-    if (urlTableParam) {
-      const tableNumber = parseInt(urlTableParam, 10);
-      if (!isNaN(tableNumber)) {
-        getTableByNumber(tableNumber)
-          .then((table) => {
-            setTable({
-              id: table.id,
-              number: table.number,
-              restaurantId: table.restaurantId,
-              restaurantName: table.restaurantName,
-              // Приоритет: menuId из URL, затем из таблицы
-              menuId: urlMenuId || table.menuId,
-              menuName: urlMenuId ? undefined : table.menuName,
-            });
-          })
-          .catch((err) => {
+    const loadData = async () => {
+      let tableData: any = null;
+      let menuData: any = null;
+
+      // Загрузить информацию о столе
+      if (urlTableParam) {
+        const tableNumber = parseInt(urlTableParam, 10);
+        if (!isNaN(tableNumber)) {
+          try {
+            tableData = await getTableByNumber(tableNumber);
+          } catch (err) {
             console.error("Failed to load table:", err);
-            setTable({
-              id: `table-${tableNumber}`,
-              number: tableNumber,
-              menuId: urlMenuId || undefined,
-            });
-          });
+            tableData = { id: `table-${tableNumber}`, number: tableNumber };
+          }
+        }
       }
-    }
+
+      // Если есть menuId в URL - загрузить информацию о меню
+      if (urlMenuId) {
+        try {
+          menuData = await getMenu(urlMenuId);
+        } catch (err) {
+          console.error("Failed to load menu:", err);
+        }
+      }
+
+      // Обновить store
+      if (tableData || menuData) {
+        setTable({
+          id: tableData?.id || `menu-${urlMenuId}`,
+          number: tableData?.number || 0,
+          restaurantId: menuData?.restaurantId || tableData?.restaurantId,
+          restaurantName: menuData?.restaurantName || tableData?.restaurantName,
+          menuId: urlMenuId || tableData?.menuId,
+          menuName: menuData?.name || tableData?.menuName,
+        });
+      }
+    };
+
+    loadData();
   }, [urlTableParam, urlMenuId, setTable]);
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({

@@ -83,6 +83,18 @@ export const getTableByNumber = async (number: number): Promise<Table> => {
   return data;
 };
 
+// Menus
+export const getMenu = async (id: string): Promise<{
+  id: string;
+  name: string;
+  description?: string;
+  restaurantId: string;
+  restaurantName: string;
+}> => {
+  const { data } = await api.get(`/menus/${id}`);
+  return data;
+};
+
 // Auth
 export const sendOtp = async (phone: string): Promise<void> => {
   await api.post("/auth/send-otp", { phone });
