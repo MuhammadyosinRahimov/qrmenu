@@ -78,7 +78,53 @@ public class AdminTableSessionsController : ControllerBase
                 .OrderByDescending(s => s.StartedAt)
                 .ToListAsync();
 
-            return Ok(sessions.Select(MapToDto).ToList());
+            var result = sessions.Select(MapToDto).ToList();
+
+            // Добавляем заказы без сессий (Delivery/Takeaway) как "виртуальные" сессии
+            var ordersWithoutSessionQuery = _context.Orders
+                .Include(o => o.Items)
+                .Include(o => o.Restaurant)
+                .Include(o => o.User)
+                .Where(o => o.TableSessionId == null)
+                .Where(o => o.OrderType == OrderType.Delivery || o.OrderType == OrderType.Takeaway)
+                .Where(o => o.Status != OrderStatus.Cancelled)
+                .AsQueryable();
+
+            // Фильтр по ресторану
+            if (userRestaurantId.HasValue)
+            {
+                ordersWithoutSessionQuery = ordersWithoutSessionQuery.Where(o => o.RestaurantId == userRestaurantId.Value);
+            }
+            else if (restaurantId.HasValue)
+            {
+                ordersWithoutSessionQuery = ordersWithoutSessionQuery.Where(o => o.RestaurantId == restaurantId.Value);
+            }
+
+            // Фильтр по статусу (для виртуальных сессий: active = не оплачен, closed = оплачен)
+            if (status?.ToLower() == "active")
+            {
+                ordersWithoutSessionQuery = ordersWithoutSessionQuery.Where(o => !o.IsPaid);
+            }
+            else if (status?.ToLower() == "closed")
+            {
+                ordersWithoutSessionQuery = ordersWithoutSessionQuery.Where(o => o.IsPaid);
+            }
+
+            var ordersWithoutSession = await ordersWithoutSessionQuery
+                .OrderByDescending(o => o.CreatedAt)
+                .ToListAsync();
+
+            // Создаём виртуальные сессии для каждого заказа Delivery/Takeaway
+            foreach (var order in ordersWithoutSession)
+            {
+                var virtualSession = MapOrderToVirtualSession(order);
+                result.Add(virtualSession);
+            }
+
+            // Сортируем общий результат по дате
+            result = result.OrderByDescending(s => s.StartedAt).ToList();
+
+            return Ok(result);
         }
         catch (Exception ex)
         {
@@ -379,6 +425,73 @@ public class AdminTableSessionsController : ControllerBase
                     DeliveryFee: o.DeliveryFee
                 );
             }).ToList()
+        );
+    }
+
+    private static TableSessionDto MapOrderToVirtualSession(Core.Entities.Order order)
+    {
+        var items = order.Items ?? new List<Core.Entities.OrderItem>();
+        var hasPendingItems = items.Any(i => i.Status == OrderItemStatus.Pending);
+
+        // Для виртуальной сессии delivery/takeaway total = subtotal + deliveryFee (без service fee)
+        var total = order.Subtotal + order.DeliveryFee;
+        var paidAmount = order.IsPaid ? total : 0;
+
+        var sessionOrder = new SessionOrderDto(
+            Id: order.Id,
+            UserId: order.UserId,
+            GuestPhone: order.User?.Phone ?? order.CustomerPhone,
+            CreatedAt: order.CreatedAt,
+            Status: order.Status,
+            Subtotal: order.Subtotal,
+            ServiceFeeShare: 0,
+            Total: total,
+            IsPaid: order.IsPaid,
+            PaidAt: order.PaidAt,
+            CompletedAt: order.CompletedAt,
+            HasPendingItems: hasPendingItems,
+            PaymentMethod: order.PaymentMethod,
+            WantsCashPayment: order.PaymentMethod == "cash" && !order.IsPaid,
+            Items: items.Select(i => new OrderItemDto(
+                i.Id,
+                i.ProductId,
+                i.ProductName,
+                i.SizeName,
+                i.UnitPrice,
+                i.Quantity,
+                i.TotalPrice,
+                ParseSelectedAddons(i.SelectedAddons),
+                i.Status,
+                i.CreatedAt,
+                i.CancelReason,
+                i.Note
+            )).ToList(),
+            OrderType: order.OrderType,
+            DeliveryAddress: order.DeliveryAddress,
+            CustomerName: order.CustomerName,
+            CustomerPhone: order.CustomerPhone,
+            DeliveryFee: order.DeliveryFee
+        );
+
+        return new TableSessionDto(
+            Id: order.Id,  // Используем ID заказа как ID "виртуальной" сессии
+            TableId: Guid.Empty,
+            TableNumber: 0,
+            TableName: order.OrderType == OrderType.Delivery ? "Доставка" : "Самовывоз",
+            RestaurantId: order.RestaurantId ?? Guid.Empty,
+            RestaurantName: order.Restaurant?.Name,
+            StartedAt: order.CreatedAt,
+            ClosedAt: order.IsPaid ? order.PaidAt : null,
+            Status: order.IsPaid ? TableSessionStatus.Closed : TableSessionStatus.Active,
+            SessionSubtotal: order.Subtotal,
+            SessionServiceFee: 0,
+            SessionTotal: total,
+            ServiceFeePercent: 0,
+            PaidAmount: paidAmount,
+            UnpaidAmount: total - paidAmount,
+            OrderCount: 1,
+            GuestCount: 1,
+            Orders: new List<SessionOrderDto> { sessionOrder }
         );
     }
 }
