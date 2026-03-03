@@ -8,9 +8,7 @@ using Microsoft.OpenApi.Models;
 using QrMenu.Api.Hubs;
 using QrMenu.Infrastructure.Data;
 using QrMenu.Infrastructure.Services;
-
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +47,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var jwtKey = builder.Configuration["Jwt:SecretKey"] ?? "QrMenuSecretKey12345678901234567890";
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "QrMenu";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "QrMenuApp";
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -148,13 +145,13 @@ builder.Services.AddRateLimiter(options =>
     {
         context.HttpContext.Response.StatusCode = 429;
         await context.HttpContext.Response.WriteAsJsonAsync(
-            new { message = "Слишком много запросов. Попробуйте позже." });
+            new { message = "Слишком много запросов. Попробуйте позже )" });
     };
 });
 
 var app = builder.Build();
 
-// Global exception handler
+
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
