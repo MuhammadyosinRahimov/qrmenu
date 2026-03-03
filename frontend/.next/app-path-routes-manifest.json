@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/cart/page": "/cart",
+  "/checkout/page": "/checkout",
+  "/checkout/success/page": "/checkout/success",
+  "/favicon.ico/route": "/favicon.ico",
+  "/menu/[productId]/page": "/menu/[productId]",
+  "/menu/page": "/menu",
+  "/orders/page": "/orders",
+  "/page": "/",
+  "/payment/callback/page": "/payment/callback"
+}

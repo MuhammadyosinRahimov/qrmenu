@@ -1,0 +1,102 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Icon } from "@/components/ui/Icon";
+import { useOrderStore } from "@/stores/orderStore";
+
+interface NavItem {
+  href: string;
+  icon: string;
+  filledIcon?: string;
+  label: string;
+  badge?: () => number;
+}
+
+export function BottomNav() {
+  const pathname = usePathname();
+  const pendingCount = useOrderStore((state) => state.pendingCount);
+
+  const navItems: NavItem[] = [
+    {
+      href: "/",
+      icon: "home",
+      filledIcon: "home",
+      label: "Главная"
+    },
+    {
+      href: "/menu",
+      icon: "restaurant_menu",
+      filledIcon: "restaurant_menu",
+      label: "Меню"
+    },
+    {
+      href: "/orders",
+      icon: "receipt_long",
+      filledIcon: "receipt_long",
+      label: "Заказы",
+      badge: () => pendingCount,
+    },
+  ];
+
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 safe-area-inset-bottom z-50">
+      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
+        {navItems.map((item) => {
+          const active = isActive(item.href);
+          const badgeCount = item.badge?.() || 0;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center justify-center flex-1 h-full relative transition-all duration-200 ${
+                active
+                  ? "text-orange-500"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {/* Active indicator line */}
+              {active && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full" />
+              )}
+
+              <div className="relative">
+                <div className={`p-1.5 rounded-xl transition-all duration-200 ${
+                  active ? "bg-orange-50" : ""
+                }`}>
+                  <Icon
+                    name={item.icon}
+                    size={24}
+                    filled={active}
+                    className={active ? "text-orange-500" : "text-gray-400"}
+                  />
+                </div>
+
+                {/* Badge for orders */}
+                {badgeCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-sm shadow-orange-200">
+                    {badgeCount > 99 ? "99+" : badgeCount}
+                  </span>
+                )}
+              </div>
+
+              <span className={`text-xs mt-0.5 font-medium ${
+                active ? "text-orange-500" : "text-gray-400"
+              }`}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
