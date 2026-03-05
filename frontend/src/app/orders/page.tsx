@@ -11,6 +11,7 @@ import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useOrderStore } from "@/stores/orderStore";
 import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
 import { Header } from "@/components/layout/Header";
+import { OrderModeBar } from "@/components/layout/OrderModeBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -238,6 +239,7 @@ export default function OrdersPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
         <Header title="Мои заказы" />
+        <OrderModeBar />
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mb-6 shadow-lg shadow-orange-200">
             <Icon name="lock" size={48} className="text-white" />
@@ -259,6 +261,7 @@ export default function OrdersPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
         <Header title="Мои заказы" />
+        <OrderModeBar />
         <div className="p-4 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="bg-white rounded-2xl p-4 animate-pulse border border-gray-100 shadow-sm">
@@ -277,6 +280,7 @@ export default function OrdersPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
         <Header title="Мои заказы" />
+        <OrderModeBar />
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mb-6">
             <Icon name="receipt_long" size={48} className="text-gray-400" />
@@ -295,6 +299,7 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
       <Header title="Мои заказы" />
+      <OrderModeBar />
 
       <div className="p-4 space-y-4 max-w-lg mx-auto">
         {orders.map((order) => {

@@ -54,16 +54,17 @@ export const useOrderModeStore = create<OrderModeState>()(
       setCustomerPhone: (phone) => set({ customerPhone: phone }),
 
       clearMode: () =>
-        set({
+        set((state) => ({
           mode: "qr",
           selectedRestaurantId: null,
           selectedRestaurantName: null,
           deliveryAddress: "",
           tableNumber: null,
           customerName: "",
-          customerPhone: "",
+          // Сохраняем телефон при очистке
+          customerPhone: state.customerPhone,
           deliveryFee: 0,
-        }),
+        })),
 
       clearRestaurant: () =>
         set({

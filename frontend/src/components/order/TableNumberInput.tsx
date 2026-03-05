@@ -9,9 +9,11 @@ import { useOrderModeStore } from "@/stores/orderModeStore";
 interface TableNumberInputProps {
   onSubmit: () => void;
   onBack: () => void;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
-export function TableNumberInput({ onSubmit, onBack }: TableNumberInputProps) {
+export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submitError }: TableNumberInputProps) {
   const { tableNumber, setTableNumber, selectedRestaurantName } =
     useOrderModeStore();
 
@@ -70,21 +72,30 @@ export function TableNumberInput({ onSubmit, onBack }: TableNumberInputProps) {
           maxLength={3}
           inputMode="numeric"
           error={error || undefined}
+          disabled={isSubmitting}
         />
       </div>
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
+      {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
 
       <div className="space-y-3">
         <Button
           onClick={handleSubmit}
           className="w-full"
           size="lg"
-          disabled={!inputValue}
+          disabled={!inputValue || isSubmitting}
         >
-          Продолжить
+          {isSubmitting ? (
+            <>
+              <Icon name="progress_activity" size={18} className="mr-2 animate-spin" />
+              Оформление...
+            </>
+          ) : (
+            "Подтвердить заказ"
+          )}
         </Button>
-        <Button onClick={onBack} variant="ghost" className="w-full">
+        <Button onClick={onBack} variant="ghost" className="w-full" disabled={isSubmitting}>
           <Icon name="arrow_back" size={18} className="mr-2" />
           Назад
         </Button>

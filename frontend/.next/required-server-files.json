@@ -111,7 +111,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend",
+    "outputFileTracingRoot": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend\\frontend",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -304,11 +304,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend"
+      "root": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend\\frontend"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend",
+  "appDir": "C:\\Users\\Mardin it\\Desktop\\qr\\frontend\\frontend",
   "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",

@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { getTableByNumber, getMySessionInfo, PublicRestaurant } from "@/lib/api";
 import { OrderModeSelector, RestaurantList } from "@/components/order";
 import { Header } from "@/components/layout/Header";
+import { OrderModeBar } from "@/components/layout/OrderModeBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Icon } from "@/components/ui/Icon";
 
@@ -141,6 +142,7 @@ function HomeContent() {
       </div>
 
       <Header title="QR Menu" />
+      <OrderModeBar />
 
       <div className="relative p-4 space-y-8 max-w-md mx-auto">
         {/* Welcome Hero */}

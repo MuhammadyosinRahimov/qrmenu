@@ -23,7 +23,7 @@ import { Icon } from "@/components/ui/Icon";
 import { DeliveryForm, TableNumberInput, TakeawayConfirm } from "@/components/order";
 import type { Order } from "@/types";
 
-type Step = "phone" | "otp" | "details" | "confirm";
+type Step = "phone" | "otp" | "details";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -51,8 +51,7 @@ export default function CheckoutPage() {
   // Determine initial step based on mode and authentication
   const getInitialStep = (): Step => {
     if (!isAuthenticated) return "phone";
-    if (mode !== "qr" && mode !== "dinein") return "details";
-    return "confirm";
+    return "details";
   };
 
   const [step, setStep] = useState<Step>(getInitialStep);
@@ -87,13 +86,9 @@ export default function CheckoutPage() {
   // Update step when authentication changes
   useEffect(() => {
     if (isAuthenticated && step === "phone") {
-      if (mode !== "qr" && mode !== "dinein") {
-        setStep("details");
-      } else {
-        setStep("confirm");
-      }
+      setStep("details");
     }
-  }, [isAuthenticated, mode, step]);
+  }, [isAuthenticated, step]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -148,18 +143,10 @@ export default function CheckoutPage() {
     try {
       await verifyOtp("+" + digits, otp);
       setCustomerPhone("+" + digits);
-      if (mode !== "qr") {
-        setStep("details");
-      } else {
-        setStep("confirm");
-      }
+      setStep("details");
     } catch {
       // Error is handled in store
     }
-  };
-
-  const handleDetailsSubmit = () => {
-    setStep("confirm");
   };
 
   const handleDetailsBack = () => {
@@ -319,8 +306,7 @@ export default function CheckoutPage() {
     switch (step) {
       case "phone": return "Авторизация";
       case "otp": return "Подтверждение";
-      case "details": return mode === "delivery" ? "Адрес доставки" : mode === "dinein" ? "Номер стола" : "Самовывоз";
-      case "confirm": return "Подтверждение";
+      case "details": return mode === "delivery" ? "Адрес доставки" : mode === "dinein" ? "Номер стола" : mode === "takeaway" ? "Самовывоз" : "Оформление";
       default: return "Оформление";
     }
   };
@@ -338,9 +324,9 @@ export default function CheckoutPage() {
       </header>
 
       <div className="p-4 space-y-6 max-w-md mx-auto">
-        {/* Steps indicator */}
+        {/* Steps indicator - 3 steps */}
         {(() => {
-          const steps = mode === "qr" ? ["phone", "otp", "confirm"] : ["phone", "otp", "details", "confirm"];
+          const steps: Step[] = ["phone", "otp", "details"];
           const currentIndex = steps.indexOf(step);
 
           return (
@@ -444,188 +430,127 @@ export default function CheckoutPage() {
           </div>
         )}
 
-        {/* Details step */}
-        {step === "details" && mode !== "qr" && (
+        {/* Details step - now includes submit */}
+        {step === "details" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-            {mode === "delivery" && <DeliveryForm onSubmit={handleDetailsSubmit} onBack={handleDetailsBack} />}
-            {mode === "dinein" && <TableNumberInput onSubmit={handleDetailsSubmit} onBack={handleDetailsBack} />}
-            {mode === "takeaway" && <TakeawayConfirm onSubmit={handleDetailsSubmit} onBack={handleDetailsBack} />}
-          </div>
-        )}
-
-        {/* Confirm step */}
-        {step === "confirm" && (
-          <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-200">
-                <Icon name="receipt_long" size={32} className="text-white" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-800">Подтвердите заказ</h2>
-            </div>
-
-            {/* Order mode info */}
-            {mode !== "qr" && (
-              <div className={`rounded-2xl p-4 border space-y-2 ${
-                mode === "delivery" ? "bg-purple-50 border-purple-100" :
-                mode === "takeaway" ? "bg-emerald-50 border-emerald-100" :
-                "bg-orange-50 border-orange-100"
-              }`}>
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    mode === "delivery" ? "bg-purple-100" :
-                    mode === "takeaway" ? "bg-emerald-100" :
-                    "bg-orange-100"
-                  }`}>
-                    <Icon
-                      name={mode === "delivery" ? "delivery_dining" : mode === "takeaway" ? "takeout_dining" : "restaurant"}
-                      size={22}
-                      className={mode === "delivery" ? "text-purple-500" : mode === "takeaway" ? "text-emerald-500" : "text-orange-500"}
-                    />
-                  </div>
-                  <div>
-                    <span className={`font-semibold ${
-                      mode === "delivery" ? "text-purple-700" :
-                      mode === "takeaway" ? "text-emerald-700" :
-                      "text-orange-700"
-                    }`}>
-                      {mode === "delivery" ? "Доставка" : mode === "takeaway" ? "Самовывоз" : "В ресторане"}
-                    </span>
-                    {selectedRestaurantName && (
-                      <p className={`text-sm ${
-                        mode === "delivery" ? "text-purple-600" :
-                        mode === "takeaway" ? "text-emerald-600" :
-                        "text-orange-600"
-                      }`}>{selectedRestaurantName}</p>
-                    )}
-                  </div>
-                </div>
-                {mode === "delivery" && deliveryAddress && (
-                  <div className="flex items-center gap-2 text-sm text-purple-600 bg-white/50 rounded-lg p-2">
-                    <Icon name="location_on" size={16} />
-                    <span>{deliveryAddress}</span>
-                  </div>
-                )}
-                {mode === "dinein" && modeTableNumber && (
-                  <div className="flex items-center gap-2 text-sm text-orange-600 bg-white/50 rounded-lg p-2">
-                    <Icon name="table_restaurant" size={16} />
-                    <span>Стол #{modeTableNumber}</span>
-                  </div>
-                )}
-                {customerName && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Icon name="person" size={16} />
-                    <span>{customerName}</span>
-                  </div>
-                )}
-              </div>
+            {mode === "delivery" && (
+              <DeliveryForm
+                onSubmit={handleSubmitOrder}
+                onBack={handleDetailsBack}
+                isSubmitting={isSubmitting}
+                submitError={submitError}
+              />
             )}
-
-            {/* Order summary */}
-            <div className="bg-white rounded-2xl p-4 space-y-3 border border-gray-100 shadow-sm">
-              <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                <Icon name="shopping_bag" size={18} className="text-orange-500" />
-                Ваш заказ
-              </h3>
-              <div className="space-y-2">
-                {items.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm py-1">
-                    <span className="text-gray-600 flex-1">
-                      {item.productName} <span className="text-gray-400">x{item.quantity}</span>
-                      {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
-                    </span>
-                    <span className="text-gray-800 font-medium ml-2">{formatPrice(item.totalPrice)} TJS</span>
+            {mode === "dinein" && (
+              <TableNumberInput
+                onSubmit={handleSubmitOrder}
+                onBack={handleDetailsBack}
+                isSubmitting={isSubmitting}
+                submitError={submitError}
+              />
+            )}
+            {mode === "takeaway" && (
+              <TakeawayConfirm
+                onSubmit={handleSubmitOrder}
+                onBack={handleDetailsBack}
+                isSubmitting={isSubmitting}
+                submitError={submitError}
+              />
+            )}
+            {mode === "qr" && (
+              <div className="space-y-5">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-200">
+                    <Icon name="receipt_long" size={32} className="text-white" />
                   </div>
-                ))}
-              </div>
-              <div className="border-t border-gray-100 pt-3 space-y-2">
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Подитог</span>
-                  <span>{formatPrice(getSubtotal())} TJS</span>
+                  <h2 className="text-xl font-bold text-gray-800">Подтвердите заказ</h2>
                 </div>
-                {mode === "qr" && (
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>Обслуживание (10%)</span>
-                    <span>{formatPrice(getTax())} TJS</span>
-                  </div>
-                )}
-                {mode === "delivery" && deliveryFee > 0 && (
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span>Доставка</span>
-                    <span>{formatPrice(deliveryFee)} TJS</span>
-                  </div>
-                )}
-                <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">
-                  <span>Итого</span>
-                  <span className="text-orange-500">
-                    {formatPrice(mode === "qr" ? getTotal() : mode === "delivery" ? getSubtotal() + deliveryFee : getSubtotal())} TJS
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* Payment info */}
-            <div className={`rounded-2xl p-4 border ${
-              mode === "delivery" || mode === "takeaway"
-                ? "bg-green-50 border-green-100"
-                : "bg-blue-50 border-blue-100"
-            }`}>
-              <div className="flex items-start gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                  mode === "delivery" || mode === "takeaway" ? "bg-green-100" : "bg-blue-100"
-                }`}>
-                  <Icon
-                    name={mode === "delivery" || mode === "takeaway" ? "credit_card" : "info"}
-                    size={20}
-                    className={mode === "delivery" || mode === "takeaway" ? "text-green-500" : "text-blue-500"}
+                {/* Order summary for QR mode */}
+                <div className="bg-white rounded-2xl p-4 space-y-3 border border-gray-100 shadow-sm">
+                  <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                    <Icon name="shopping_bag" size={18} className="text-orange-500" />
+                    Ваш заказ
+                  </h3>
+                  <div className="space-y-2">
+                    {items.map((item) => (
+                      <div key={item.id} className="flex justify-between text-sm py-1">
+                        <span className="text-gray-600 flex-1">
+                          {item.productName} <span className="text-gray-400">x{item.quantity}</span>
+                          {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                        </span>
+                        <span className="text-gray-800 font-medium ml-2">{formatPrice(item.totalPrice)} TJS</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-gray-100 pt-3 space-y-2">
+                    <div className="flex justify-between text-sm text-gray-500">
+                      <span>Подитог</span>
+                      <span>{formatPrice(getSubtotal())} TJS</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-500">
+                      <span>Обслуживание (10%)</span>
+                      <span>{formatPrice(getTax())} TJS</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">
+                      <span>Итого</span>
+                      <span className="text-orange-500">{formatPrice(getTotal())} TJS</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment info */}
+                <div className="bg-blue-50 border-blue-100 rounded-2xl p-4 border">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-blue-100">
+                      <Icon name="info" size={20} className="text-blue-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-blue-800">Способ оплаты</p>
+                      <p className="text-sm mt-1 text-blue-600">
+                        После подтверждения заказа вы сможете выбрать способ оплаты: наличными или картой DC
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Special instructions */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-2">
+                    Комментарий к заказу
+                  </label>
+                  <textarea
+                    value={specialInstructions}
+                    onChange={(e) => setSpecialInstructions(e.target.value)}
+                    placeholder="Например: без лука, острый соус отдельно..."
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none shadow-sm transition-all"
+                    rows={2}
                   />
                 </div>
-                <div>
-                  <p className={`text-sm font-medium ${
-                    mode === "delivery" || mode === "takeaway" ? "text-green-800" : "text-blue-800"
-                  }`}>
-                    {mode === "delivery" || mode === "takeaway" ? "Онлайн оплата" : "Способ оплаты"}
-                  </p>
-                  <p className={`text-sm mt-1 ${
-                    mode === "delivery" || mode === "takeaway" ? "text-green-600" : "text-blue-600"
-                  }`}>
-                    {mode === "delivery" || mode === "takeaway"
-                      ? "После подтверждения вы будете перенаправлены на безопасную страницу оплаты DC Bank"
-                      : "После подтверждения заказа вы сможете выбрать способ оплаты: наличными или картой DC"}
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* Special instructions */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Комментарий к заказу
-              </label>
-              <textarea
-                value={specialInstructions}
-                onChange={(e) => setSpecialInstructions(e.target.value)}
-                placeholder="Например: без лука, острый соус отдельно..."
-                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none shadow-sm transition-all"
-                rows={2}
-              />
-            </div>
+                {submitError && (
+                  <div className="bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2">
+                    <Icon name="error" size={20} className="text-red-500" />
+                    <p className="text-red-600 text-sm">{submitError}</p>
+                  </div>
+                )}
 
-            {submitError && (
-              <div className="bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2">
-                <Icon name="error" size={20} className="text-red-500" />
-                <p className="text-red-600 text-sm">{submitError}</p>
+                <Button
+                  onClick={handleSubmitOrder}
+                  className="w-full"
+                  size="lg"
+                  isLoading={isSubmitting}
+                >
+                  <Icon name="check_circle" size={22} className="mr-2" />
+                  Подтвердить заказ
+                </Button>
+
+                <Button onClick={handleDetailsBack} variant="ghost" className="w-full">
+                  <Icon name="arrow_back" size={18} className="mr-2" />
+                  Назад
+                </Button>
               </div>
             )}
-
-            <Button
-              onClick={handleSubmitOrder}
-              className="w-full"
-              size="lg"
-              isLoading={isSubmitting}
-            >
-              <Icon name="check_circle" size={22} className="mr-2" />
-              {mode === "delivery" || mode === "takeaway" ? "Оплатить и заказать" : "Подтвердить заказ"}
-            </Button>
           </div>
         )}
       </div>

@@ -9,9 +9,11 @@ import { useOrderModeStore } from "@/stores/orderModeStore";
 interface DeliveryFormProps {
   onSubmit: () => void;
   onBack: () => void;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
-export function DeliveryForm({ onSubmit, onBack }: DeliveryFormProps) {
+export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitError }: DeliveryFormProps) {
   const {
     deliveryAddress,
     setDeliveryAddress,
@@ -73,6 +75,7 @@ export function DeliveryForm({ onSubmit, onBack }: DeliveryFormProps) {
           onChange={(e) => setCustomerName(e.target.value)}
           placeholder="Как к вам обращаться?"
           required
+          disabled={isSubmitting}
         />
 
         <div>
@@ -83,20 +86,34 @@ export function DeliveryForm({ onSubmit, onBack }: DeliveryFormProps) {
             value={deliveryAddress}
             onChange={(e) => setDeliveryAddress(e.target.value)}
             placeholder="Улица, дом, квартира, подъезд, этаж..."
-            className="w-full px-4 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none shadow-sm"
+            className="w-full px-4 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             rows={3}
             required
+            disabled={isSubmitting}
           />
         </div>
       </div>
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
+      {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
 
       <div className="space-y-3">
-        <Button onClick={handleSubmit} className="w-full" size="lg">
-          Продолжить
+        <Button
+          onClick={handleSubmit}
+          className="w-full"
+          size="lg"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Icon name="progress_activity" size={18} className="mr-2 animate-spin" />
+              Оформление...
+            </>
+          ) : (
+            "Оплатить и заказать"
+          )}
         </Button>
-        <Button onClick={onBack} variant="ghost" className="w-full">
+        <Button onClick={onBack} variant="ghost" className="w-full" disabled={isSubmitting}>
           <Icon name="arrow_back" size={18} className="mr-2" />
           Назад
         </Button>
