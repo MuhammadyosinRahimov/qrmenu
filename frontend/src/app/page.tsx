@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { getTableByNumber, getMySessionInfo, PublicRestaurant } from "@/lib/api";
 import { RestaurantList } from "@/components/order";
 import { Header } from "@/components/layout/Header";
-import { OrderModeBar } from "@/components/layout/OrderModeBar";
+
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Icon } from "@/components/ui/Icon";
 

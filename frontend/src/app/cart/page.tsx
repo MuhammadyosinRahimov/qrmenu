@@ -42,7 +42,7 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-background pb-20">
         <Header title="Корзина" />
-        <OrderModeBar />
+      
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-6">
             <Icon name="shopping_cart" size={48} className="text-orange-400" />
@@ -63,7 +63,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-background pb-56">
       <Header title="Корзина" />
-      <OrderModeBar />
+     
 
       <div className="p-4 space-y-4">
         {items.map((item) => {

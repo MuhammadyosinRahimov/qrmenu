@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
-import { OrderModeBar } from "@/components/layout/OrderModeBar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { FloatingCart } from "@/components/layout/FloatingCart";
 import { CategoryList } from "@/components/menu/CategoryList";
@@ -221,7 +220,7 @@ function MenuContent() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header title="Меню" />
-      <OrderModeBar />
+   
 
       {/* Order mode banner */}
       {isRestaurantMode && selectedRestaurantName && (
