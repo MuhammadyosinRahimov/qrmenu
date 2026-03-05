@@ -3,11 +3,11 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTableStore } from "@/stores/tableStore";
-import { useOrderModeStore, OrderMode } from "@/stores/orderModeStore";
+import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 import { getTableByNumber, getMySessionInfo, PublicRestaurant } from "@/lib/api";
-import { OrderModeSelector, RestaurantList } from "@/components/order";
+import { RestaurantList } from "@/components/order";
 import { Header } from "@/components/layout/Header";
 import { OrderModeBar } from "@/components/layout/OrderModeBar";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -92,11 +92,6 @@ function HomeContent() {
     setIsQrMode(false);
   }, [searchParams, router, setTable, setMode]);
 
-  const handleModeSelect = (selectedMode: OrderMode) => {
-    setMode(selectedMode);
-    // Clear cart when changing mode
-    clearCart();
-  };
 
   const handleSelectRestaurant = (restaurant: PublicRestaurant) => {
     setRestaurant(restaurant.id, restaurant.name, restaurant.deliveryFee);
@@ -162,9 +157,6 @@ function HomeContent() {
             Выберите способ заказа
           </p>
         </div>
-
-        {/* Mode selector */}
-        <OrderModeSelector onModeSelect={handleModeSelect} />
 
         {/* Restaurant list */}
         {mode !== "qr" && (
