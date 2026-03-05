@@ -537,7 +537,7 @@ export default function CheckoutPage() {
                 )}
 
                 <Button
-                  onClick={handleSubmitOrder}
+                  onClick={() => handleSubmitOrder()}
                   className="w-full"
                   size="lg"
                   isLoading={isSubmitting}
