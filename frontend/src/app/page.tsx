@@ -91,7 +91,15 @@ function HomeContent() {
 
     // No table param - show mode selection
     setIsQrMode(false);
-  }, [searchParams, router, setTable, setMode]);
+
+    // Clear QR mode if user came directly without ?table= param
+    // This allows users to exit QR mode by visiting the site directly
+    if (mode === "qr") {
+      clearMode();
+      clearTable();
+      clearCart();
+    }
+  }, [searchParams, router, setTable, setMode, mode, clearMode, clearTable, clearCart]);
 
 
   const handleSelectRestaurant = (restaurant: PublicRestaurant) => {

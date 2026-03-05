@@ -184,7 +184,9 @@ export default function CartPage() {
       </div>
 
       {/* Summary */}
-      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-border p-4 shadow-lg">
+      <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-border shadow-lg">
+        <OrderModeBar />
+        <div className="p-4">
         <div className="space-y-2 mb-4">
           <div className="flex justify-between text-muted">
             <span>Подитог</span>
@@ -214,6 +216,7 @@ export default function CartPage() {
           <Icon name="shopping_cart_checkout" size={22} className="mr-2" />
           Оформить заказ
         </Button>
+        </div>
       </div>
 
       <BottomNav />
