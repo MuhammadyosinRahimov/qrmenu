@@ -30,7 +30,7 @@ export function OrderModeBar() {
 
   return (
     <div className="sticky top-14 bg-white/95 backdrop-blur-sm border-b border-border z-30 safe-area-inset-top">
-      <div className="flex justify-center py-3 px-4">
+      <div className="flex justify-center py-1 px-4">
         {/* Контейнер с border */}
         <div className="relative flex border border-gray-200 rounded-md p-1 bg-gray-50/50">
           {/* Sliding indicator */}
@@ -50,7 +50,7 @@ export function OrderModeBar() {
                 setMode(m.value);
                 clearCart();
               }}
-              className={`relative z-10 flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+              className={`relative z-10 flex-1 px-2 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                 mode === m.value
                   ? "text-white"
                   : "text-gray-600 hover:text-gray-900"
