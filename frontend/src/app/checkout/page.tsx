@@ -166,7 +166,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const handleSubmitOrder = async () => {
+  const handleSubmitOrder = async (dineInTableNumber?: number) => {
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -223,10 +223,11 @@ export default function CheckoutPage() {
         clearMode();
         // Redirect to payment for takeaway
         handlePaymentRedirect(order);
-      } else if (mode === "dinein" && selectedRestaurantId && modeTableNumber) {
+      } else if (mode === "dinein" && selectedRestaurantId && (dineInTableNumber || modeTableNumber)) {
+        const tableNum = dineInTableNumber || modeTableNumber;
         await createDineInOrder({
           restaurantId: selectedRestaurantId,
-          tableNumber: modeTableNumber,
+          tableNumber: tableNum!,
           items: orderItems,
           specialInstructions: specialInstructions || undefined,
         });
@@ -443,7 +444,7 @@ export default function CheckoutPage() {
             )}
             {mode === "dinein" && (
               <TableNumberInput
-                onSubmit={handleSubmitOrder}
+                onSubmit={(tableNum) => handleSubmitOrder(tableNum)}
                 onBack={handleDetailsBack}
                 isSubmitting={isSubmitting}
                 submitError={submitError}

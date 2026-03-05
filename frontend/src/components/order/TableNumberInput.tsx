@@ -7,7 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 
 interface TableNumberInputProps {
-  onSubmit: () => void;
+  onSubmit: (tableNumber: number) => void;
   onBack: () => void;
   isSubmitting?: boolean;
   submitError?: string | null;
@@ -36,7 +36,7 @@ export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submi
       return;
     }
     setTableNumber(num);
-    onSubmit();
+    onSubmit(num);
   };
 
   return (
