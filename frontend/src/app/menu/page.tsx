@@ -23,7 +23,7 @@ function MenuContent() {
   const searchParams = useSearchParams();
   const setTable = useTableStore((state) => state.setTable);
   const menuId = useTableStore((state) => state.menuId);
-  const { mode, selectedRestaurantId, selectedRestaurantName, deliveryFee } = useOrderModeStore();
+  const { mode, setMode, setTableNumber, selectedRestaurantId, selectedRestaurantName, deliveryFee } = useOrderModeStore();
   const { items: cartItems, addItem, removeItem, updateQuantity } = useCartStore();
   const { showToast } = useToast();
 
@@ -96,6 +96,10 @@ function MenuContent() {
       if (urlTableParam) {
         const tableNumber = parseInt(urlTableParam, 10);
         if (!isNaN(tableNumber)) {
+          // Установить QR-режим при сканировании QR-кода
+          setMode("qr");
+          setTableNumber(tableNumber);
+
           try {
             tableData = await getTableByNumber(tableNumber);
           } catch (err) {
@@ -130,7 +134,7 @@ function MenuContent() {
     };
 
     loadData();
-  }, [urlTableParam, urlMenuId, setTable, isRestaurantMode]);
+  }, [urlTableParam, urlMenuId, setTable, setMode, setTableNumber, isRestaurantMode]);
 
   // Use API queries only when NOT in restaurant mode
   const { data: apiCategories = [], isLoading: categoriesLoading } = useQuery({

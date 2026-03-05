@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
+import { useOrderModeStore } from "@/stores/orderModeStore";
 import { Header } from "@/components/layout/Header";
 import { OrderModeBar } from "@/components/layout/OrderModeBar";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -15,7 +16,11 @@ export default function CartPage() {
   const router = useRouter();
   const { items, updateQuantity, updateItemNote, removeItem, getSubtotal, getTax, getTotal } =
     useCartStore();
+  const { mode, deliveryFee } = useOrderModeStore();
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+
+  const isDelivery = mode === "delivery";
+  const finalTotal = isDelivery ? getTotal() + deliveryFee : getTotal();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -189,9 +194,15 @@ export default function CartPage() {
             <span>Обслуживание (10%)</span>
             <span>{formatPrice(getTax())} TJS</span>
           </div>
+          {isDelivery && deliveryFee > 0 && (
+            <div className="flex justify-between text-muted">
+              <span>Доставка</span>
+              <span>{formatPrice(deliveryFee)} TJS</span>
+            </div>
+          )}
           <div className="flex justify-between text-xl font-bold text-foreground pt-2 border-t border-gray-100">
             <span>Итого</span>
-            <span className="text-orange-500">{formatPrice(getTotal())} TJS</span>
+            <span className="text-orange-500">{formatPrice(finalTotal)} TJS</span>
           </div>
         </div>
 
