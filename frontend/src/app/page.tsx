@@ -146,7 +146,7 @@ function HomeContent() {
       </div>
 
       <Header title="QR Menu" />
-      <OrderModeBar />
+    
 
       <div className="relative p-4 space-y-8 max-w-md mx-auto">
         {/* Welcome Hero */}
