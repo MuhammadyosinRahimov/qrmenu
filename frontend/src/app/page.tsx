@@ -23,6 +23,7 @@ function HomeContent() {
   const { isAuthenticated } = useAuthStore();
 
   const [isQrMode, setIsQrMode] = useState<boolean | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Check if session is completed and clear context
   useEffect(() => {
@@ -158,12 +159,39 @@ function HomeContent() {
           </p>
         </div>
 
+        {/* Search input */}
+        {mode !== "qr" && (
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Icon name="search" size={22} className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Найти ресторан..."
+              className="w-full pl-12 pr-12 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent shadow-sm transition-all text-base"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center"
+              >
+                <div className="w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors">
+                  <Icon name="close" size={14} className="text-gray-500" />
+                </div>
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Restaurant list */}
         {mode !== "qr" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <RestaurantList
               mode={mode}
               onSelectRestaurant={handleSelectRestaurant}
+              searchQuery={searchQuery}
             />
           </div>
         )}

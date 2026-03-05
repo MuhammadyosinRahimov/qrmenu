@@ -9,14 +9,26 @@ import { OrderMode } from "@/stores/orderModeStore";
 interface RestaurantListProps {
   mode: OrderMode;
   onSelectRestaurant: (restaurant: PublicRestaurant) => void;
+  searchQuery?: string;
 }
 
-export function RestaurantList({ mode, onSelectRestaurant }: RestaurantListProps) {
+export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: RestaurantListProps) {
   const apiMode = mode === "delivery" ? "delivery" : mode === "takeaway" ? "takeaway" : undefined;
 
   const { data: restaurants = [], isLoading, error } = useQuery({
     queryKey: ["restaurants", apiMode],
     queryFn: () => getRestaurants(apiMode),
+  });
+
+  // Filter restaurants by search query
+  const filteredRestaurants = restaurants.filter((restaurant) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase().trim();
+    return (
+      restaurant.name.toLowerCase().includes(query) ||
+      restaurant.address?.toLowerCase().includes(query) ||
+      restaurant.description?.toLowerCase().includes(query)
+    );
   });
 
   const getModeTitle = () => {
@@ -102,6 +114,20 @@ export function RestaurantList({ mode, onSelectRestaurant }: RestaurantListProps
     );
   }
 
+  if (filteredRestaurants.length === 0 && searchQuery.trim()) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-4">
+          <Icon name="search_off" size={32} className="text-orange-400" />
+        </div>
+        <p className="text-gray-600 font-medium mb-1">
+          Ничего не найдено
+        </p>
+        <p className="text-gray-400 text-sm">Попробуйте изменить поисковый запрос</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Section header */}
@@ -113,13 +139,13 @@ export function RestaurantList({ mode, onSelectRestaurant }: RestaurantListProps
           {getModeTitle()}
         </h3>
         <span className="text-sm text-gray-400 ml-auto">
-          {restaurants.length} {restaurants.length === 1 ? "ресторан" : restaurants.length < 5 ? "ресторана" : "ресторанов"}
+          {filteredRestaurants.length} {filteredRestaurants.length === 1 ? "ресторан" : filteredRestaurants.length < 5 ? "ресторана" : "ресторанов"}
         </span>
       </div>
 
       {/* Restaurant cards */}
       <div className="space-y-4">
-        {restaurants.map((restaurant) => (
+        {filteredRestaurants.map((restaurant) => (
           <RestaurantCard
             key={restaurant.id}
             restaurant={restaurant}
