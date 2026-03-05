@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useOrderModeStore, OrderMode } from "@/stores/orderModeStore";
 import { useTableStore } from "@/stores/tableStore";
-import { useCartStore } from "@/stores/cartStore";
 
 const modes: { value: OrderMode; label: string }[] = [
   { value: "delivery", label: "Доставка" },
@@ -15,7 +14,6 @@ export function OrderModeBar() {
   const [isHydrated, setIsHydrated] = useState(false);
   const { mode, setMode } = useOrderModeStore();
   const tableNumber = useTableStore((state) => state.tableNumber);
-  const { clearCart } = useCartStore();
 
   useEffect(() => {
     setIsHydrated(true);
@@ -46,10 +44,7 @@ export function OrderModeBar() {
           {modes.map((m) => (
             <button
               key={m.value}
-              onClick={() => {
-                setMode(m.value);
-                clearCart();
-              }}
+              onClick={() => setMode(m.value)}
               className={`relative z-10 flex-1 px-4 py-1 text-sm font-medium rounded-2xl transition-all duration-300 ${
                 mode === m.value
                   ? "text-white"
