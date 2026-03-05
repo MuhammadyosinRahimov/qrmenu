@@ -170,6 +170,15 @@ export interface AuthResponse {
 }
 
 // Table Session types for guests
+export interface GuestOrderItem {
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  sizeName?: string;
+  selectedAddons?: string[];
+}
+
 export interface GuestOrderSummary {
   orderId: string;
   subtotal: number;           // Сумма без service fee
@@ -178,6 +187,8 @@ export interface GuestOrderSummary {
   isPaid: boolean;
   itemCount: number;
   itemsPreview: string;
+  maskedPhone?: string;       // Последние 4 цифры телефона "**1234"
+  items: GuestOrderItem[];    // Детали заказа
 }
 
 export interface GuestSessionInfo {

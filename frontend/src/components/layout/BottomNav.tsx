@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import { useOrderStore } from "@/stores/orderStore";
+import { useOrderModeStore } from "@/stores/orderModeStore";
 
 interface NavItem {
   href: string;
@@ -11,11 +12,13 @@ interface NavItem {
   filledIcon?: string;
   label: string;
   badge?: () => number;
+  qrOnly?: boolean; // показывать только в QR-режиме
 }
 
 export function BottomNav() {
   const pathname = usePathname();
   const pendingCount = useOrderStore((state) => state.pendingCount);
+  const mode = useOrderModeStore((state) => state.mode);
 
   const navItems: NavItem[] = [
     {
@@ -28,7 +31,8 @@ export function BottomNav() {
       href: "/menu",
       icon: "restaurant_menu",
       filledIcon: "restaurant_menu",
-      label: "Меню"
+      label: "Меню",
+      qrOnly: true, // показывать только в QR-режиме
     },
     {
       href: "/orders",
@@ -49,9 +53,35 @@ export function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 safe-area-inset-bottom z-50">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
-        {navItems.map((item) => {
+        {navItems
+          .filter((item) => !item.qrOnly || mode === "qr")
+          .map((item) => {
           const active = isActive(item.href);
           const badgeCount = item.badge?.() || 0;
+          const isDisabled = item.href === "/" && mode === "qr";
+
+          // Заблокированная кнопка "Главная" в QR-режиме
+          if (isDisabled) {
+            return (
+              <div
+                key={item.href}
+                className="flex flex-col items-center justify-center flex-1 h-full relative opacity-40 cursor-not-allowed"
+              >
+                <div className="relative">
+                  <div className="p-1.5 rounded-xl">
+                    <Icon
+                      name={item.icon}
+                      size={24}
+                      className="text-gray-400"
+                    />
+                  </div>
+                </div>
+                <span className="text-xs mt-0.5 font-medium text-gray-400">
+                  {item.label}
+                </span>
+              </div>
+            );
+          }
 
           return (
             <Link

@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
-import type { OrderStatus, OrderItemStatus, Order, GuestSessionInfo, OrderType } from "@/types";
+import type { OrderStatus, OrderItemStatus, Order, GuestSessionInfo, OrderType, GuestOrderItem } from "@/types";
 import { normalizeOrderStatus, normalizeItemStatus, normalizeOrderType } from "@/types";
 
 const statusConfig: Record<
@@ -42,7 +42,8 @@ const itemStatusConfig: Record<
 export default function OrdersPage() {
   const router = useRouter();
   const { isAuthenticated, userId } = useAuthStore();
-  const { onlinePaymentAvailable: tableOnlinePayment } = useTableStore();
+  const { onlinePaymentAvailable: tableOnlinePayment, tableId } = useTableStore();
+  const { mode } = useOrderModeStore();
   const { clearCart } = useCartStore();
   const { clearMode } = useOrderModeStore();
   const { setPendingCount } = useOrderStore();
@@ -72,6 +73,24 @@ export default function OrdersPage() {
     enabled: isAuthenticated,
     refetchInterval: 30000, // Auto-refresh every 30 seconds as backup
   });
+
+  // Load session info for QR mode to show other guests' orders
+  useEffect(() => {
+    const loadSessionInfo = async () => {
+      if (mode === "qr" && tableId && isAuthenticated) {
+        setLoadingSessionInfo(true);
+        try {
+          const info = await getMySessionInfo(tableId);
+          setSessionInfo(info);
+        } catch {
+          setSessionInfo(null);
+        } finally {
+          setLoadingSessionInfo(false);
+        }
+      }
+    };
+    loadSessionInfo();
+  }, [mode, tableId, isAuthenticated, orders]);
 
   // Update pending orders count - use ref to avoid infinite loop
   const prevPendingCountRef = useRef<number>(-1);
@@ -302,6 +321,51 @@ export default function OrdersPage() {
       <OrderModeBar />
 
       <div className="p-4 space-y-4 max-w-lg mx-auto">
+        {/* Other guests' orders section */}
+        {mode === "qr" && sessionInfo && sessionInfo.otherOrders.length > 0 && (
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex items-center gap-2 mb-3">
+              <Icon name="group" size={18} className="text-gray-500" />
+              <span className="text-sm font-medium text-gray-700">
+                Заказы за столом ({sessionInfo.guestCount} гостей)
+              </span>
+            </div>
+            <div className="space-y-3">
+              {sessionInfo.otherOrders.map((guestOrder) => (
+                <div key={guestOrder.orderId} className="bg-white p-3 rounded-lg border border-gray-100">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                      {guestOrder.maskedPhone || "Гость"}
+                    </span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      guestOrder.isPaid
+                        ? "bg-green-100 text-green-700"
+                        : "bg-orange-100 text-orange-700"
+                    }`}>
+                      {guestOrder.isPaid ? "Оплачено" : "Не оплачено"}
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    {guestOrder.items.map((item: GuestOrderItem, idx: number) => (
+                      <div key={idx} className="flex justify-between text-sm">
+                        <span className="text-gray-600">
+                          {item.quantity}x {item.productName}
+                          {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                        </span>
+                        <span className="text-gray-500">{formatPrice(item.totalPrice)} TJS</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between mt-2 pt-2 border-t border-gray-100">
+                    <span className="text-sm font-medium">Итого:</span>
+                    <span className="text-sm font-semibold">{formatPrice(guestOrder.total)} TJS</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {orders.map((order) => {
           if (!order) return null;
           const normalizedStatus = normalizeOrderStatus(order.status);
@@ -508,6 +572,30 @@ export default function OrdersPage() {
                     <span className="font-semibold">{formatPrice(sessionInfo.myTotal)} TJS</span>
                   </div>
                 </div>
+
+                {/* Other guests' orders in payment modal */}
+                {sessionInfo.otherOrders.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-blue-200">
+                    <p className="text-xs font-medium text-blue-700 mb-2">Заказы других гостей:</p>
+                    <div className="space-y-2 max-h-32 overflow-y-auto">
+                      {sessionInfo.otherOrders.map((guestOrder) => (
+                        <div key={guestOrder.orderId} className="flex justify-between items-center text-xs">
+                          <span className="text-blue-600">
+                            {guestOrder.maskedPhone || "Гость"} ({guestOrder.itemCount} поз.)
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-blue-700">{formatPrice(guestOrder.total)} TJS</span>
+                            <span className={`px-1.5 py-0.5 rounded ${
+                              guestOrder.isPaid ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600"
+                            }`}>
+                              {guestOrder.isPaid ? "оплачено" : "не оплачено"}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
