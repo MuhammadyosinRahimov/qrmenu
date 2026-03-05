@@ -1,554 +1,61 @@
-[00:00:03.841] Server  LOG     ✓ Ready in 3.1s
-[00:46:36.700] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:46:37.532] Browser ERROR   Failed to load table: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://yalla-co-menu-beckend-dev-47c9.twc1.net/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/tables/by-number/3","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getTableByNumber (http://localhost:3001/_next/static/chunks/src_42085085._.js:426:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:990:45)","status":404}
-[00:46:37.533] Browser ERROR   Failed to load menu: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://yalla-co-menu-beckend-dev-47c9.twc1.net/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/menus/1b4d2564-5e29-4b09-be0e-97df69aa3dab","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getMenu (http://localhost:3001/_next/static/chunks/src_42085085._.js:430:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:1003:40)","status":404}
-[00:46:49.911] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:46:50.340] Browser ERROR   Failed to load table: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://yalla-co-menu-beckend-dev-47c9.twc1.net/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/tables/by-number/3","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getTableByNumber (http://localhost:3001/_next/static/chunks/src_42085085._.js:426:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:990:45)","status":404}
-[00:46:50.458] Browser ERROR   Failed to load menu: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://yalla-co-menu-beckend-dev-47c9.twc1.net/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/menus/1b4d2564-5e29-4b09-be0e-97df69aa3dab","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getMenu (http://localhost:3001/_next/static/chunks/src_42085085._.js:430:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:1003:40)","status":404}
-[00:47:25.573] Server  LOG     ✓ Compiled in 995ms
-[00:47:25.777] Browser ERROR   ./src/lib/api.ts:12:59
-Parsing ecmascript source code failed
-  10 | } from "@/types";
-  11 |
-> 12 | const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ""http://localhost:5079/"";
-     |                                                           ^^^^
-  13 |
-  14 | // Helper to build full image URL from relative path
-  15 | export const getImageUrl = (imageUrl: string | null | undefined): string | null => {
-
-Expected a semicolon
-
-Import traces:
-  #1 [Client Component Browser]:
-    ./src/lib/api.ts [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  #2 [Client Component SSR]:
-    ./src/lib/api.ts [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-  #3 [Client Component Browser]:
-    ./src/lib/api.ts [Client Component Browser]
-    ./src/stores/authStore.ts [Client Component Browser]
-    ./src/components/StoreHydration.tsx [Client Component Browser]
-    ./src/components/StoreHydration.tsx [Server Component]
-    ./src/app/layout.tsx [Server Component]
-
-  #4 [Client Component SSR]:
-    ./src/lib/api.ts [Client Component SSR]
-    ./src/stores/authStore.ts [Client Component SSR]
-    ./src/components/StoreHydration.tsx [Client Component SSR]
-    ./src/components/StoreHydration.tsx [Server Component]
-    ./src/app/layout.tsx [Server Component]
-[00:47:26.779] Browser ERROR   ./src/lib/api.ts:12:59
-Parsing ecmascript source code failed
-  10 | } from "@/types";
-  11 |
-> 12 | const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ""http://localhost:5079/";
-     |                                                           ^^^^
-  13 |
-  14 | // Helper to build full image URL from relative path
-  15 | export const getImageUrl = (imageUrl: string | null | undefined): string | null => {
-
-Expected a semicolon
-
-Import traces:
-  #1 [Client Component Browser]:
-    ./src/lib/api.ts [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  #2 [Client Component SSR]:
-    ./src/lib/api.ts [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-  #3 [Client Component Browser]:
-    ./src/lib/api.ts [Client Component Browser]
-    ./src/stores/authStore.ts [Client Component Browser]
-    ./src/components/StoreHydration.tsx [Client Component Browser]
-    ./src/components/StoreHydration.tsx [Server Component]
-    ./src/app/layout.tsx [Server Component]
-
-  #4 [Client Component SSR]:
-    ./src/lib/api.ts [Client Component SSR]
-    ./src/stores/authStore.ts [Client Component SSR]
-    ./src/components/StoreHydration.tsx [Client Component SSR]
-    ./src/components/StoreHydration.tsx [Server Component]
-    ./src/app/layout.tsx [Server Component]
-[00:47:29.692] Server  LOG     ✓ Compiled in 99ms
-[00:47:30.769] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:47:31.303] Browser ERROR   Failed to load table: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:5079//api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/tables/by-number/3","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getTableByNumber (http://localhost:3001/_next/static/chunks/src_42085085._.js:426:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:990:45)","status":404}
-[00:47:31.303] Browser ERROR   Failed to load menu: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"http://localhost:5079//api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/menus/1b4d2564-5e29-4b09-be0e-97df69aa3dab","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:6588:16)\n    at XMLHttpRequest.onloadend (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7106:174)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getMenu (http://localhost:3001/_next/static/chunks/src_42085085._.js:430:22)\n    at async MenuContent.useEffect.loadData (http://localhost:3001/_next/static/chunks/src_07ebd036._.js:1003:40)","status":404}
-[00:47:40.007] Server  LOG     ✓ Compiled in 105ms
-[00:47:40.604] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:47:45.540] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:50:40.877] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:50:51.253] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:51:38.418] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:51:38.909] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:51:53.364] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:52:08.038] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:52:09.338] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:52:36.449] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[00:53:27.990] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:55:51.450] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[00:55:54.723] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:56:14.481] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[00:58:57.875] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:59:05.157] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:59:30.323] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:59:38.629] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[00:59:46.636] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:59:59.994] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:00:02.712] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:00:04.667] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:00:15.339] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:00:17.105] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:00:23.376] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:00:28.264] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:12:41.830] Server  LOG     ✓ Compiled in 450ms
-[01:12:58.466] Server  LOG     ✓ Compiled in 96ms
-[01:13:39.616] Server  LOG     ✓ Compiled in 118ms
-[01:14:00.829] Server  LOG     ✓ Compiled in 94ms
-[01:14:30.027] Server  LOG     ✓ Compiled in 129ms
-[01:16:54.404] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.415] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.437] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.453] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.496] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.503] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:16:54.525] Server  LOG     ✓ Compiled in 107ms
-[01:17:22.822] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.830] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.839] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.848] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.854] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.862] Server  ERROR   ⨯ ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[01:17:22.868] Server  LOG     ✓ Compiled in 75ms
-[01:19:24.272] Server  LOG     ✓ Compiled in 95ms
-[01:24:34.124] Browser ERROR   ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-[01:24:34.124] Browser ERROR   ./src/app/orders/page.tsx:9:1
-Export getSignalRUrl doesn't exist in target module
-   7 | import { useAuthStore } from "@/stores/authStore";
-   8 | import { useTableStore } from "@/stores/tableStore";
->  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  10 | import { Header } from "@/components/layout/Header";
-  11 | import { BottomNav } from "@/components/layout/BottomNav";
-  12 | import { Button } from "@/components/ui/Button";
-
-The export getSignalRUrl was not found in module [project]/src/lib/api.ts [app-client] (ecmascript).
-Did you mean to import getImageUrl?
-All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-[01:24:34.124] Browser ERROR   ./src/app/orders/page.tsx:9:1
-Export getSignalRUrl doesn't exist in target module
-   7 | import { useAuthStore } from "@/stores/authStore";
-   8 | import { useTableStore } from "@/stores/tableStore";
->  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  10 | import { Header } from "@/components/layout/Header";
-  11 | import { BottomNav } from "@/components/layout/BottomNav";
-  12 | import { Button } from "@/components/ui/Button";
-
-The export getSignalRUrl was not found in module [project]/src/lib/api.ts [app-ssr] (ecmascript).
-Did you mean to import getImageUrl?
-All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-[01:24:34.124] Browser ERROR   ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-[01:24:34.124] Browser ERROR   ./src/app/orders/page.tsx:6:1
-Module not found: Can't resolve '@microsoft/signalr'
-  4 | import { useRouter } from "next/navigation";
-  5 | import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-> 6 | import * as signalR from "@microsoft/signalr";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 | import { useAuthStore } from "@/stores/authStore";
-  8 | import { useTableStore } from "@/stores/tableStore";
-  9 | import { getOrders, cancelOrderItem, createPayment, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
-
-Import traces:
-  Client Component Browser:
-    ./src/app/orders/page.tsx [Client Component Browser]
-    ./src/app/orders/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/app/orders/page.tsx [Client Component SSR]
-    ./src/app/orders/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-[01:24:43.050] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:43:23.985] Server  LOG     ✓ Compiled in 10.2s
-[01:44:54.757] Server  LOG     ✓ Compiled in 130ms
-[01:46:31.311] Server  LOG     ✓ Compiled in 218ms
-[01:47:18.347] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:47:23.277] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:48:03.202] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[01:48:04.840] Browser INFO    [2026-02-28T10:38:21.740Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[01:48:04.840] Browser ERROR   [2026-02-28T10:38:21.747Z] Error: Failed to start the HttpConnection before stop() was called.
-[01:48:04.840] Browser INFO    [2026-02-28T10:38:21.751Z] Information: Connection disconnected.
-[01:48:04.840] Browser ERROR   SignalR connection error: {}
-[01:48:04.840] Browser INFO    [2026-02-28T10:38:21.784Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[01:48:13.222] Browser INFO    [2026-02-28T10:38:30.214Z] Information: Connection disconnected.
-[01:48:21.825] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:48:23.937] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:48:32.314] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:48:34.075] Browser INFO    [2026-02-28T10:38:51.034Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[01:48:34.075] Browser ERROR   [2026-02-28T10:38:51.034Z] Error: Failed to start the HttpConnection before stop() was called.
-[01:48:34.075] Browser INFO    [2026-02-28T10:38:51.036Z] Information: Connection disconnected.
-[01:48:34.075] Browser ERROR   SignalR connection error: {}
-[01:48:34.075] Browser INFO    [2026-02-28T10:38:51.068Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[01:49:14.984] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:49:15.090] Browser INFO    [2026-02-28T10:39:32.079Z] Information: Connection disconnected.
-[01:49:18.242] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:49:23.104] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:49:29.714] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:50:28.795] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:50:32.086] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:50:45.686] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:50:50.008] Server  ERROR   ReferenceError: location is not defined
-[01:50:50.710] Server  ERROR   ⨯ "uncaughtException:" ReferenceError: location is not defined
-[01:50:51.231] Server  ERROR   ⨯ "uncaughtException: " ReferenceError: location is not defined
-[01:50:51.982] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:50:52.227] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[01:51:02.036] Server  ERROR   ReferenceError: location is not defined
-[01:51:02.789] Server  ERROR   ⨯ "uncaughtException:" ReferenceError: location is not defined
-[01:51:03.434] Server  ERROR   ⨯ "uncaughtException: " ReferenceError: location is not defined
-[01:51:04.594] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:51:05.954] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[01:51:12.793] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+[00:00:03.985] Server  LOG     ✓ Ready in 3.1s
+[00:00:09.113] Server  LOG     ○ Compiling / ...
+[00:00:18.078] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:04.672] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:34.205] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:01:34.215] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:01:34.403] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:01:34.410] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:01:34.519] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:01:34.609] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:01:34.618] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:01:34.645] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:01:34.702] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:01:34.711] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
+[00:01:34.786] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:01:34.818] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
+[00:01:34.823] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:01:34.887] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
+[00:01:34.891] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
+[00:01:34.944] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:01:34.982] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
+[00:01:35.003] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:01:35.007] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:01:35.096] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
+[00:01:35.127] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
+[00:01:35.204] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
+[00:01:35.449] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:01:35.477] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:01:35.672] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
+[00:01:35.784] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:01:38.159] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:01:51.022] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:55.726] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
+[00:01:55.732] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:01:55.741] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:01:55.750] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:01:55.756] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:01:55.775] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:01:55.910] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:01:55.914] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:01:55.919] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:01:55.925] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:01:55.943] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:01:55.955] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:01:56.113] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:01:56.121] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
+[00:01:56.127] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
+[00:01:56.137] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
+[00:01:56.142] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:01:56.172] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
+[00:01:56.345] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
+[00:01:56.351] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:01:56.354] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:01:56.357] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:01:56.360] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
+[00:01:56.364] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:02:39.693] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:40.012] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
 - A server/client branch `if (typeof window !== 'undefined')`.
 - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
@@ -561,346 +68,58 @@ It can also happen if the client has a browser extension installed which messes 
 https://react.dev/link/hydration-mismatch
 
   ...
-    <RenderFromTemplateContext>
-      <ScrollAndFocusHandler segmentPath={[...]}>
-        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:true, ...}}>
-          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
-            <LoadingBoundary name="cart/" loading={null}>
-              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
-                <RedirectBoundary>
-                  <RedirectErrorBoundary router={{...}}>
-                    <InnerLayoutRouter url="/cart" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
-                      <SegmentViewNode type="page" pagePath="cart/page.tsx">
-                        <SegmentTrieNode>
-                        <ClientPageRoot Component={function CartPage} serverProvidedParams={{...}}>
-                          <CartPage params={Promise} searchParams={Promise}>
-+                           <div className="min-h-screen bg-background pb-20">
--                           <Suspense>
+    <RedirectBoundary>
+      <RedirectErrorBoundary router={{...}}>
+        <InnerLayoutRouter url="/menu" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} segmentPath={[...]} ...>
+          <SegmentViewNode type="page" pagePath="menu/page.tsx">
+            <SegmentTrieNode>
+            <ClientPageRoot Component={function MenuPage} serverProvidedParams={{...}}>
+              <MenuPage params={Promise} searchParams={Promise}>
+                <Suspense fallback={<div>}>
+                  <MenuContent>
+                    <div className="min-h-scre...">
+                      <Header>
+                      <OrderModeBar>
+                      <div>
+                      <FloatingCart>
+                        <LinkComponent href="/cart" className="fixed bott...">
++                         <a
++                           className="fixed bottom-20 right-4 z-50 animate-in slide-in-from-bottom-4 duration-300"
++                           ref={function}
++                           onClick={function onClick}
++                           onMouseEnter={function onMouseEnter}
++                           onTouchStart={function onTouchStart}
++                           href="/cart"
++                         >
+-                         <nav
+-                           className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray..."
+-                         >
                       ...
-                    ...
           ...
+        ...
 
-[01:54:34.224] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:55:17.963] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:58:03.026] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[01:58:56.098] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:58:58.069] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[02:23:36.768] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:41:50.039] Server  LOG     ✓ Compiled in 89ms
-[02:42:25.621] Server  LOG     ✓ Compiled in 554ms
-[02:43:10.667] Server  LOG     ✓ Compiled in 700ms
-[02:44:10.878] Server  ERROR   ⨯ ./src/components/menu/ProductGrid.tsx:4:1
-Module not found: Can't resolve './ProductListCard'
-  2 |
-  3 | import { ProductCard } from "./ProductCard";
-> 4 | import { ProductListCard } from "./ProductListCard";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 | import { Icon } from "@/components/ui/Icon";
-  6 | import { useUIStore } from "@/stores/uiStore";
-  7 | import type { Product } from "@/types";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/components/menu/ProductGrid.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/components/menu/ProductGrid.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:44:10.894] Server  ERROR   ⨯ ./src/components/menu/ProductGrid.tsx:4:1
-Module not found: Can't resolve './ProductListCard'
-  2 |
-  3 | import { ProductCard } from "./ProductCard";
-> 4 | import { ProductListCard } from "./ProductListCard";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 | import { Icon } from "@/components/ui/Icon";
-  6 | import { useUIStore } from "@/stores/uiStore";
-  7 | import type { Product } from "@/types";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/components/menu/ProductGrid.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/components/menu/ProductGrid.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:44:10.902] Server  ERROR   ⨯ ./src/components/menu/ProductGrid.tsx:4:1
-Module not found: Can't resolve './ProductListCard'
-  2 |
-  3 | import { ProductCard } from "./ProductCard";
-> 4 | import { ProductListCard } from "./ProductListCard";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 | import { Icon } from "@/components/ui/Icon";
-  6 | import { useUIStore } from "@/stores/uiStore";
-  7 | import type { Product } from "@/types";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/components/menu/ProductGrid.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/components/menu/ProductGrid.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:44:10.908] Server  ERROR   ⨯ ./src/components/menu/ProductGrid.tsx:4:1
-Module not found: Can't resolve './ProductListCard'
-  2 |
-  3 | import { ProductCard } from "./ProductCard";
-> 4 | import { ProductListCard } from "./ProductListCard";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 | import { Icon } from "@/components/ui/Icon";
-  6 | import { useUIStore } from "@/stores/uiStore";
-  7 | import type { Product } from "@/types";
-
-
-
-Import traces:
-  Client Component Browser:
-    ./src/components/menu/ProductGrid.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/components/menu/ProductGrid.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:44:10.919] Server  LOG     ✓ Compiled in 355ms
-[02:44:45.290] Server  LOG     ✓ Compiled in 197ms
-[02:45:56.519] Server  LOG     ✓ Compiled in 284ms
-[02:56:42.204] Browser ERROR   ./src/components/menu/ProductGrid.tsx:4:1
-Module not found: Can't resolve './ProductListCard'
-  2 |
-  3 | import { ProductCard } from "./ProductCard";
-> 4 | import { ProductListCard } from "./ProductListCard";
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  5 | import { Icon } from "@/components/ui/Icon";
-  6 | import { useUIStore } from "@/stores/uiStore";
-  7 | import type { Product } from "@/types";
-
-Import traces:
-  Client Component Browser:
-    ./src/components/menu/ProductGrid.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Client Component Browser]
-    ./src/app/menu/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./src/components/menu/ProductGrid.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Client Component SSR]
-    ./src/app/menu/page.tsx [Server Component]
-
-https://nextjs.org/docs/messages/module-not-found
-[02:57:04.260] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[02:57:08.632] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[02:57:11.818] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[02:57:27.079] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[02:58:07.297] Browser ERROR   Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Router CheckoutPage CheckoutPage
-[02:58:10.488] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[02:58:10.488] Browser INFO    [2026-02-28T11:48:27.451Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[02:58:10.489] Browser ERROR   [2026-02-28T11:48:27.452Z] Error: Failed to start the HttpConnection before stop() was called.
-[02:58:10.489] Browser INFO    [2026-02-28T11:48:27.454Z] Information: Connection disconnected.
-[02:58:10.489] Browser ERROR   SignalR connection error: {}
-[02:58:10.489] Browser INFO    [2026-02-28T11:48:27.457Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[02:58:10.489] Browser ERROR   [2026-02-28T11:48:27.458Z] Error: Failed to start the HttpConnection before stop() was called.
-[02:58:10.489] Browser INFO    [2026-02-28T11:48:27.458Z] Information: Connection disconnected.
-[02:58:10.489] Browser ERROR   SignalR connection error: {}
-[02:59:20.984] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:00:35.206] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[03:00:53.354] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[03:01:14.457] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[03:01:17.320] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[03:01:38.867] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[03:01:38.867] Browser INFO    [2026-02-28T11:51:55.827Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:01:38.867] Browser ERROR   [2026-02-28T11:51:55.828Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:01:38.867] Browser INFO    [2026-02-28T11:51:55.833Z] Information: Connection disconnected.
-[03:01:38.867] Browser ERROR   SignalR connection error: {}
-[03:01:38.867] Browser INFO    [2026-02-28T11:51:55.838Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:01:38.867] Browser ERROR   [2026-02-28T11:51:55.839Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:01:38.867] Browser INFO    [2026-02-28T11:51:55.840Z] Information: Connection disconnected.
-[03:01:38.867] Browser ERROR   SignalR connection error: {}
-[03:08:43.908] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:08:44.888] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[03:08:44.888] Browser INFO    [2026-02-28T11:59:01.868Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:08:44.888] Browser ERROR   [2026-02-28T11:59:01.870Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:08:44.888] Browser INFO    [2026-02-28T11:59:01.872Z] Information: Connection disconnected.
-[03:08:44.888] Browser ERROR   SignalR connection error: {}
-[03:08:50.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:08:55.882] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[03:08:55.882] Browser INFO    [2026-02-28T11:59:12.838Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:08:55.882] Browser ERROR   [2026-02-28T11:59:12.839Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:08:55.882] Browser INFO    [2026-02-28T11:59:12.843Z] Information: Connection disconnected.
-[03:08:55.883] Browser ERROR   SignalR connection error: {}
-[03:08:55.883] Browser INFO    [2026-02-28T11:59:12.847Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:08:55.883] Browser ERROR   [2026-02-28T11:59:12.848Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:08:55.883] Browser INFO    [2026-02-28T11:59:12.850Z] Information: Connection disconnected.
-[03:08:55.883] Browser ERROR   SignalR connection error: {}
-[03:09:10.965] Server  LOG     ✓ Compiled in 373ms
-[03:09:10.981] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[03:09:14.640] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:09:21.784] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[03:09:21.784] Browser INFO    [2026-02-28T11:59:37.660Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:09:21.784] Browser ERROR   [2026-02-28T11:59:37.661Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:09:21.784] Browser INFO    [2026-02-28T11:59:37.673Z] Information: Connection disconnected.
-[03:09:21.784] Browser ERROR   SignalR connection error: {}
-[03:09:25.574] Server  LOG     ✓ Compiled in 155ms
-[03:09:25.621] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[03:09:29.243] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:09:33.829] Browser ERROR   uncaughtError: Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
-[03:09:33.829] Browser INFO    [2026-02-28T11:59:50.542Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:09:33.829] Browser ERROR   [2026-02-28T11:59:50.543Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:09:33.830] Browser INFO    [2026-02-28T11:59:50.551Z] Information: Connection disconnected.
-[03:09:33.830] Browser ERROR   SignalR connection error: {}
-[03:11:43.241] Server  LOG     ✓ Compiled in 151ms
-[03:11:43.258] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[03:11:44.369] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:11:45.125] Browser INFO    [2026-02-28T12:02:01.748Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:12:57.854] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:12:58.204] Browser INFO    [2026-02-28T12:03:15.161Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:12:58.882] Browser INFO    [2026-02-28T12:03:15.872Z] Information: Connection disconnected.
-[03:13:01.490] Browser INFO    [2026-02-28T12:03:18.473Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:13:01.490] Browser ERROR   [2026-02-28T12:03:18.474Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:13:01.490] Browser INFO    [2026-02-28T12:03:18.477Z] Information: Connection disconnected.
-[03:13:01.490] Browser ERROR   SignalR connection error: {}
-[03:13:01.490] Browser INFO    [2026-02-28T12:03:18.482Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:19:23.527] Browser INFO    [2026-02-28T12:09:40.527Z] Information: Connection disconnected.
-[03:19:41.573] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[03:20:41.705] Browser INFO    [2026-02-28T12:10:58.318Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:20:41.706] Browser ERROR   [2026-02-28T12:10:58.320Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:20:41.706] Browser INFO    [2026-02-28T12:10:58.333Z] Information: Connection disconnected.
-[03:20:41.706] Browser ERROR   SignalR connection error: {}
-[03:20:41.706] Browser INFO    [2026-02-28T12:10:58.377Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:25:28.332] Browser INFO    [2026-02-28T12:15:45.324Z] Information: Connection disconnected.
-[03:27:17.345] Server  LOG     ✓ Compiled in 311ms
-[03:27:33.608] Server  LOG     ✓ Compiled in 293ms
-[03:28:57.008] Browser INFO    [2026-02-28T12:19:14.002Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:28:57.009] Browser ERROR   [2026-02-28T12:19:14.003Z] Error: Failed to start the HttpConnection before stop() was called.
-[03:28:57.009] Browser INFO    [2026-02-28T12:19:14.005Z] Information: Connection disconnected.
-[03:28:57.009] Browser ERROR   SignalR connection error: {}
-[03:28:57.009] Browser INFO    [2026-02-28T12:19:14.008Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[03:29:35.843] Browser ERROR   [2026-02-28T12:19:46.422Z] Error: Connection disconnected with error 'Error: WebSocket closed with status code: 1006 (no reason given).'.
-[03:29:35.844] Browser INFO    [2026-02-28T12:19:51.287Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[04:10:57.061] Browser ERROR   [2026-02-28T12:20:48.806Z] Error: Connection disconnected with error 'Error: WebSocket closed with status code: 1006 (no reason given).'.
-[04:10:57.061] Browser INFO    [2026-02-28T12:20:48.818Z] Information: (WebSockets transport) There was an error with the transport.
-[04:10:57.061] Browser ERROR   [2026-02-28T12:20:48.819Z] Error: Failed to start the connection: Error: WebSocket failed to connect. The connection could not be found on the server, either the endpoint may not be a SignalR endpoint, the connection ID is not present on the server, or there is a proxy blocking WebSockets. If you have multiple servers check that sticky sessions are enabled.
-[04:10:57.782] Browser INFO    [2026-02-28T13:01:14.220Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:27:17.478] Browser ERROR   [2026-03-03T08:17:27.476Z] Error: Connection disconnected with error 'Error: WebSocket closed with status code: 1006 (no reason given).'.
-[71:27:17.478] Browser INFO    [2026-03-03T08:17:27.717Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:27:20.506] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[71:28:30.645] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:36:19.183] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:36:24.670] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:36:26.743] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:36:33.914] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:37:10.038] Browser INFO    [2026-03-03T08:27:23.290Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:37:10.038] Browser ERROR   [2026-03-03T08:27:23.294Z] Error: Failed to start the HttpConnection before stop() was called.
-[71:37:10.038] Browser INFO    [2026-03-03T08:27:23.302Z] Information: Connection disconnected.
-[71:37:10.038] Browser ERROR   SignalR connection error: {}
-[71:37:10.038] Browser INFO    [2026-03-03T08:27:23.311Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:38:05.301] Browser INFO    [2026-03-03T08:28:18.736Z] Information: Connection disconnected.
-[71:38:08.601] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:38:11.002] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:38:28.432] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:38:30.429] Browser INFO    [2026-03-03T08:28:43.851Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:38:30.429] Browser ERROR   [2026-03-03T08:28:43.851Z] Error: Failed to start the HttpConnection before stop() was called.
-[71:38:30.429] Browser INFO    [2026-03-03T08:28:43.853Z] Information: Connection disconnected.
-[71:38:30.429] Browser ERROR   SignalR connection error: {}
-[71:38:30.429] Browser INFO    [2026-03-03T08:28:43.857Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:38:34.041] Browser INFO    [2026-03-03T08:28:47.475Z] Information: Connection disconnected.
-[71:38:34.044] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:46:17.979] Browser INFO    [2026-03-03T08:36:31.389Z] Information: (WebSockets transport) There was an error with the transport.
-[71:46:17.980] Browser ERROR   [2026-03-03T08:36:31.390Z] Error: Failed to start the connection: Error: WebSocket failed to connect. The connection could not be found on the server, either the endpoint may not be a SignalR endpoint, the connection ID is not present on the server, or there is a proxy blocking WebSockets. If you have multiple servers check that sticky sessions are enabled.
-[71:46:17.980] Browser ERROR   SignalR connection error: {}
-[71:46:20.261] Browser INFO    [2026-03-03T08:36:33.451Z] Information: (WebSockets transport) There was an error with the transport.
-[71:46:20.261] Browser ERROR   [2026-03-03T08:36:33.452Z] Error: Failed to start the connection: Error: WebSocket failed to connect. The connection could not be found on the server, either the endpoint may not be a SignalR endpoint, the connection ID is not present on the server, or there is a proxy blocking WebSockets. If you have multiple servers check that sticky sessions are enabled.
-[71:46:20.261] Browser ERROR   SignalR connection error: {}
-[71:48:50.808] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:49:15.528] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:49:40.591] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:49:42.621] Browser INFO    [2026-03-03T08:39:56.039Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:49:42.621] Browser ERROR   [2026-03-03T08:39:56.039Z] Error: Failed to start the HttpConnection before stop() was called.
-[71:49:42.621] Browser INFO    [2026-03-03T08:39:56.041Z] Information: Connection disconnected.
-[71:49:42.621] Browser ERROR   SignalR connection error: {}
-[71:49:42.621] Browser INFO    [2026-03-03T08:39:56.045Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:50:49.762] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[71:50:51.030] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:06.020] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:11.404] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:14.895] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:16.454] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:22.059] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:30.001] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[71:51:33.658] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:51:34.895] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[71:52:21.508] Browser INFO    [2026-03-03T08:42:34.754Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[71:52:21.508] Browser ERROR   [2026-03-03T08:42:34.755Z] Error: Failed to start the HttpConnection before stop() was called.
-[71:52:21.508] Browser INFO    [2026-03-03T08:42:34.759Z] Information: Connection disconnected.
-[71:52:21.508] Browser ERROR   SignalR connection error: {}
-[71:52:21.508] Browser INFO    [2026-03-03T08:42:34.764Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:05:46.798] Browser INFO    [2026-03-03T08:56:00.189Z] Information: Connection disconnected.
-[72:05:47.301] Browser INFO    [2026-03-03T08:56:00.737Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:06:00.545] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:06:01.490] Browser INFO    [2026-03-03T08:56:14.608Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:06:05.057] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:06:45.850] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:06:50.940] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:07:06.045] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:07:29.819] Browser INFO    [2026-03-03T08:57:43.099Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:07:29.819] Browser ERROR   [2026-03-03T08:57:43.099Z] Error: Failed to start the HttpConnection before stop() was called.
-[72:07:29.819] Browser INFO    [2026-03-03T08:57:43.104Z] Information: Connection disconnected.
-[72:07:29.819] Browser ERROR   SignalR connection error: {}
-[72:07:29.820] Browser INFO    [2026-03-03T08:57:43.115Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:08:00.379] Browser INFO    [2026-03-03T08:58:13.817Z] Information: Connection disconnected.
-[72:11:18.793] Browser INFO    [2026-03-03T09:01:32.153Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:11:18.794] Browser ERROR   [2026-03-03T09:01:32.153Z] Error: Failed to start the HttpConnection before stop() was called.
-[72:11:18.795] Browser INFO    [2026-03-03T09:01:32.155Z] Information: Connection disconnected.
-[72:11:18.795] Browser ERROR   SignalR connection error: {}
-[72:11:18.798] Browser INFO    [2026-03-03T09:01:32.159Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:14:23.189] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:14:24.079] Browser INFO    [2026-03-03T09:04:37.186Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:24:13.735] Browser INFO    [2026-03-03T09:14:27.102Z] Information: Connection disconnected.
-[72:25:30.058] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:25:37.716] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:25:47.075] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:26:26.746] Browser INFO    [2026-03-03T09:16:40.153Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:26:26.746] Browser ERROR   [2026-03-03T09:16:40.154Z] Error: Failed to start the HttpConnection before stop() was called.
-[72:26:26.746] Browser INFO    [2026-03-03T09:16:40.159Z] Information: Connection disconnected.
-[72:26:26.746] Browser ERROR   SignalR connection error: {}
-[72:26:26.746] Browser INFO    [2026-03-03T09:16:40.165Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:27:00.571] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:27:01.710] Browser INFO    [2026-03-03T09:17:14.645Z] Information: WebSocket connected to ws://localhost:5079/hubs/orders.
-[72:27:13.982] Browser INFO    [2026-03-03T09:17:27.418Z] Information: Connection disconnected.
-[72:27:14.303] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:27:22.431] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:27:37.388] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:27:43.868] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:28:08.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[72:28:12.712] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
-[72:28:14.288] Server  ERROR   ⨯ "upstream image" "http://localhost:5079/images/77579c57-0b3c-472f-b7e4-a6d0206ddfff.jpg" "resolved to private ip" "[\"::1\",\"127.0.0.1\"]"
+[00:02:43.836] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:02:43.937] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:02:44.047] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:02:44.162] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:02:44.206] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
+[00:02:44.260] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:02:44.466] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:02:44.638] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:02:44.775] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:02:44.812] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:02:44.881] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:02:44.900] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:02:45.078] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:02:45.087] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
+[00:02:45.119] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
+[00:02:45.131] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
+[00:02:45.147] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:02:45.166] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
+[00:02:45.318] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
+[00:02:45.325] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:02:45.333] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:02:45.346] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:02:45.355] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
+[00:02:45.366] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:03:36.288] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

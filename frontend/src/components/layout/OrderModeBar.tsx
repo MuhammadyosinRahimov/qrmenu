@@ -35,7 +35,7 @@ export function OrderModeBar() {
         <div className="relative flex border border-gray-200 rounded-md p-1 bg-gray-50/50">
           {/* Sliding indicator */}
           <div
-            className="absolute top-1 bottom-1 bg-primary rounded-md transition-all duration-300 ease-out"
+            className="absolute top-1 bottom-1 bg-primary rounded-2xl transition-all duration-300 ease-out"
             style={{
               width: `calc(${100 / modes.length}% - 4px)`,
               left: `calc(${(activeIndex * 100) / modes.length}% + 2px)`,
@@ -50,7 +50,7 @@ export function OrderModeBar() {
                 setMode(m.value);
                 clearCart();
               }}
-              className={`relative z-10 flex-1 px-2 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+              className={`relative z-10 flex-1 px-4 py-1 text-sm font-medium rounded-2xl transition-all duration-300 ${
                 mode === m.value
                   ? "text-white"
                   : "text-gray-600 hover:text-gray-900"
