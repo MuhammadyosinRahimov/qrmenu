@@ -18,7 +18,7 @@ export function Header({ title, showTable = true }: HeaderProps) {
   }, []);
 
   // До гидрации показываем fallback title чтобы избежать мигания
-  const displayName = isHydrated ? (restaurantName || title || "QR Menu") : (title || "QR Menu");
+  const displayName = isHydrated ? (restaurantName || title || "Oson eats") : (title || "Oson eats");
   const displayTable = isHydrated ? tableNumber : null;
 
   return (

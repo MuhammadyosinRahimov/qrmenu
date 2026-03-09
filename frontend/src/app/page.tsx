@@ -145,7 +145,7 @@ function HomeContent() {
         <div className="absolute -top-16 right-0 w-48 h-48 bg-amber-200/30 rounded-full blur-3xl" />
       </div>
 
-      <Header title="QR Menu" />
+      <Header title="Oson eats" />
     
 
       <div className="relative p-4 space-y-8 max-w-md mx-auto">

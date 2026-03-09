@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "QR Menu",
+  title: "Oson eats",
   description: "Scan QR code to view restaurant menu ",
 };
 
