@@ -253,17 +253,38 @@ export default function OrdersPage() {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
         <Header title="Мои заказы" />
 
-        <div className="flex flex-col items-center justify-center py-20 px-4">
+        <div className="flex flex-col items-center justify-center py-16 px-4 max-w-md mx-auto">
           <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mb-6 shadow-lg shadow-orange-200">
-            <Icon name="lock" size={48} className="text-white" />
+            <Icon name="receipt_long" size={48} className="text-white" />
           </div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">
-            Требуется авторизация
+            Войдите для просмотра заказов
           </h2>
-          <p className="text-gray-500 text-center mb-6">
-            Чтобы просмотреть историю заказов, оформите заказ
+          <p className="text-gray-500 text-center mb-8">
+            Зарегистрируйтесь, чтобы видеть историю заказов и отслеживать их статус
           </p>
-          <Button onClick={() => router.push("/menu")}>Перейти в меню</Button>
+
+          {/* Registration button */}
+          <button
+            onClick={() => router.push("/checkout")}
+            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-orange-200/50 hover:shadow-xl hover:scale-[1.02] transition-all mb-4"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <Icon name="person_add" size={26} className="text-white" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-lg">Регистрация</p>
+                <p className="text-sm text-white/80">Войдите по номеру телефона</p>
+              </div>
+            </div>
+            <Icon name="arrow_forward" size={24} className="text-white" />
+          </button>
+
+          <Button onClick={() => router.push("/menu")} variant="outline" className="w-full">
+            <Icon name="restaurant_menu" size={20} className="mr-2" />
+            Перейти в меню
+          </Button>
         </div>
         <BottomNav />
       </div>
