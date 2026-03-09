@@ -15,19 +15,22 @@ export function FloatingCart() {
   };
 
   return (
-    <Link
-      href="/cart"
-      className="fixed bottom-20 right-4 z-50 animate-in slide-in-from-bottom-4 duration-300"
-    >
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full px-5 py-3 shadow-lg shadow-orange-200 flex items-center gap-3 hover:shadow-xl hover:scale-105 transition-all duration-200">
-        <div className="relative">
-          <Icon name="shopping_cart" size={22} className="text-white" />
-          <span className="absolute -top-2 -right-2 bg-white text-orange-500 text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
-            {itemCount}
-          </span>
+    <div className="fixed bottom-20 left-0 right-0 z-50 flex justify-center animate-in slide-in-from-bottom-4 duration-300 px-4">
+      <Link
+        href="/cart"
+        className="w-full max-w-md"
+      >
+        <div className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full px-5 py-3 shadow-lg shadow-orange-200 flex items-center justify-between hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
+          <div className="relative">
+            <Icon name="shopping_cart" size={22} className="text-white" />
+            <span className="absolute -top-2 -right-2 bg-white text-orange-500 text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+              {itemCount}
+            </span>
+          </div>
+          <span className="font-semibold">{formatPrice(total)} TJS</span>
+          <Icon name="arrow_forward" size={22} className="text-white" />
         </div>
-        <span className="font-semibold">{formatPrice(total)} TJS</span>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }

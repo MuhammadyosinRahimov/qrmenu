@@ -26,7 +26,6 @@ const statusConfig: Record<
 > = {
   Pending: { label: "Ожидает подтверждения", variant: "warning", icon: "schedule", color: "orange" },
   Confirmed: { label: "Готовится", variant: "primary", icon: "restaurant", color: "blue" },
-  Completed: { label: "Завершён", variant: "success", icon: "check_circle", color: "green" },
   Cancelled: { label: "Отменён", variant: "error", icon: "cancel", color: "red" },
 };
 
@@ -122,11 +121,6 @@ export default function OrdersPage() {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       const normalizedStatus = normalizeOrderStatus(updatedOrder.status);
       showToast(`Статус заказа обновлён: ${statusConfig[normalizedStatus]?.label}`, "success");
-
-      // Clear cart when order is completed
-      if (normalizedStatus === "Completed") {
-        clearOrderData(updatedOrder.orderType);
-      }
     });
 
     // Handle order updates
@@ -386,27 +380,23 @@ export default function OrdersPage() {
               <div className={`px-4 py-3 flex items-center justify-between ${
                 normalizedStatus === "Pending" ? "bg-gradient-to-r from-orange-50 to-amber-50" :
                 normalizedStatus === "Confirmed" ? "bg-gradient-to-r from-blue-50 to-indigo-50" :
-                normalizedStatus === "Completed" ? "bg-gradient-to-r from-green-50 to-emerald-50" :
                 "bg-gradient-to-r from-red-50 to-rose-50"
               }`}>
                 <div className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     normalizedStatus === "Pending" ? "bg-orange-100" :
                     normalizedStatus === "Confirmed" ? "bg-blue-100" :
-                    normalizedStatus === "Completed" ? "bg-green-100" :
                     "bg-red-100"
                   }`}>
                     <Icon name={status.icon} size={18} className={
                       normalizedStatus === "Pending" ? "text-orange-500" :
                       normalizedStatus === "Confirmed" ? "text-blue-500" :
-                      normalizedStatus === "Completed" ? "text-green-500" :
                       "text-red-500"
                     } />
                   </div>
                   <span className={`font-medium text-sm ${
                     normalizedStatus === "Pending" ? "text-orange-700" :
                     normalizedStatus === "Confirmed" ? "text-blue-700" :
-                    normalizedStatus === "Completed" ? "text-green-700" :
                     "text-red-700"
                   }`}>
                     {status.label}
@@ -794,7 +784,7 @@ export default function OrdersPage() {
 
               {/* Action buttons */}
               <div className="space-y-2">
-                {normalizeOrderStatus(selectedOrder.status) !== "Completed" && normalizeOrderStatus(selectedOrder.status) !== "Cancelled" && (
+                {normalizeOrderStatus(selectedOrder.status) !== "Cancelled" && (
                   <div className="grid grid-cols-2 gap-2">
                     <Button onClick={() => router.push("/menu")} variant="outline">
                       <Icon name="add" size={18} className="mr-1" />

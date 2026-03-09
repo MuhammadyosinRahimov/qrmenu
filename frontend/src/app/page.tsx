@@ -193,8 +193,29 @@ function HomeContent() {
           </div>
         )}
 
+        {/* Registration button for unauthenticated users */}
+        {!isAuthenticated && mode !== "qr" && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <button
+              onClick={() => router.push("/checkout")}
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-orange-200/50 hover:shadow-xl hover:scale-[1.02] transition-all"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <Icon name="person_add" size={26} className="text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-lg">Регистрация</p>
+                  <p className="text-sm text-white/80">Войдите для оформления заказов</p>
+                </div>
+              </div>
+              <Icon name="arrow_forward" size={24} className="text-white" />
+            </button>
+          </div>
+        )}
+
         {/* Restaurant list */}
-        {mode !== "qr" && (
+        {isAuthenticated && mode !== "qr" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <RestaurantList
               mode={mode}

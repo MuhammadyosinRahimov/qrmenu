@@ -1,125 +1,301 @@
-[00:00:03.985] Server  LOG     ✓ Ready in 3.1s
-[00:00:09.113] Server  LOG     ○ Compiling / ...
-[00:00:18.078] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:04.672] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:34.205] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
-[00:01:34.215] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
-[00:01:34.403] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
-[00:01:34.410] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
-[00:01:34.519] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
-[00:01:34.609] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
-[00:01:34.618] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
-[00:01:34.645] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
-[00:01:34.702] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
-[00:01:34.711] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
-[00:01:34.786] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
-[00:01:34.818] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
-[00:01:34.823] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
-[00:01:34.887] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
-[00:01:34.891] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
-[00:01:34.944] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
-[00:01:34.982] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
-[00:01:35.003] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
-[00:01:35.007] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
-[00:01:35.096] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
-[00:01:35.127] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
-[00:01:35.204] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
-[00:01:35.449] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
-[00:01:35.477] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
-[00:01:35.672] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
-[00:01:35.784] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
-[00:01:38.159] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
-[00:01:51.022] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:55.726] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
-[00:01:55.732] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
-[00:01:55.741] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
-[00:01:55.750] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
-[00:01:55.756] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
-[00:01:55.775] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
-[00:01:55.910] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
-[00:01:55.914] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
-[00:01:55.919] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
-[00:01:55.925] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
-[00:01:55.943] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
-[00:01:55.955] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
-[00:01:56.113] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
-[00:01:56.121] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
-[00:01:56.127] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
-[00:01:56.137] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
-[00:01:56.142] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
-[00:01:56.172] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
-[00:01:56.345] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
-[00:01:56.351] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
-[00:01:56.354] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
-[00:01:56.357] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
-[00:01:56.360] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
-[00:01:56.364] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
-[00:02:39.693] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:40.012] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+[00:00:04.020] Server  LOG     ✓ Ready in 3.1s
+[00:07:10.360] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:16.429] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:31.143] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:07:31.159] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:07:31.185] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:07:31.336] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:07:31.456] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:07:31.550] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:07:40.267] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:07:40.276] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:07:45.042] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:07:45.050] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:07:45.196] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:07:45.202] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:07:45.282] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:07:45.294] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:07:45.307] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:07:45.330] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:07:45.336] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:07:45.342] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
+[00:07:46.356] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:07:46.363] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
+[00:08:20.034] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:08:20.052] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:08:20.135] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:08:20.232] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:08:20.260] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:08:20.304] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:08:20.631] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:08:20.671] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:08:20.701] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:08:20.733] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:08:20.749] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:08:20.796] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:08:20.952] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:08:20.977] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:08:22.484] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:08:22.616] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:08:29.464] Server  LOG     ○ Compiling /cart ...
+[00:08:52.341] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:08:52.385] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:09:39.097] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:09:39.111] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:09:39.125] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:09:39.146] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:09:39.153] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:09:39.255] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:09:39.393] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:09:39.400] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:09:39.412] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:09:39.425] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:09:39.434] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:09:39.453] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:09:39.559] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:09:39.576] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:09:39.644] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:09:39.653] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:09:43.868] Server  LOG     ✓ Compiled in 666ms
+[00:10:01.823] Server  LOG     ✓ Compiled in 182ms
+[00:10:06.530] Browser ERROR   Error checking restaurant status: {"code":"ERR_NETWORK","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"baseURL":"https://yalla-co-menu-beckend-dev-47c9.twc1.net/api","env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY0ZGNiYjJlLWQxZDUtNDgzZC05ODc4LWI2YTNiNWEzNmVkMiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL21vYmlsZXBob25lIjoiKzk5Mjk4ODEyMjczMSIsImlzQWRtaW4iOiJmYWxzZSIsImV4cCI6MTc3MjYxNTc4NywiaXNzIjoiUXJNZW51IiwiYXVkIjoiUXJNZW51QXBwIn0.LWVc_uKddIEyTDV1-JQLswFZSJoS1JIJ1X1Y6q9BL_s","Content-Type":"application/json"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"/restaurants/ce301329-1edd-4d72-8e56-2aa15baf8195/status","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Network Error","name":"AxiosError","stack":"AxiosError: Network Error\n    at XMLHttpRequest.handleError (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7152:25)\n    at Axios.request (http://localhost:3001/_next/static/chunks/node_modules_dddb9c32._.js:7912:49)\n    at async getRestaurantStatus (http://localhost:3001/_next/static/chunks/src_b8555fef._.js:565:22)\n    at async CheckoutPage.useEffect.checkRestaurantStatus (http://localhost:3001/_next/static/chunks/src_1394dd9e._.js:1817:44)"}
+[00:10:40.958] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:10:40.969] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:10:40.981] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:10:40.991] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:10:40.998] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:10:41.005] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:10:41.422] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:10:41.433] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:10:41.442] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:10:41.450] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:10:41.456] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:10:41.464] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:10:41.526] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:10:41.560] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:10:41.567] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:10:41.587] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:13:55.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:01.870] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:14:01.891] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:14:23.620] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:29.917] Server  LOG     ○ Compiling /orders ...
+[00:14:36.246] Browser INFO    [2026-03-09T05:29:14.501Z] Information: WebSocket connected to wss://yalla-co-menu-beckend-dev-47c9.twc1.net/hubs/orders.
+[00:14:36.246] Browser ERROR   [2026-03-09T05:29:14.507Z] Error: Failed to start the HttpConnection before stop() was called.
+[00:14:36.246] Browser INFO    [2026-03-09T05:29:14.519Z] Information: Connection disconnected.
+[00:14:36.246] Browser ERROR   SignalR connection error: {}
+[00:14:36.461] Browser INFO    [2026-03-09T05:29:16.305Z] Information: WebSocket connected to wss://yalla-co-menu-beckend-dev-47c9.twc1.net/hubs/orders.
+[00:15:26.384] Browser INFO    [2026-03-09T05:30:06.225Z] Information: Connection disconnected.
+[00:15:29.299] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:15:29.306] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:15:29.313] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:15:29.327] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:15:29.335] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:15:29.338] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:15:29.435] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:15:29.447] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:15:29.451] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:15:29.457] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:15:29.468] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:15:29.473] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:15:29.537] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:15:29.578] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:15:35.234] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
+[00:15:35.239] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:15:35.251] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
+[00:15:35.259] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:15:35.270] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:15:35.287] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:16:12.177] Server  LOG     ✓ Compiled in 452ms
+[00:16:36.000] Browser INFO    [2026-03-09T05:31:15.729Z] Information: WebSocket connected to wss://yalla-co-menu-beckend-dev-47c9.twc1.net/hubs/orders.
+[00:16:36.000] Browser ERROR   [2026-03-09T05:31:15.732Z] Error: Failed to start the HttpConnection before stop() was called.
+[00:16:36.000] Browser INFO    [2026-03-09T05:31:15.741Z] Information: Connection disconnected.
+[00:16:36.000] Browser ERROR   SignalR connection error: {}
+[00:16:36.000] Browser INFO    [2026-03-09T05:31:15.774Z] Information: WebSocket connected to wss://yalla-co-menu-beckend-dev-47c9.twc1.net/hubs/orders.
+[00:16:39.704] Browser INFO    [2026-03-09T05:31:19.496Z] Information: Connection disconnected.
+[00:16:47.806] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:16:47.821] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:16:47.832] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:16:47.839] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:16:47.848] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:16:47.856] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:16:48.041] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:16:48.055] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:16:48.069] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:16:48.100] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:16:48.124] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:16:48.163] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:16:48.290] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:16:48.302] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:16:50.856] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:18:15.197] Server  LOG     ✓ Compiled in 5.3s
+[00:18:27.854] Server  LOG     ✓ Compiled in 1716ms
+[00:18:44.288] Server  LOG     ✓ Compiled in 579ms
+[00:18:58.138] Server  LOG     ✓ Compiled in 426ms
+[00:19:05.537] Server  LOG     ✓ Compiled in 355ms
+[00:19:28.538] Server  LOG     ✓ Compiled in 150ms
+[00:19:49.227] Server  LOG     ✓ Compiled in 459ms
+[00:19:52.705] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:20:04.262] Server  LOG     ✓ Compiled in 565ms
+[00:20:08.553] Server  LOG     ✓ Compiled in 431ms
+[00:20:16.507] Server  LOG     ✓ Compiled in 348ms
+[00:20:18.621] Server  LOG     ✓ Compiled in 802ms
+[00:20:33.980] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:20:37.500] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:20:49.691] Server  LOG     ✓ Compiled in 1313ms
+[00:20:57.030] Server  LOG     ✓ Compiled in 1207ms
+[00:21:22.934] Server  LOG     ✓ Compiled in 264ms
+[00:22:25.589] Server  LOG     ✓ Compiled in 135ms
+[00:23:23.747] Server  LOG     ✓ Compiled in 116ms
+[00:24:48.668] Server  LOG     ✓ Compiled in 70ms
+[00:26:10.696] Server  LOG     ✓ Compiled in 89ms
+[00:26:29.618] Server  LOG     ✓ Compiled in 119ms
+[00:26:48.184] Server  LOG     ✓ Compiled in 58ms
+[00:28:23.107] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:28:23.115] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:28:23.124] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:28:23.129] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:28:23.137] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:28:23.148] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:28:23.313] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:28:23.318] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:28:23.325] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:28:23.329] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:28:23.338] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:28:23.348] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:28:23.462] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:28:23.466] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:28:23.470] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:28:27.995] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:28:34.744] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:30:43.871] Server  LOG     ✓ Compiled in 778ms
+[00:30:57.401] Server  LOG     ✓ Compiled in 77ms
+[00:31:19.405] Server  LOG     ✓ Compiled in 93ms
+[00:31:38.441] Server  LOG     ✓ Compiled in 94ms
+[00:32:46.811] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:49.092] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:33:04.824] Server  LOG     ✓ Compiled in 318ms
+[00:33:25.463] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:33:25.548] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:33:25.601] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:33:25.635] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:33:25.658] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:33:25.682] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:33:25.877] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:33:25.941] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:33:25.996] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:33:26.031] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:33:26.048] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:33:26.191] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:33:26.507] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:33:26.532] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:33:34.237] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:33:34.248] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:33:34.262] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
+[00:33:34.269] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
+[00:33:34.276] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:33:34.293] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:33:34.416] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
+[00:33:34.421] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
+[00:33:34.432] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
+[00:33:34.442] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
+[00:33:34.446] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
+[00:33:34.454] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
+[00:33:34.557] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
+[00:33:47.090] Server  LOG     ✓ Compiled in 315ms
+[00:33:50.669] Server  LOG     ✓ Compiled in 877ms
+[00:33:52.021] Browser ERROR   ./src/app/cart/page.tsx:10:1
+Parsing ecmascript source code failed
+   8 | import { useOrderModeStore } from "@/stores/orderModeStore";
+   9 | import { Header } from "@/components/layout/Header";
+> 10 | in burger Категории 
+     | ^^
+  11 | import { BottomNav } from "@/components/layout/BottomNav";
+  12 | import { Button } from "@/components/ui/Button";
+  13 | import { Icon } from "@/components/ui/Icon";
 
-- A server/client branch `if (typeof window !== 'undefined')`.
-- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
-- Date formatting in a user's locale which doesn't match the server.
-- External changing data without sending a snapshot of it along with the HTML.
-- Invalid HTML tag nesting.
+Expression expected
 
-It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+Import traces:
+  Client Component Browser:
+    ./src/app/cart/page.tsx [Client Component Browser]
+    ./src/app/cart/page.tsx [Server Component]
 
-https://react.dev/link/hydration-mismatch
-
-  ...
-    <RedirectBoundary>
-      <RedirectErrorBoundary router={{...}}>
-        <InnerLayoutRouter url="/menu" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} segmentPath={[...]} ...>
-          <SegmentViewNode type="page" pagePath="menu/page.tsx">
-            <SegmentTrieNode>
-            <ClientPageRoot Component={function MenuPage} serverProvidedParams={{...}}>
-              <MenuPage params={Promise} searchParams={Promise}>
-                <Suspense fallback={<div>}>
-                  <MenuContent>
-                    <div className="min-h-scre...">
-                      <Header>
-                      <OrderModeBar>
-                      <div>
-                      <FloatingCart>
-                        <LinkComponent href="/cart" className="fixed bott...">
-+                         <a
-+                           className="fixed bottom-20 right-4 z-50 animate-in slide-in-from-bottom-4 duration-300"
-+                           ref={function}
-+                           onClick={function onClick}
-+                           onMouseEnter={function onMouseEnter}
-+                           onTouchStart={function onTouchStart}
-+                           href="/cart"
-+                         >
--                         <nav
--                           className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray..."
--                         >
-                      ...
-          ...
-        ...
-
-[00:02:43.836] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
-[00:02:43.937] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
-[00:02:44.047] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
-[00:02:44.162] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
-[00:02:44.206] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
-[00:02:44.260] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
-[00:02:44.466] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
-[00:02:44.638] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
-[00:02:44.775] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
-[00:02:44.812] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
-[00:02:44.881] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
-[00:02:44.900] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
-[00:02:45.078] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
-[00:02:45.087] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
-[00:02:45.119] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
-[00:02:45.131] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
-[00:02:45.147] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
-[00:02:45.166] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
-[00:02:45.318] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
-[00:02:45.325] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
-[00:02:45.333] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
-[00:02:45.346] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
-[00:02:45.355] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
-[00:02:45.366] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
-[00:03:36.288] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+  Client Component SSR:
+    ./src/app/cart/page.tsx [Client Component SSR]
+    ./src/app/cart/page.tsx [Server Component]
+[00:35:16.586] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:35:16.595] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:35:16.601] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:35:16.613] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:35:16.618] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:35:16.627] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:35:16.747] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:35:16.751] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:35:16.756] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:35:16.765] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:35:16.773] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:35:16.779] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:35:16.881] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:35:16.886] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:35:33.337] Server  LOG     ✓ Compiled in 5.9s
+[00:36:04.431] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:36:04.436] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:36:04.447] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:36:04.453] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:36:04.460] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:36:04.471] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:36:04.573] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:36:04.580] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:36:04.588] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:36:04.599] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:36:04.603] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:36:04.609] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:36:04.708] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:36:04.714] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:36:09.129] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:36:09.144] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:36:50.877] Server  LOG     ✓ Compiled in 255ms
+[00:38:03.410] Server  LOG     ✓ Compiled in 141ms
+[00:38:47.173] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:38:47.182] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:38:47.197] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:38:47.209] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:38:47.216] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:38:47.220] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:38:47.329] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:38:47.333] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:38:47.338] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:38:47.343] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:38:49.367] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:38:49.373] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404
+[00:38:49.380] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:38:49.385] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:39:28.967] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5387b81e-fb39-492f-8948-d1640ff76ba4.png" 404
+[00:39:28.975] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1b9a9c3e-0d7b-42cb-a03f-9d3e7fd7878f.png" 404
+[00:39:28.984] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f8d78585-6c0f-4d5e-858d-ae0f7540e615.png" 404
+[00:39:28.994] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/01cf1619-47ea-4f11-8354-c7cc21aa7812.png" 404
+[00:39:29.826] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/0d0db1e1-8d63-4774-a72e-5cce703bf21a.png" 404
+[00:39:29.834] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/3b85e542-b12f-49f8-9f69-4bd2a2017670.png" 404
+[00:39:30.587] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/45e3b51e-fb22-4ac2-9d4a-582a21ad57cd.png" 404
+[00:39:30.600] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/74b6c248-f1e8-4bca-8aaf-6cb3810081e8.png" 404
+[00:39:30.615] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c53413-0693-4193-8c52-564fbe61d83b.png" 404
+[00:39:30.626] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/b162312c-82da-4acf-9abf-c944d92c0a4c.png" 404
+[00:39:30.828] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e8b5674c-c707-462f-9222-04e79a1534f3.png" 404
+[00:39:30.843] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/ded3c51d-d44f-4d58-b0a1-3590c18e4663.png" 404
+[00:39:31.431] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f5815d09-e9af-46e6-a3c8-e0cbd46cf72d.png" 404
+[00:39:42.389] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/38537b6d-1f68-45c1-a35d-f6fee475b91c.png" 404
+[00:39:42.411] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/da7660d3-d8f9-470a-a9c8-4300bd75a9ad.png" 404
+[00:39:42.431] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/edd00578-5a8c-4086-a945-526d594b95ce.png" 404
+[00:39:42.452] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/299ef643-0fa7-479d-88da-81af01866315.png" 404
+[00:39:42.469] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/f44b3733-1889-445b-8cd7-cfcdab8424a5.png" 404
+[00:40:28.945] Server  LOG     ✓ Compiled in 715ms
+[00:40:56.825] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/069acc5d-212b-4778-819d-70d12971217c.png" 404
+[00:40:56.846] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/006068c3-f45a-40db-a9f3-f4cb4209aa9e.png" 404
+[00:40:56.868] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/73373034-9b36-4822-a0f2-91cabe631134.png" 404
+[00:40:56.892] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/4c88a502-4264-4073-ac98-3bc14efdd146.png" 404
+[00:40:57.118] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/85c8bc52-acd3-45ca-95b4-b65efc2db501.png" 404
+[00:40:57.159] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/2f35a524-7adf-4634-ba27-27c079b40d80.png" 404
+[00:40:57.624] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/e1c97db8-3187-46a3-95a6-b258abfa7616.png" 404
+[00:40:57.638] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/1aa415d3-43a7-44b5-88ae-b0b353ad9128.png" 404
+[00:40:57.650] Server  ERROR   ⨯ "upstream image response failed for" "https://yalla-co-menu-beckend-dev-47c9.twc1.net/images/5341e1b4-6cf2-427a-aebf-366f90b080d3.png" 404

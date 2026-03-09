@@ -14,10 +14,39 @@ interface TakeawayConfirmProps {
 }
 
 export function TakeawayConfirm({ onSubmit, onBack, isSubmitting = false, submitError }: TakeawayConfirmProps) {
-  const { customerName, setCustomerName, selectedRestaurantName } =
+  const { mode, setMode, customerName, setCustomerName, selectedRestaurantName } =
     useOrderModeStore();
 
   const [error, setError] = useState<string | null>(null);
+
+  // Mode cycle: delivery -> dinein -> takeaway -> delivery
+  const cycleMode = () => {
+    if (mode === "delivery") {
+      setMode("dinein");
+    } else if (mode === "dinein") {
+      setMode("takeaway");
+    } else if (mode === "takeaway") {
+      setMode("delivery");
+    }
+  };
+
+  const getModeIcon = () => {
+    switch (mode) {
+      case "delivery": return "delivery_dining";
+      case "dinein": return "restaurant";
+      case "takeaway": return "takeout_dining";
+      default: return "takeout_dining";
+    }
+  };
+
+  const getModeLabel = () => {
+    switch (mode) {
+      case "delivery": return "Доставка";
+      case "dinein": return "В ресторане";
+      case "takeaway": return "Самовывоз";
+      default: return "Самовывоз";
+    }
+  };
 
   const handleSubmit = () => {
     if (!customerName.trim()) {
@@ -71,6 +100,18 @@ export function TakeawayConfirm({ onSubmit, onBack, isSubmitting = false, submit
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
       {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
+
+      {/* Compact mode selector */}
+      <button
+        onClick={cycleMode}
+        className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <Icon name={getModeIcon()} size={16} className="text-orange-500" />
+          <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
+        </div>
+        <Icon name="chevron_right" size={18} className="text-gray-400" />
+      </button>
 
       <div className="space-y-3">
         <Button

@@ -43,7 +43,7 @@ export function ProductListCard({
       }`}
     >
       {/* Image */}
-      <div className="relative w-28 h-28 flex-shrink-0 bg-surface-light">
+      <div className="relative w-28 h-28 flex-shrink-0 bg-gray-100">
         {getImageUrl(product.imageUrl) ? (
           <Image
             src={getImageUrl(product.imageUrl)!}

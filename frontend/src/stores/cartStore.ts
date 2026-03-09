@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem } from "@/types";
+import { useOrderModeStore } from "./orderModeStore";
 
 interface CartState {
   items: CartItem[];
@@ -79,6 +80,10 @@ export const useCartStore = create<CartState>()(
       },
 
       getTax: () => {
+        const mode = useOrderModeStore.getState().mode;
+        if (mode === "delivery" || mode === "takeaway") {
+          return 0;
+        }
         return Math.round(get().getSubtotal() * 0.1);
       },
 

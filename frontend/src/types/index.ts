@@ -130,14 +130,12 @@ export interface OrderItem {
 export type OrderStatus =
   | "Pending"
   | "Confirmed"
-  | "Completed"
   | "Cancelled";
 
 // Map numeric status to string status
 export const OrderStatusMap: Record<number, OrderStatus> = {
   0: "Pending",
   1: "Confirmed",
-  2: "Completed",
   3: "Cancelled",
 };
 

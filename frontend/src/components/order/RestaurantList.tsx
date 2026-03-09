@@ -130,30 +130,15 @@ export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: R
 
   return (
     <div className="space-y-4">
-      {/* Section header */}
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-sm shadow-orange-200">
-          <Icon name={getModeIcon()} size={18} className="text-white" />
-        </div>
-        <h3 className="text-lg font-semibold text-gray-800">
-          {getModeTitle()}
-        </h3>
-        <span className="text-sm text-gray-400 ml-auto">
-          {filteredRestaurants.length} {filteredRestaurants.length === 1 ? "ресторан" : filteredRestaurants.length < 5 ? "ресторана" : "ресторанов"}
-        </span>
-      </div>
-
       {/* Restaurant cards */}
-      <div className="space-y-4">
-        {filteredRestaurants.map((restaurant) => (
-          <RestaurantCard
-            key={restaurant.id}
-            restaurant={restaurant}
-            onSelect={onSelectRestaurant}
-            showDeliveryFee={mode === "delivery"}
-          />
-        ))}
-      </div>
+      {filteredRestaurants.map((restaurant) => (
+        <RestaurantCard
+          key={restaurant.id}
+          restaurant={restaurant}
+          onSelect={onSelectRestaurant}
+          showDeliveryFee={mode === "delivery"}
+        />
+      ))}
     </div>
   );
 }

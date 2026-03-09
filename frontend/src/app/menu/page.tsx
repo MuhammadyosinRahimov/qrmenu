@@ -13,17 +13,17 @@ import { getCategories, getProducts, getTableByNumber, getMenu, getRestaurantMen
 import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
+import { useUIStore } from "@/stores/uiStore";
 import { useToast } from "@/components/ui/Toast";
-import { Icon } from "@/components/ui/Icon";
-import { Badge } from "@/components/ui/Badge";
 import type { Product, Category } from "@/types";
 
 function MenuContent() {
   const searchParams = useSearchParams();
   const setTable = useTableStore((state) => state.setTable);
   const menuId = useTableStore((state) => state.menuId);
-  const { mode, setMode, setTableNumber, selectedRestaurantId, selectedRestaurantName, deliveryFee } = useOrderModeStore();
+  const { mode, setMode, setTableNumber, selectedRestaurantId, selectedRestaurantName } = useOrderModeStore();
   const { items: cartItems, addItem, removeItem, updateQuantity } = useCartStore();
+  const { gridView, setGridView } = useUIStore();
   const { showToast } = useToast();
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -173,10 +173,6 @@ function MenuContent() {
     ? !restaurantMenuData
     : categoriesLoading || productsLoading;
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("ru-RU").format(price);
-  };
-
   // Build a map of productId -> quantity from cart items
   const cartItemsMap = useMemo(() => {
     const map = new Map<string, number>();
@@ -220,53 +216,15 @@ function MenuContent() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <Header title="Меню" />
-   
-
-      {/* Order mode banner */}
-      {isRestaurantMode && selectedRestaurantName && (
-        <div className="bg-orange-50 border-b border-orange-100 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Icon
-                name={
-                  mode === "delivery"
-                    ? "delivery_dining"
-                    : mode === "takeaway"
-                    ? "takeout_dining"
-                    : "restaurant"
-                }
-                size={20}
-                className="text-orange-500"
-              />
-              <div>
-                <p className="text-sm font-medium text-orange-700">
-                  {selectedRestaurantName}
-                </p>
-                <p className="text-xs text-orange-600">
-                  {mode === "delivery"
-                    ? "Доставка"
-                    : mode === "takeaway"
-                    ? "Самовывоз"
-                    : mode === "dinein"
-                    ? "В ресторане"
-                    : ""}
-                </p>
-              </div>
-            </div>
-            {mode === "delivery" && deliveryFee > 0 && (
-              <Badge variant="warning" size="sm">
-                Доставка {formatPrice(deliveryFee)} TJS
-              </Badge>
-            )}
-          </div>
-        </div>
-      )}
 
       <div className="space-y-4 py-4">
         <SearchBar
           value={searchQuery}
           onChange={setSearchQuery}
           placeholder="Поиск блюд..."
+          showViewToggle={true}
+          gridView={gridView}
+          onViewChange={setGridView}
         />
 
         {!isLoading && categories.length > 0 && (

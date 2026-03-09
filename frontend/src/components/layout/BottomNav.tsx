@@ -20,17 +20,20 @@ export function BottomNav() {
   const pendingCount = useOrderStore((state) => state.pendingCount);
   const mode = useOrderModeStore((state) => state.mode);
 
+  // Check if user is on menu page
+  const isOnMenuPage = pathname === "/menu" || pathname.startsWith("/menu");
+
   const navItems: NavItem[] = [
     {
-      href: "/",
+      href: isOnMenuPage ? "/" : "/",
       icon: "home",
       filledIcon: "home",
       label: "Главная"
     },
     {
       href: "/menu",
-      icon: "restaurant_menu",
-      filledIcon: "restaurant_menu",
+      icon: "home",
+      filledIcon: "home",
       label: "Меню",
       qrOnly: true, // показывать только в QR-режиме
     },
@@ -45,7 +48,8 @@ export function BottomNav() {
 
   const isActive = (href: string) => {
     if (href === "/") {
-      return pathname === "/";
+      // "Главная" активна на главной странице И на странице меню (в режиме доставки/ресторана)
+      return pathname === "/" || (isOnMenuPage && mode !== "qr");
     }
     return pathname.startsWith(href);
   };

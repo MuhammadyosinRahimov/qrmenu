@@ -56,7 +56,7 @@ export function ProductCard({
         </div>
       )}
 
-      <div className="relative aspect-square bg-surface-light">
+      <div className="relative aspect-square bg-gray-100">
         {getImageUrl(product.imageUrl) ? (
           <Image
             src={getImageUrl(product.imageUrl)!}

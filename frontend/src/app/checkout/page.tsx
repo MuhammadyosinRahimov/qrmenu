@@ -34,6 +34,7 @@ export default function CheckoutPage() {
   const { tableId, tableNumber, restaurantId: tableRestaurantId, onlinePaymentAvailable } = useTableStore();
   const {
     mode,
+    setMode,
     selectedRestaurantId,
     selectedRestaurantName,
     deliveryAddress,
@@ -44,6 +45,35 @@ export default function CheckoutPage() {
     setCustomerPhone,
     clearMode,
   } = useOrderModeStore();
+
+  // Mode cycle for non-QR modes: delivery -> dinein -> takeaway -> delivery
+  const cycleMode = () => {
+    if (mode === "delivery") {
+      setMode("dinein");
+    } else if (mode === "dinein") {
+      setMode("takeaway");
+    } else if (mode === "takeaway") {
+      setMode("delivery");
+    }
+  };
+
+  const getModeIcon = () => {
+    switch (mode) {
+      case "delivery": return "delivery_dining";
+      case "dinein": return "restaurant";
+      case "takeaway": return "takeout_dining";
+      default: return "restaurant";
+    }
+  };
+
+  const getModeLabel = () => {
+    switch (mode) {
+      case "delivery": return "Доставка";
+      case "dinein": return "В ресторане";
+      case "takeaway": return "Самовывоз";
+      default: return "";
+    }
+  };
 
   // Determine the effective restaurant ID
   const restaurantId = mode === "qr" ? tableRestaurantId : selectedRestaurantId;
@@ -153,17 +183,10 @@ export default function CheckoutPage() {
     router.push("/");
   };
 
-  // Handle payment redirect for delivery/takeaway using paymentLink
-  const handlePaymentRedirect = (order: Order) => {
-    if (order.paymentLink) {
-      // Replace {amount} placeholder with actual total
-      const finalLink = order.paymentLink.replace('{amount}', order.total.toString());
-      window.location.href = finalLink;
-    } else {
-      // No payment link - go to orders page
-      showToast("Заказ оформлен! Оплата доступна на странице заказов.", "success");
-      router.push("/orders");
-    }
+  // Handle order completion - always go to orders page
+  const handlePaymentRedirect = (_order: Order) => {
+    showToast("Заказ оформлен!", "success");
+    router.push("/orders");
   };
 
   const handleSubmitOrder = async (dineInTableNumber?: number) => {
@@ -269,7 +292,7 @@ export default function CheckoutPage() {
           // No active order or error - will create new
         }
 
-        if (activeOrder && activeOrder.status !== "Completed" && activeOrder.status !== "Cancelled") {
+        if (activeOrder && activeOrder.status !== "Cancelled") {
           await addItemsToOrder(activeOrder.id, orderItems);
         } else {
           await createOrder({
@@ -528,6 +551,7 @@ export default function CheckoutPage() {
                     rows={2}
                   />
                 </div>
+                
 
                 {submitError && (
                   <div className="bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2">

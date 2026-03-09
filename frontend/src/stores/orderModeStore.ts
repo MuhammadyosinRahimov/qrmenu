@@ -27,7 +27,7 @@ interface OrderModeState {
 export const useOrderModeStore = create<OrderModeState>()(
   persist(
     (set) => ({
-      mode: "dinein",
+      mode: "delivery",
       selectedRestaurantId: null,
       selectedRestaurantName: null,
       deliveryAddress: "",
@@ -55,7 +55,7 @@ export const useOrderModeStore = create<OrderModeState>()(
 
       clearMode: () =>
         set((state) => ({
-          mode: "dinein",
+          mode: "delivery",
           selectedRestaurantId: null,
           selectedRestaurantName: null,
           deliveryAddress: "",

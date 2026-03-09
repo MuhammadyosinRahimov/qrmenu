@@ -15,6 +15,8 @@ interface DeliveryFormProps {
 
 export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitError }: DeliveryFormProps) {
   const {
+    mode,
+    setMode,
     deliveryAddress,
     setDeliveryAddress,
     customerName,
@@ -24,6 +26,92 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
   } = useOrderModeStore();
 
   const [error, setError] = useState<string | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+
+  // Mode cycle: delivery -> dinein -> takeaway -> delivery
+  const cycleMode = () => {
+    if (mode === "delivery") {
+      setMode("dinein");
+    } else if (mode === "dinein") {
+      setMode("takeaway");
+    } else if (mode === "takeaway") {
+      setMode("delivery");
+    }
+  };
+
+  const getModeIcon = () => {
+    switch (mode) {
+      case "delivery": return "delivery_dining";
+      case "dinein": return "restaurant";
+      case "takeaway": return "takeout_dining";
+      default: return "delivery_dining";
+    }
+  };
+
+  const getModeLabel = () => {
+    switch (mode) {
+      case "delivery": return "Доставка";
+      case "dinein": return "В ресторане";
+      case "takeaway": return "Самовывоз";
+      default: return "Доставка";
+    }
+  };
+
+  // Get user's location and reverse geocode to address
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setError("Геолокация не поддерживается вашим браузером");
+      return;
+    }
+
+    setIsLoadingLocation(true);
+    setError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          // Use OpenStreetMap Nominatim for reverse geocoding
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=ru`
+          );
+          const data = await response.json();
+
+          if (data.display_name) {
+            // Extract relevant parts of address
+            const address = data.address;
+            let formattedAddress = "";
+
+            if (address.road) formattedAddress += address.road;
+            if (address.house_number) formattedAddress += `, ${address.house_number}`;
+            if (address.suburb) formattedAddress += `, ${address.suburb}`;
+            if (address.city || address.town || address.village) {
+              formattedAddress += `, ${address.city || address.town || address.village}`;
+            }
+
+            setDeliveryAddress(formattedAddress || data.display_name);
+          } else {
+            setDeliveryAddress(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+          }
+        } catch {
+          // If geocoding fails, just use coordinates
+          setDeliveryAddress(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+        }
+        setIsLoadingLocation(false);
+      },
+      (err) => {
+        setIsLoadingLocation(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          setError("Доступ к геолокации запрещён");
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          setError("Местоположение недоступно");
+        } else {
+          setError("Не удалось определить местоположение");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -79,9 +167,29 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
         />
 
         <div>
-          <label className="block text-sm font-medium text-muted mb-2">
-            Адрес доставки
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-muted">
+              Адрес доставки
+            </label>
+            <button
+              type="button"
+              onClick={handleGetLocation}
+              disabled={isLoadingLocation || isSubmitting}
+              className="flex items-center gap-1 text-sm text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isLoadingLocation ? (
+                <>
+                  <Icon name="progress_activity" size={16} className="animate-spin" />
+                  <span>Определение...</span>
+                </>
+              ) : (
+                <>
+                  <Icon name="my_location" size={16} />
+                  <span>Мое местоположение</span>
+                </>
+              )}
+            </button>
+          </div>
           <textarea
             value={deliveryAddress}
             onChange={(e) => setDeliveryAddress(e.target.value)}
@@ -96,6 +204,18 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
       {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
+
+      {/* Compact mode selector */}
+      <button
+        onClick={cycleMode}
+        className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <Icon name={getModeIcon()} size={16} className="text-orange-500" />
+          <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
+        </div>
+        <Icon name="chevron_right" size={18} className="text-gray-400" />
+      </button>
 
       <div className="space-y-3">
         <Button

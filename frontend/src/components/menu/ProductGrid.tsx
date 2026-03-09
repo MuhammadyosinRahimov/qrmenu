@@ -12,7 +12,6 @@ interface ProductGridProps {
   cartItems?: Map<string, number>; // productId -> quantity
   onAdd?: (product: Product) => void;
   onRemove?: (product: Product) => void;
-  showViewToggle?: boolean;
 }
 
 export function ProductGrid({
@@ -21,18 +20,12 @@ export function ProductGrid({
   cartItems,
   onAdd,
   onRemove,
-  showViewToggle = true,
 }: ProductGridProps) {
-  const { gridView, setGridView } = useUIStore();
+  const { gridView } = useUIStore();
 
   if (isLoading) {
     return (
       <div className="px-4">
-        {showViewToggle && (
-          <div className="flex justify-end gap-2 mb-4">
-            <div className="w-20 h-9 bg-gray-200 rounded-lg animate-pulse" />
-          </div>
-        )}
         <div className={gridView === "2x2" ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}>
           {Array.from({ length: 6 }).map((_, i) => (
             <div
@@ -65,32 +58,6 @@ export function ProductGrid({
 
   return (
     <div className="px-4">
-      {/* View toggle */}
-      {showViewToggle && (
-        <div className="flex justify-end gap-1 mb-4">
-          <button
-            onClick={() => setGridView("1x1")}
-            className={`p-2 rounded-lg transition-all ${
-              gridView === "1x1"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-            }`}
-          >
-            <Icon name="view_list" size={20} />
-          </button>
-          <button
-            onClick={() => setGridView("2x2")}
-            className={`p-2 rounded-lg transition-all ${
-              gridView === "2x2"
-                ? "bg-orange-500 text-white shadow-sm"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-            }`}
-          >
-            <Icon name="grid_view" size={20} />
-          </button>
-        </div>
-      )}
-
       {/* Products grid */}
       <div className={gridView === "2x2" ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}>
         {products.map((product) => {

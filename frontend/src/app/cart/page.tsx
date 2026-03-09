@@ -7,7 +7,7 @@ import { getImageUrl } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { Header } from "@/components/layout/Header";
-import { OrderModeBar } from "@/components/layout/OrderModeBar";
+
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -20,7 +20,10 @@ export default function CartPage() {
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
 
   const isDelivery = mode === "delivery";
-  const finalTotal = isDelivery ? getTotal() + deliveryFee : getTotal();
+  const isQrMode = mode === "qr";
+  // Service fee only for QR/dine-in mode
+  const serviceFee = isQrMode ? getTax() : 0;
+  const finalTotal = getSubtotal() + serviceFee + (isDelivery ? deliveryFee : 0);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -185,17 +188,19 @@ export default function CartPage() {
 
       {/* Summary */}
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-border shadow-lg">
-        <OrderModeBar />
+       
         <div className="p-4">
         <div className="space-y-2 mb-4">
           <div className="flex justify-between text-muted">
             <span>Подитог</span>
             <span>{formatPrice(getSubtotal())} TJS</span>
           </div>
-          <div className="flex justify-between text-muted">
-            <span>Обслуживание (10%)</span>
-            <span>{formatPrice(getTax())} TJS</span>
-          </div>
+          {isQrMode && (
+            <div className="flex justify-between text-muted">
+              <span>Обслуживание (10%)</span>
+              <span>{formatPrice(serviceFee)} TJS</span>
+            </div>
+          )}
           {isDelivery && deliveryFee > 0 && (
             <div className="flex justify-between text-muted">
               <span>Доставка</span>
