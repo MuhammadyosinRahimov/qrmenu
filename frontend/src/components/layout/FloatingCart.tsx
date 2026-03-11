@@ -20,10 +20,10 @@ export function FloatingCart() {
         href="/cart"
         className="w-full max-w-md"
       >
-        <div className="w-full bg-gradient-to-r from-[#f7df00] to-[#f7df00] text-white rounded-full px-5 py-3 shadow-lg shadow-primary-200 flex items-center justify-between hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
+        <div className="w-full bg-gradient-to-r from-[#0f2c5e] to-[#0c244d] text-white rounded-full px-5 py-3 shadow-lg shadow-[#0f2c5e]/30 flex items-center justify-between hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
           <div className="relative">
             <Icon name="shopping_cart" size={22} className="text-white" />
-            <span className="absolute -top-2 -right-2 bg-white text-[#0f2c5e] text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+            <span className="absolute -top-2 -right-2 bg-[#f7df00] text-[#0f2c5e] text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
               {itemCount}
             </span>
           </div>

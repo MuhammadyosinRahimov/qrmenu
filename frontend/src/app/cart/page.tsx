@@ -122,7 +122,7 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.id, item.quantity - 1)
                         }
-                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-white transition-colors"
+                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-[#0f2c5e] transition-colors shadow-sm"
                       >
                         <Icon name="remove" size={20} />
                       </button>
@@ -133,7 +133,7 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
-                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-white transition-colors"
+                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-[#0f2c5e] transition-colors shadow-sm"
                       >
                         <Icon name="add" size={20} />
                       </button>
@@ -228,9 +228,10 @@ export default function CartPage() {
           <Button
             onClick={() => router.push("/checkout")}
             className="w-full"
+            variant="navy"
             size="lg"
           >
-            <Icon name="shopping_cart_checkout" size={22} className="mr-2" />
+            <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#f7df00]" />
             Оформить заказ
           </Button>
         </div>

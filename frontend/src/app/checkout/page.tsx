@@ -373,15 +373,15 @@ export default function CheckoutPage() {
                 <div key={s} className="flex items-center">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm transition-all ${
                     step === s
-                      ? "bg-gradient-to-br from-[#f7df00] to-[#f7df00] text-white shadow-primary-200"
+                      ? "bg-[#f7df00] text-[#0f2c5e] shadow-[0_4px_10px_rgba(247,223,0,0.3)]"
                       : i < currentIndex
-                      ? "bg-gradient-to-br from-green-400 to-green-500 text-white shadow-green-200"
+                      ? "bg-gradient-to-br from-[#0f2c5e] to-[#0c244d] text-white shadow-md shadow-[#0f2c5e]/20"
                       : "bg-white text-gray-400 border border-gray-200"
                   }`}>
                     {i < currentIndex ? <Icon name="check" size={18} /> : i + 1}
                   </div>
                   {i < steps.length - 1 && (
-                    <div className={`w-8 h-1 mx-1 rounded-full ${i < currentIndex ? "bg-green-400" : "bg-gray-200"}`} />
+                    <div className={`w-8 h-1 mx-1 rounded-full ${i < currentIndex ? "bg-[#0f2c5e]" : "bg-gray-200"}`} />
                   )}
                 </div>
               ))}
@@ -414,11 +414,12 @@ export default function CheckoutPage() {
             <Button
               onClick={handleSendOtp}
               className="w-full"
+              variant="navy"
               size="lg"
               isLoading={isLoading}
               disabled={phone.replace(/\D/g, "").length !== 12}
             >
-              <Icon name="send" size={20} className="mr-2" />
+              <Icon name="send" size={20} className="mr-2 text-[#f7df00]" />
               Получить код
             </Button>
           </div>
@@ -430,15 +431,15 @@ export default function CheckoutPage() {
             <div className="text-center">
               <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${
                 mode === "qr"
-                  ? "bg-gradient-to-br from-green-400 to-green-500 shadow-green-200"
-                  : "bg-gradient-to-br from-blue-400 to-blue-500 shadow-blue-200"
+                  ? "bg-gradient-to-br from-[#0f2c5e] to-[#0c244d] shadow-[#0f2c5e]/20"
+                  : "bg-gradient-to-br from-[#0f2c5e] to-[#0c244d] shadow-[#0f2c5e]/20"
               }`}>
                 <Icon name={mode === "qr" ? "receipt_long" : "sms"} size={40} className="text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите код из SMS</h2>
               <p className="text-gray-500">Код отправлен на {phone}</p>
               {mode === "qr" && (
-                <p className="text-sm text-green-600 mt-2 font-medium">
+                <p className="text-sm text-[#0f2c5e] mt-2 font-medium">
                   После подтверждения заказ будет оформлен
                 </p>
               )}
@@ -469,11 +470,12 @@ export default function CheckoutPage() {
               <Button
                 onClick={handleVerifyOtp}
                 className="w-full"
+                variant="navy"
                 size="lg"
                 isLoading={isLoading || isSubmitting}
                 disabled={otp.length !== 4}
               >
-                <Icon name={mode === "qr" ? "check_circle" : "verified"} size={20} className="mr-2" />
+                <Icon name={mode === "qr" ? "check_circle" : "verified"} size={20} className="mr-2 text-[#f7df00]" />
                 {mode === "qr" ? "Подтвердить заказ" : "Подтвердить"}
               </Button>
               <Button onClick={() => setStep("phone")} variant="ghost" className="w-full" disabled={isSubmitting}>
@@ -514,8 +516,8 @@ export default function CheckoutPage() {
             {mode === "qr" && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-200">
-                    <Icon name="receipt_long" size={32} className="text-white" />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0f2c5e] to-[#0c244d] flex items-center justify-center mx-auto mb-3 shadow-lg shadow-[#0f2c5e]/20">
+                    <Icon name="receipt_long" size={32} className="text-[#f7df00]" />
                   </div>
                   <h2 className="text-xl font-bold text-gray-800">Подтвердите заказ</h2>
                 </div>
@@ -593,10 +595,11 @@ export default function CheckoutPage() {
                 <Button
                   onClick={() => handleSubmitOrder()}
                   className="w-full"
+                  variant="navy"
                   size="lg"
                   isLoading={isSubmitting}
                 >
-                  <Icon name="check_circle" size={22} className="mr-2" />
+                  <Icon name="check_circle" size={22} className="mr-2 text-[#f7df00]" />
                   Подтвердить заказ
                 </Button>
 

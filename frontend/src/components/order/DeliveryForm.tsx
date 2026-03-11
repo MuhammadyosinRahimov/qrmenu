@@ -221,12 +221,13 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
         <Button
           onClick={handleSubmit}
           className="w-full"
+          variant="navy"
           size="lg"
           disabled={isSubmitting}
         >
           {isSubmitting ? (
             <>
-              <Icon name="progress_activity" size={18} className="mr-2 animate-spin" />
+              <Icon name="progress_activity" size={18} className="mr-2 animate-spin text-[#f7df00]" />
               Оформление...
             </>
           ) : (
