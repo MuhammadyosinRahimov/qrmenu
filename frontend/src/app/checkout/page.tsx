@@ -80,6 +80,7 @@ export default function CheckoutPage() {
 
   // Determine initial step based on mode and authentication
   const getInitialStep = (): Step => {
+    // If not authenticated, ALWAYS start at phone input
     if (!isAuthenticated) return "phone";
     // QR mode goes directly to OTP step (order will be submitted after)
     if (mode === "qr") return "otp";
@@ -117,7 +118,10 @@ export default function CheckoutPage() {
 
   // Update step when authentication changes
   useEffect(() => {
-    if (isAuthenticated && step === "phone") {
+    if (!isAuthenticated) {
+      // If the user loses authentication (e.g. storage cleared), forcefully step back to phone
+      setStep("phone");
+    } else if (isAuthenticated && step === "phone") {
       // QR mode: submit order directly when authenticated
       if (mode === "qr") {
         handleSubmitOrder();
