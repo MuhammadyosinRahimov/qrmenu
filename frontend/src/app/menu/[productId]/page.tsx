@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { getProduct, getImageUrl } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/Button";
@@ -116,12 +115,10 @@ export default function ProductPage() {
       {/* Image */}
       <div className="relative h-72 bg-surface-light">
         {getImageUrl(product.imageUrl) ? (
-          <Image
+          <img
             src={getImageUrl(product.imageUrl)!}
             alt={product.name}
-            fill
-            className="object-cover"
-            priority
+            className="w-full h-full object-cover"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">

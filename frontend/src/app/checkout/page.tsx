@@ -119,8 +119,11 @@ export default function CheckoutPage() {
   // Update step when authentication changes
   useEffect(() => {
     if (!isAuthenticated) {
-      // If the user loses authentication (e.g. storage cleared), forcefully step back to phone
-      setStep("phone");
+      // If the user loses authentication (e.g. storage cleared) while on the final details screen, 
+      // forcefully step back to phone. But do NOT interrupt if they are typing OTP!
+      if (step === "details") {
+        setStep("phone");
+      }
     } else if (isAuthenticated && step === "phone") {
       // QR mode: submit order directly when authenticated
       if (mode === "qr") {

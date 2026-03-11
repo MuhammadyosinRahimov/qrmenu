@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { getImageUrl } from "@/lib/api";
 import type { Product } from "@/types";
@@ -45,12 +44,10 @@ export function ProductListCard({
       {/* Image */}
       <div className="relative w-28 h-28 flex-shrink-0 bg-gray-100">
         {getImageUrl(product.imageUrl) ? (
-          <Image
+          <img
             src={getImageUrl(product.imageUrl)!}
             alt={product.name}
-            fill
-            className={`object-cover ${isInactive ? "blur-sm" : ""}`}
-            sizes="112px"
+            className={`w-full h-full object-cover ${isInactive ? "blur-sm" : ""}`}
           />
         ) : (
           <div

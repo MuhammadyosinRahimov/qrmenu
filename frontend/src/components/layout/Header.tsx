@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTableStore } from "@/stores/tableStore";
 
 interface HeaderProps {
@@ -27,7 +26,7 @@ export function Header({ title, showTable = true }: HeaderProps) {
       <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
-            <Image src="/assets/logo.jpg" alt="Logo" width={32} height={32} className="w-full h-full object-cover" />
+            <img src="/assets/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-lg font-bold text-foreground truncate max-w-[180px]">
             {displayName}

@@ -2,7 +2,6 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { useTableStore } from "@/stores/tableStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useCartStore } from "@/stores/cartStore";
@@ -115,7 +114,7 @@ function HomeContent() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
         <div className="animate-pulse flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
-            <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
+            <img src="/assets/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
           <p className="text-gray-500 font-medium">Загрузка...</p>
         </div>
@@ -129,7 +128,7 @@ function HomeContent() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
         <div className="animate-pulse flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
-            <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
+            <img src="/assets/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
           <p className="text-gray-500 font-medium">Загрузка меню...</p>
         </div>
@@ -154,7 +153,7 @@ function HomeContent() {
         <div className="text-center py-6">
           <div className="relative inline-block">
             <div className="w-24 h-24 rounded-3xl bg-white flex items-center justify-center shadow-xl shadow-primary-200/50 transform rotate-3 overflow-hidden">
-              <Image src="/assets/logo.jpg" alt="Oson eats" width={96} height={96} className="w-full h-full object-cover" />
+              <img src="/assets/logo.jpg" alt="Oson eats" className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg">
               <Icon name="check" size={18} className="text-white" />
@@ -236,7 +235,7 @@ export default function HomePage() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
           <div className="animate-pulse flex flex-col items-center gap-4">
             <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
-              <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
+              <img src="/assets/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <p className="text-gray-500 font-medium">Загрузка...</p>
           </div>
