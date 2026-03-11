@@ -15,20 +15,25 @@ export function CacheManager() {
   useEffect(() => {
     // ONE-TIME WIPE FOR LEGACY USERS
     // This clears all caches for users who have the old, infinite-duration cache
-    const hasBeenClearedV2 = localStorage.getItem("yalla_cache_cleared_v2");
+    const hasBeenClearedV3 = localStorage.getItem("yalla_cache_cleared_v3");
     
-    if (!hasBeenClearedV2) {
-      console.log("CacheManager: Performing one-time wipe of legacy caches.");
+    if (!hasBeenClearedV3) {
+      console.log("CacheManager: Performing one-time wipe of legacy caches (v3).");
       clearMode();
       clearCart();
       clearTable();
+      
+      // Explicitly delete legacy keys, AND auth tokens per user request
       localStorage.removeItem("order-mode-storage");
       localStorage.removeItem("cart-storage");
       localStorage.removeItem("table-storage");
+      localStorage.removeItem("current-mode"); 
+      localStorage.removeItem("auth-storage");
+      localStorage.removeItem("token");
       sessionStorage.clear();
       
       // Mark as cleared so we never do this hard wipe again
-      localStorage.setItem("yalla_cache_cleared_v2", "true");
+      localStorage.setItem("yalla_cache_cleared_v3", "true");
       
       // Also set the last activity so the regular 3-hour timer starts from now
       localStorage.setItem("yalla_last_activity", Date.now().toString());
@@ -71,7 +76,7 @@ export function CacheManager() {
 
     // Listen for tab close / app exit
     const handleExit = () => {
-      // Hard clear everything when the user actually closes the window or tab
+      // User explicitly requested to delete authentication and EVERYTHING on window close
       localStorage.clear();
       sessionStorage.clear();
     };
