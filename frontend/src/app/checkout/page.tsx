@@ -81,6 +81,8 @@ export default function CheckoutPage() {
   // Determine initial step based on mode and authentication
   const getInitialStep = (): Step => {
     if (!isAuthenticated) return "phone";
+    // QR mode goes directly to OTP step (order will be submitted after)
+    if (mode === "qr") return "otp";
     return "details";
   };
 
@@ -116,9 +118,14 @@ export default function CheckoutPage() {
   // Update step when authentication changes
   useEffect(() => {
     if (isAuthenticated && step === "phone") {
-      setStep("details");
+      // QR mode: submit order directly when authenticated
+      if (mode === "qr") {
+        handleSubmitOrder();
+      } else {
+        setStep("details");
+      }
     }
-  }, [isAuthenticated, step]);
+  }, [isAuthenticated, step, mode]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
@@ -173,7 +180,13 @@ export default function CheckoutPage() {
     try {
       await verifyOtp("+" + digits, otp);
       setCustomerPhone("+" + digits);
-      setStep("details");
+
+      // For QR mode, submit order directly after OTP verification
+      if (mode === "qr") {
+        await handleSubmitOrder();
+      } else {
+        setStep("details");
+      }
     } catch {
       // Error is handled in store
     }
@@ -329,7 +342,7 @@ export default function CheckoutPage() {
   const getStepTitle = () => {
     switch (step) {
       case "phone": return "Авторизация";
-      case "otp": return "Подтверждение";
+      case "otp": return mode === "qr" ? "Подтверждение заказа" : "Подтверждение";
       case "details": return mode === "delivery" ? "Адрес доставки" : mode === "dinein" ? "Номер стола" : mode === "takeaway" ? "Самовывоз" : "Оформление";
       default: return "Оформление";
     }
@@ -348,9 +361,10 @@ export default function CheckoutPage() {
       </header>
 
       <div className="p-4 space-y-6 max-w-md mx-auto">
-        {/* Steps indicator - 3 steps */}
+        {/* Steps indicator - 2 steps for QR mode, 3 steps for other modes */}
         {(() => {
-          const steps: Step[] = ["phone", "otp", "details"];
+          // QR mode has only 2 steps (phone, otp), other modes have 3 (phone, otp, details)
+          const steps: Step[] = mode === "qr" ? ["phone", "otp"] : ["phone", "otp", "details"];
           const currentIndex = steps.indexOf(step);
 
           return (
@@ -414,11 +428,20 @@ export default function CheckoutPage() {
         {step === "otp" && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
-                <Icon name="sms" size={40} className="text-white" />
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${
+                mode === "qr"
+                  ? "bg-gradient-to-br from-green-400 to-green-500 shadow-green-200"
+                  : "bg-gradient-to-br from-blue-400 to-blue-500 shadow-blue-200"
+              }`}>
+                <Icon name={mode === "qr" ? "receipt_long" : "sms"} size={40} className="text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите код из SMS</h2>
               <p className="text-gray-500">Код отправлен на {phone}</p>
+              {mode === "qr" && (
+                <p className="text-sm text-green-600 mt-2 font-medium">
+                  После подтверждения заказ будет оформлен
+                </p>
+              )}
             </div>
 
             <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
@@ -428,25 +451,32 @@ export default function CheckoutPage() {
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
                 placeholder="• • • •"
                 className="text-center text-3xl tracking-[0.5em] font-bold"
-                error={error || undefined}
+                error={error || submitError || undefined}
                 maxLength={4}
               />
             </div>
 
             <p className="text-center text-sm text-gray-400">Код придёт по SMS в течение минуты</p>
 
+            {submitError && mode === "qr" && (
+              <div className="bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2">
+                <Icon name="error" size={20} className="text-red-500" />
+                <p className="text-red-600 text-sm">{submitError}</p>
+              </div>
+            )}
+
             <div className="space-y-3">
               <Button
                 onClick={handleVerifyOtp}
                 className="w-full"
                 size="lg"
-                isLoading={isLoading}
+                isLoading={isLoading || isSubmitting}
                 disabled={otp.length !== 4}
               >
-                <Icon name="verified" size={20} className="mr-2" />
-                Подтвердить
+                <Icon name={mode === "qr" ? "check_circle" : "verified"} size={20} className="mr-2" />
+                {mode === "qr" ? "Подтвердить заказ" : "Подтвердить"}
               </Button>
-              <Button onClick={() => setStep("phone")} variant="ghost" className="w-full">
+              <Button onClick={() => setStep("phone")} variant="ghost" className="w-full" disabled={isSubmitting}>
                 <Icon name="edit" size={18} className="mr-2" />
                 Изменить номер
               </Button>

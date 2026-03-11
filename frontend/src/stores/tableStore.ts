@@ -61,7 +61,7 @@ export const useTableStore = create<TableState>()(
     }),
     {
       name: "table-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
