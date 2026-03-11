@@ -93,13 +93,13 @@ export function BottomNav() {
               href={item.href}
               className={`flex flex-col items-center justify-center flex-1 h-full relative transition-all duration-200 ${
                 active
-                  ? "text-orange-500"
+                  ? "text-[ #f7df00]"
                   : "text-gray-400 hover:text-gray-600"
               }`}
             >
               {/* Active indicator line */}
               {active && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-[ #f7df00] to-[ #f7df00] rounded-full" />
               )}
 
               <div className="relative">
@@ -110,20 +110,20 @@ export function BottomNav() {
                     name={item.icon}
                     size={24}
                     filled={active}
-                    className={active ? "text-orange-500" : "text-gray-400"}
+                    className={active ? "text-[ #f7df00]" : "text-gray-400"}
                   />
                 </div>
 
                 {/* Badge for orders */}
                 {badgeCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-sm shadow-orange-200">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[ #f7df00] to-[ #f7df00] text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shadow-sm shadow-orange-200">
                     {badgeCount > 99 ? "99+" : badgeCount}
                   </span>
                 )}
               </div>
 
               <span className={`text-xs mt-0.5 font-medium ${
-                active ? "text-orange-500" : "text-gray-400"
+                active ? "text-[ #f7df00]" : "text-gray-400"
               }`}>
                 {item.label}
               </span>

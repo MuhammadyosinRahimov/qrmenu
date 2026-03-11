@@ -96,18 +96,18 @@ export function CategoryModal({
             >
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${
                 selectedId === null
-                  ? "bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-md shadow-orange-200"
+                  ? "bg-gradient-to-br from-orange-400 to-[ #f7df00] text-white shadow-md shadow-orange-200"
                   : "bg-gray-100 text-gray-500"
               }`}>
                 <Icon name="grid_view" size={24} />
               </div>
               <span className={`font-semibold text-base ${
-                selectedId === null ? "text-orange-600" : "text-gray-700"
+                selectedId === null ? "text-[ #f7df00]" : "text-gray-700"
               }`}>
                 Все категории
               </span>
               {selectedId === null && (
-                <div className="ml-auto w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                <div className="ml-auto w-6 h-6 rounded-full bg-[ #f7df00] flex items-center justify-center">
                   <Icon name="check" size={16} className="text-white" />
                 </div>
               )}
@@ -131,18 +131,18 @@ export function CategoryModal({
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${
                   selectedId === category.id
-                    ? "bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-md shadow-orange-200"
+                    ? "bg-gradient-to-br from-orange-400 to-[ #f7df00] text-white shadow-md shadow-orange-200"
                     : "bg-gray-100 text-gray-500"
                 }`}>
                   <Icon name={category.icon} size={24} />
                 </div>
                 <span className={`font-semibold text-base ${
-                  selectedId === category.id ? "text-orange-600" : "text-gray-700"
+                  selectedId === category.id ? "text-[ #f7df00]" : "text-gray-700"
                 }`}>
                   {category.name}
                 </span>
                 {selectedId === category.id && (
-                  <div className="ml-auto w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                  <div className="ml-auto w-6 h-6 rounded-full bg-[#f7df00] flex items-center justify-center">
                     <Icon name="check" size={16} className="text-white" />
                   </div>
                 )}

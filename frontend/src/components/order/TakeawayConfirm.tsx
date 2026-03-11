@@ -107,7 +107,7 @@ export function TakeawayConfirm({ onSubmit, onBack, isSubmitting = false, submit
         className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Icon name={getModeIcon()} size={16} className="text-orange-500" />
+          <Icon name={getModeIcon()} size={16} className="text-[#f7df00]" />
           <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
         </div>
         <Icon name="chevron_right" size={18} className="text-gray-400" />

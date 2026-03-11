@@ -48,7 +48,7 @@ export default function CartPage() {
       
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-6">
-            <Icon name="shopping_cart" size={48} className="text-orange-400" />
+            <Icon name="shopping_cart" size={48} className="text-[ #f7df00]" />
           </div>
           <h2 className="text-xl font-bold text-foreground mb-2">
             Корзина пуста
@@ -66,7 +66,6 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-background pb-56">
       <Header title="Корзина" />
-     
 
       <div className="p-4 space-y-4">
         {items.map((item) => {
@@ -90,7 +89,11 @@ export default function CartPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Icon name="restaurant" size={28} className="text-muted" />
+                      <Icon
+                        name="restaurant"
+                        size={28}
+                        className="text-muted"
+                      />
                     </div>
                   )}
                 </div>
@@ -116,8 +119,10 @@ export default function CartPage() {
 
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 flex items-center justify-center text-white transition-colors"
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-white transition-colors"
                       >
                         <Icon name="remove" size={20} />
                       </button>
@@ -125,8 +130,10 @@ export default function CartPage() {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 flex items-center justify-center text-white transition-colors"
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-white transition-colors"
                       >
                         <Icon name="add" size={20} />
                       </button>
@@ -143,7 +150,11 @@ export default function CartPage() {
                 >
                   <div className="flex items-center gap-2">
                     <Icon name="edit_note" size={18} />
-                    <span>{item.note ? "Изменить комментарий" : "Добавить комментарий"}</span>
+                    <span>
+                      {item.note
+                        ? "Изменить комментарий"
+                        : "Добавить комментарий"}
+                    </span>
                   </div>
                   <Icon
                     name={isNoteExpanded ? "expand_less" : "expand_more"}
@@ -157,7 +168,7 @@ export default function CartPage() {
                       value={item.note || ""}
                       onChange={(e) => updateItemNote(item.id, e.target.value)}
                       placeholder="Например: без лука, острый соус отдельно..."
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none transition-all"
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[ #f7df00] focus:border-transparent resize-none transition-all"
                       rows={2}
                     />
                   </div>
@@ -188,39 +199,40 @@ export default function CartPage() {
 
       {/* Summary */}
       <div className="fixed bottom-16 left-0 right-0 bg-white border-t border-border shadow-lg">
-       
         <div className="p-4">
-        <div className="space-y-2 mb-4">
-          <div className="flex justify-between text-muted">
-            <span>Подитог</span>
-            <span>{formatPrice(getSubtotal())} TJS</span>
-          </div>
-          {isQrMode && (
+          <div className="space-y-2 mb-4">
             <div className="flex justify-between text-muted">
-              <span>Обслуживание (10%)</span>
-              <span>{formatPrice(serviceFee)} TJS</span>
+              <span>Подитог</span>
+              <span>{formatPrice(getSubtotal())} TJS</span>
             </div>
-          )}
-          {isDelivery && deliveryFee > 0 && (
-            <div className="flex justify-between text-muted">
-              <span>Доставка</span>
-              <span>{formatPrice(deliveryFee)} TJS</span>
+            {isQrMode && (
+              <div className="flex justify-between text-muted">
+                <span>Обслуживание (10%)</span>
+                <span>{formatPrice(serviceFee)} TJS</span>
+              </div>
+            )}
+            {isDelivery && deliveryFee > 0 && (
+              <div className="flex justify-between text-muted">
+                <span>Доставка</span>
+                <span>{formatPrice(deliveryFee)} TJS</span>
+              </div>
+            )}
+            <div className="flex justify-between text-xl font-bold text-foreground pt-2 border-t border-gray-100">
+              <span>Итого</span>
+              <span className="text-[#0f2c5e]">
+                {formatPrice(finalTotal)} TJS
+              </span>
             </div>
-          )}
-          <div className="flex justify-between text-xl font-bold text-foreground pt-2 border-t border-gray-100">
-            <span>Итого</span>
-            <span className="text-orange-500">{formatPrice(finalTotal)} TJS</span>
           </div>
-        </div>
 
-        <Button
-          onClick={() => router.push("/checkout")}
-          className="w-full"
-          size="lg"
-        >
-          <Icon name="shopping_cart_checkout" size={22} className="mr-2" />
-          Оформить заказ
-        </Button>
+          <Button
+            onClick={() => router.push("/checkout")}
+            className="w-full"
+            size="lg"
+          >
+            <Icon name="shopping_cart_checkout" size={22} className="mr-2" />
+            Оформить заказ
+          </Button>
         </div>
       </div>
 

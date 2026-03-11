@@ -145,7 +145,7 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
       <div className="bg-orange-50 rounded-xl p-4 border border-orange-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Icon name="delivery_dining" size={20} className="text-orange-500" />
+            <Icon name="delivery_dining" size={20} className="text-[ #f7df00]" />
             <span className="text-sm text-orange-700">Стоимость доставки</span>
           </div>
           <span className="font-bold text-orange-600">
@@ -175,7 +175,7 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
               type="button"
               onClick={handleGetLocation}
               disabled={isLoadingLocation || isSubmitting}
-              className="flex items-center gap-1 text-sm text-orange-500 hover:text-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1 text-sm text-[ #f7df00] hover:text-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoadingLocation ? (
                 <>
@@ -211,7 +211,7 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
         className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Icon name={getModeIcon()} size={16} className="text-orange-500" />
+          <Icon name={getModeIcon()} size={16} className="text-[#f7df00]" />
           <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
         </div>
         <Icon name="chevron_right" size={18} className="text-gray-400" />

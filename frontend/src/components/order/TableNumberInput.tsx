@@ -71,9 +71,7 @@ export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submi
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-bold text-foreground mb-2">
-          Номер стола
-        </h2>
+        <h2 className="text-xl font-bold text-foreground mb-2">Номер стола</h2>
         {selectedRestaurantName && (
           <p className="text-muted">{selectedRestaurantName}</p>
         )}
@@ -106,7 +104,9 @@ export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submi
       </div>
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
-      {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
+      {submitError && (
+        <p className="text-error text-sm text-center">{submitError}</p>
+      )}
 
       {/* Compact mode selector */}
       <button
@@ -114,8 +114,10 @@ export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submi
         className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Icon name={getModeIcon()} size={16} className="text-orange-500" />
-          <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
+          <Icon name={getModeIcon()} size={16} className="text-[ #f7df00]" />
+          <span className="text-sm font-medium text-gray-700">
+            {getModeLabel()}
+          </span>
         </div>
         <Icon name="chevron_right" size={18} className="text-gray-400" />
       </button>
@@ -129,14 +131,23 @@ export function TableNumberInput({ onSubmit, onBack, isSubmitting = false, submi
         >
           {isSubmitting ? (
             <>
-              <Icon name="progress_activity" size={18} className="mr-2 animate-spin" />
+              <Icon
+                name="progress_activity"
+                size={18}
+                className="mr-2 animate-spin"
+              />
               Оформление...
             </>
           ) : (
             "Подтвердить заказ"
           )}
         </Button>
-        <Button onClick={onBack} variant="ghost" className="w-full" disabled={isSubmitting}>
+        <Button
+          onClick={onBack}
+          variant="ghost"
+          className="w-full"
+          disabled={isSubmitting}
+        >
           <Icon name="arrow_back" size={18} className="mr-2" />
           Назад
         </Button>

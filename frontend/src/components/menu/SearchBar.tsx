@@ -52,7 +52,7 @@ export function SearchBar({
             onClick={() => onViewChange("1x1")}
             className={`p-2.5 rounded-lg transition-all ${
               gridView === "1x1"
-                ? "bg-orange-500 text-white shadow-sm"
+                ? "bg-[ #f7df00] text-white shadow-sm"
                 : "bg-white text-gray-500 border border-border hover:bg-gray-50"
             }`}
           >
@@ -62,7 +62,7 @@ export function SearchBar({
             onClick={() => onViewChange("2x2")}
             className={`p-2.5 rounded-lg transition-all ${
               gridView === "2x2"
-                ? "bg-orange-500 text-white shadow-sm"
+                ? "bg-[ #f7df00] text-white shadow-sm"
                 : "bg-white text-gray-500 border border-border hover:bg-gray-50"
             }`}
           >

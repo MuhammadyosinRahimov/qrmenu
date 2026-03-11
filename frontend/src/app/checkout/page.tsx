@@ -373,7 +373,7 @@ export default function CheckoutPage() {
                 <div key={s} className="flex items-center">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm transition-all ${
                     step === s
-                      ? "bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-orange-200"
+                      ? "bg-gradient-to-br from-[#f7df00] to-[#f7df00] text-white shadow-orange-200"
                       : i < currentIndex
                       ? "bg-gradient-to-br from-green-400 to-green-500 text-white shadow-green-200"
                       : "bg-white text-gray-400 border border-gray-200"
@@ -393,7 +393,7 @@ export default function CheckoutPage() {
         {step === "phone" && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from- #f7df00 to-[#f7df00] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
                 <Icon name="phone_iphone" size={40} className="text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите номер телефона</h2>
@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                 type="tel"
                 value={phone}
                 onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="+992 __ ___-__-__"
+                placeholder="+992"
                 className="text-center text-xl font-medium"
                 error={error || undefined}
               />
@@ -577,7 +577,7 @@ export default function CheckoutPage() {
                     value={specialInstructions}
                     onChange={(e) => setSpecialInstructions(e.target.value)}
                     placeholder="Например: без лука, острый соус отдельно..."
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none shadow-sm transition-all"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring- #f7df00 focus:border-transparent resize-none shadow-sm transition-all"
                     rows={2}
                   />
                 </div>
