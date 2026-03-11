@@ -181,17 +181,6 @@ export default function CartPage() {
                   </p>
                 )}
               </div>
-
-              {/* Delete button */}
-              <div className="px-4 pb-4 flex justify-end">
-                <button
-                  onClick={() => removeItem(item.id)}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors text-sm"
-                >
-                  <Icon name="delete" size={18} />
-                  <span>Удалить</span>
-                </button>
-              </div>
             </div>
           );
         })}

@@ -27,7 +27,7 @@ export function FloatingCart() {
               {itemCount}
             </span>
           </div>
-          <span className="font-semibold">{formatPrice(total)} TJS</span>
+          <span className="font-semibold">Смотреть заказы{formatPrice(total)} TJS</span>
           <Icon name="arrow_forward" size={22} className="text-white" />
         </div>
       </Link>
