@@ -349,7 +349,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30">
+    <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30">
       {/* Header */}
       <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-40">
         <div className="flex items-center h-14 px-4">
@@ -373,7 +373,7 @@ export default function CheckoutPage() {
                 <div key={s} className="flex items-center">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm transition-all ${
                     step === s
-                      ? "bg-gradient-to-br from-[#f7df00] to-[#f7df00] text-white shadow-orange-200"
+                      ? "bg-gradient-to-br from-[#f7df00] to-[#f7df00] text-white shadow-primary-200"
                       : i < currentIndex
                       ? "bg-gradient-to-br from-green-400 to-green-500 text-white shadow-green-200"
                       : "bg-white text-gray-400 border border-gray-200"
@@ -393,7 +393,7 @@ export default function CheckoutPage() {
         {step === "phone" && (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from- #f7df00 to-[#f7df00] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-200">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-300 to-primary flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-200">
                 <Icon name="phone_iphone" size={40} className="text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите номер телефона</h2>
@@ -523,7 +523,7 @@ export default function CheckoutPage() {
                 {/* Order summary for QR mode */}
                 <div className="bg-white rounded-2xl p-4 space-y-3 border border-gray-100 shadow-sm">
                   <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                    <Icon name="shopping_bag" size={18} className="text-orange-500" />
+                    <Icon name="shopping_bag" size={18} className="text-primary" />
                     Ваш заказ
                   </h3>
                   <div className="space-y-2">
@@ -548,7 +548,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">
                       <span>Итого</span>
-                      <span className="text-orange-500">{formatPrice(getTotal())} TJS</span>
+                      <span className="text-primary">{formatPrice(getTotal())} TJS</span>
                     </div>
                   </div>
                 </div>
@@ -577,7 +577,7 @@ export default function CheckoutPage() {
                     value={specialInstructions}
                     onChange={(e) => setSpecialInstructions(e.target.value)}
                     placeholder="Например: без лука, острый соус отдельно..."
-                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring- #f7df00 focus:border-transparent resize-none shadow-sm transition-all"
+                    className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none shadow-sm transition-all"
                     rows={2}
                   />
                 </div>
@@ -614,8 +614,8 @@ export default function CheckoutPage() {
       {showPauseModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-sm p-6 text-center shadow-2xl">
-            <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Icon name="pause_circle" size={40} className="text-orange-500" />
+            <div className="w-16 h-16 bg-primary-light rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Icon name="pause_circle" size={40} className="text-primary" />
             </div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">Приём заказов приостановлен</h2>
             <p className="text-gray-500 mb-4">

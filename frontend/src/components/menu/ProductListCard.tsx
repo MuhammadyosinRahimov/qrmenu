@@ -38,7 +38,7 @@ export function ProductListCard({
         isInactive
           ? "cursor-not-allowed border-border"
           : isInCart
-          ? "border-[ #f7df00] bg-orange-50/30 shadow-md"
+          ? "border-primary bg-primary-light/30 shadow-md"
           : "border-border hover:shadow-md active:scale-[0.99]"
       }`}
     >
@@ -63,14 +63,14 @@ export function ProductListCard({
         )}
         {isInactive && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/60">
-            <span className="text-white font-semibold text-xs bg-[ #f7df00] px-2 py-1 rounded-full shadow-md">
+            <span className="text-white font-semibold text-xs bg-primary px-2 py-1 rounded-full shadow-md">
               Недоступно
             </span>
           </div>
         )}
         {/* In cart badge */}
         {isInCart && !isInactive && (
-          <div className="absolute top-2 left-2 z-10 w-5 h-5 rounded-full bg-[ #f7df00] flex items-center justify-center shadow-md">
+          <div className="absolute top-2 left-2 z-10 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-md">
             <Icon name="check" size={14} className="text-white" />
           </div>
         )}
@@ -85,7 +85,7 @@ export function ProductListCard({
             </h3>
             {product.rating > 0 && !isInactive && (
               <div className="flex items-center gap-0.5 text-xs text-gray-500 flex-shrink-0">
-                <Icon name="star" size={12} className="text-orange-400" filled />
+                <Icon name="star" size={12} className="text-primary-300" filled />
                 <span>{product.rating.toFixed(1)}</span>
               </div>
             )}
@@ -109,14 +109,14 @@ export function ProductListCard({
             <div className="flex items-center gap-2">
               <button
                 onClick={(e) => { e.stopPropagation(); onRemove?.(product); }}
-                className="w-8 h-8 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-primary hover:bg-primary-dark flex items-center justify-center transition-colors"
               >
                 <Icon name="remove" size={18} className="text-white" />
               </button>
-              <span className="font-bold text-[ #f7df00] min-w-[24px] text-center">{quantity}</span>
+              <span className="font-bold text-primary min-w-[24px] text-center">{quantity}</span>
               <button
                 onClick={(e) => { e.stopPropagation(); onAdd?.(product); }}
-                className="w-8 h-8 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-primary hover:bg-primary-dark flex items-center justify-center transition-colors"
               >
                 <Icon name="add" size={18} className="text-white" />
               </button>
@@ -124,7 +124,7 @@ export function ProductListCard({
           ) : !isInactive ? (
             <button
               onClick={(e) => { e.stopPropagation(); onAdd?.(product); }}
-              className="w-9 h-9 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+              className="w-9 h-9 rounded-full bg-primary hover:bg-primary-dark shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95"
             >
               <Icon name="add" size={22} className="text-white" />
             </button>

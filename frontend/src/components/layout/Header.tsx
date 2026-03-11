@@ -34,7 +34,7 @@ export function Header({ title, showTable = true }: HeaderProps) {
           </h1>
         </div>
         {showTable && displayTable && (
-          <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
+          <div className="flex items-center gap-2 bg-primary-light px-3 py-1.5 rounded-full border border-primary-200">
             <span className="text-muted text-sm">Стол</span>
             <span className="text-primary font-bold">{displayTable}</span>
           </div>

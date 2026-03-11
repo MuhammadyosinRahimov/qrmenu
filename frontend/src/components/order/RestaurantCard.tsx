@@ -53,7 +53,7 @@ export function RestaurantCard({
   return (
     <button
       onClick={() => onSelect(restaurant)}
-      className="w-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 hover:shadow-lg transition-all duration-300 text-left group"
+      className="w-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all duration-300 text-left group"
     >
       {/* Restaurant Image/Gradient Header */}
       <div className="relative h-32 overflow-hidden">
@@ -143,8 +143,8 @@ export function RestaurantCard({
 
         {/* Arrow indicator */}
         <div className="flex items-center justify-end mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-sm text-orange-500 font-medium mr-1">Открыть меню</span>
-          <Icon name="arrow_forward" size={16} className="text-orange-500" />
+          <span className="text-sm text-primary-dark font-medium mr-1">Открыть меню</span>
+          <Icon name="arrow_forward" size={16} className="text-primary-dark" />
         </div>
       </div>
     </button>

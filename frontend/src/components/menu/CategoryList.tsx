@@ -48,9 +48,9 @@ export function CategoryList({
       {/* Gradient fade edges for scroll indication */}
       <div className="relative">
         {/* Left fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-orange-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-primary-light to-transparent z-10 pointer-events-none" />
         {/* Right fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-orange-50 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-primary-light to-transparent z-10 pointer-events-none" />
 
         <div
           ref={scrollContainerRef}
@@ -59,7 +59,7 @@ export function CategoryList({
           {/* Burger menu button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-md shadow-orange-200 hover:shadow-lg hover:shadow-orange-300 hover:scale-105 transition-all duration-300 flex-shrink-0"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary-300 to-primary text-white shadow-md shadow-primary-200 hover:shadow-lg hover:shadow-primary-300 hover:scale-105 transition-all duration-300 flex-shrink-0"
           >
             <Icon name="menu" size={20} />
           </button>
@@ -69,8 +69,8 @@ export function CategoryList({
             onClick={() => handleSelect(null)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 flex-shrink-0 ${
               selectedId === null
-                ? "bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-md shadow-orange-200 scale-105"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300 hover:text-orange-500 hover:shadow-sm"
+                ? "bg-gradient-to-r from-primary-300 to-primary text-white shadow-md shadow-primary-200 scale-105"
+                : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:text-primary-dark hover:shadow-sm"
             }`}
           >
             <Icon name="grid_view" size={18} />
@@ -84,8 +84,8 @@ export function CategoryList({
               onClick={() => handleSelect(category.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 flex-shrink-0 ${
                 selectedId === category.id
-                  ? "bg-gradient-to-r from-orange-400 to-orange-500 text-white shadow-md shadow-orange-200 scale-105"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300 hover:text-orange-500 hover:shadow-sm"
+                  ? "bg-gradient-to-r from-primary-300 to-primary text-white shadow-md shadow-primary-200 scale-105"
+                  : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:text-primary-dark hover:shadow-sm"
               }`}
             >
               <Icon name={category.icon} size={18} />

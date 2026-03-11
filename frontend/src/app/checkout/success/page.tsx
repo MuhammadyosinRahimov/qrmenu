@@ -37,7 +37,7 @@ export default function CheckoutSuccessPage() {
 
         {/* Table info */}
         {tableNumber && (
-          <div className="bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <div className="bg-primary-light rounded-xl p-4 border border-primary-200">
             <p className="text-muted text-sm mb-1">Номер стола</p>
             <p className="text-3xl font-bold text-[#0f2c5e]">{tableNumber}</p>
           </div>

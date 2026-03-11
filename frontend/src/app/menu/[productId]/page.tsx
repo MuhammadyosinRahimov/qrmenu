@@ -144,7 +144,7 @@ export default function ProductPage() {
         <div>
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-2xl font-bold text-foreground">{product.name}</h1>
-            <span className="text-xl font-bold text-orange-500">
+            <span className="text-xl font-bold text-primary">
               {formatPrice(product.basePrice)} TJS
             </span>
           </div>
@@ -188,8 +188,8 @@ export default function ProductPage() {
                   onClick={() => setSelectedSizeId(size.id)}
                   className={`px-4 py-2 rounded-xl border transition-all ${
                     selectedSizeId === size.id
-                      ? "border-orange-500 bg-orange-50 text-orange-600"
-                      : "border-border text-muted hover:border-orange-300"
+                      ? "border-primary bg-primary-light text-primary-dark"
+                      : "border-border text-muted hover:border-primary-300"
                   }`}
                 >
                   <span className="text-sm font-medium">{size.name}</span>
@@ -223,12 +223,12 @@ export default function ProductPage() {
                   }}
                   className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
                     selectedAddonIds.includes(addon.id)
-                      ? "border-orange-500 bg-orange-50"
-                      : "border-border hover:border-orange-300"
+                      ? "border-primary bg-primary-light"
+                      : "border-border hover:border-primary-300"
                   }`}
                 >
                   <span className="text-foreground">{addon.name}</span>
-                  <span className="text-orange-500 font-medium">
+                  <span className="text-primary font-medium">
                     +{formatPrice(addon.price)} TJS
                   </span>
                 </button>

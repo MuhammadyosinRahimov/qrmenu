@@ -117,8 +117,8 @@ export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: R
   if (filteredRestaurants.length === 0 && searchQuery.trim()) {
     return (
       <div className="text-center py-12">
-        <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-4">
-          <Icon name="search_off" size={32} className="text-orange-400" />
+        <div className="w-16 h-16 rounded-2xl bg-primary-light flex items-center justify-center mx-auto mb-4">
+          <Icon name="search_off" size={32} className="text-primary-300" />
         </div>
         <p className="text-gray-600 font-medium mb-1">
           Ничего не найдено

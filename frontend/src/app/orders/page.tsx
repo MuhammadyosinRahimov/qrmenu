@@ -250,11 +250,11 @@ export default function OrdersPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
+      <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
         <Header title="Мои заказы" />
 
         <div className="flex flex-col items-center justify-center py-16 px-4 max-w-md mx-auto">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mb-6 shadow-lg shadow-orange-200">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-primary-300 to-primary flex items-center justify-center mb-6 shadow-lg shadow-primary-200">
             <Icon name="receipt_long" size={48} className="text-white" />
           </div>
           <h2 className="text-xl font-bold text-gray-800 mb-2">
@@ -267,7 +267,7 @@ export default function OrdersPage() {
           {/* Registration button */}
           <button
             onClick={() => router.push("/checkout")}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-orange-200/50 hover:shadow-xl hover:scale-[1.02] transition-all mb-4"
+            className="w-full bg-gradient-to-r from-primary-300 to-primary text-white rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-primary-200/50 hover:shadow-xl hover:scale-[1.02] transition-all mb-4"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
@@ -293,7 +293,7 @@ export default function OrdersPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
+      <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
         <Header title="Мои заказы" />
       
         <div className="p-4 space-y-4">
@@ -312,7 +312,7 @@ export default function OrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
+      <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
         <Header title="Мои заказы" />
        
         <div className="flex flex-col items-center justify-center py-20 px-4">
@@ -331,7 +331,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
       <Header title="Мои заказы" />
     
 
@@ -355,7 +355,7 @@ export default function OrdersPage() {
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       guestOrder.isPaid
                         ? "bg-green-100 text-green-700"
-                        : "bg-orange-100 text-orange-700"
+                        : "bg-primary-light text-primary-dark"
                     }`}>
                       {guestOrder.isPaid ? "Оплачено" : "Не оплачено"}
                     </span>
@@ -399,24 +399,24 @@ export default function OrdersPage() {
             >
               {/* Status header with gradient */}
               <div className={`px-4 py-3 flex items-center justify-between ${
-                normalizedStatus === "Pending" ? "bg-gradient-to-r from-orange-50 to-amber-50" :
+                normalizedStatus === "Pending" ? "bg-gradient-to-r from-primary-light to-primary-50" :
                 normalizedStatus === "Confirmed" ? "bg-gradient-to-r from-blue-50 to-indigo-50" :
                 "bg-gradient-to-r from-red-50 to-rose-50"
               }`}>
                 <div className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    normalizedStatus === "Pending" ? "bg-orange-100" :
+                    normalizedStatus === "Pending" ? "bg-primary-50" :
                     normalizedStatus === "Confirmed" ? "bg-blue-100" :
                     "bg-red-100"
                   }`}>
                     <Icon name={status.icon} size={18} className={
-                      normalizedStatus === "Pending" ? "text-orange-500" :
+                      normalizedStatus === "Pending" ? "text-primary-dark" :
                       normalizedStatus === "Confirmed" ? "text-blue-500" :
                       "text-red-500"
                     } />
                   </div>
                   <span className={`font-medium text-sm ${
-                    normalizedStatus === "Pending" ? "text-orange-700" :
+                    normalizedStatus === "Pending" ? "text-primary-dark" :
                     normalizedStatus === "Confirmed" ? "text-blue-700" :
                     "text-red-700"
                   }`}>
@@ -447,8 +447,8 @@ export default function OrdersPage() {
                       </div>
                     )}
                     {!isDelivery && !isTakeaway && (
-                      <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-                        <Icon name="restaurant" size={20} className="text-orange-500" />
+                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
+                        <Icon name="restaurant" size={20} className="text-primary" />
                       </div>
                     )}
                     <div>
@@ -456,7 +456,7 @@ export default function OrdersPage() {
                         {isDelivery ? "Доставка" : isTakeaway ? "Самовывоз" : order.tableName || `Стол #${order.tableNumber}`}
                       </p>
                       {order.restaurantName && (
-                        <p className="text-xs text-orange-500">{order.restaurantName}</p>
+                        <p className="text-xs text-primary">{order.restaurantName}</p>
                       )}
                     </div>
                   </div>
@@ -510,7 +510,7 @@ export default function OrdersPage() {
                       <span className="text-xs">(+{formatPrice(order.deliveryFee)} доставка)</span>
                     )}
                   </div>
-                  <span className="text-xl font-bold text-orange-500">
+                  <span className="text-xl font-bold text-primary">
                     {formatPrice(order.total)} TJS
                   </span>
                 </div>
@@ -597,7 +597,7 @@ export default function OrdersPage() {
                           <div className="flex items-center gap-2">
                             <span className="font-medium text-blue-700">{formatPrice(guestOrder.total)} TJS</span>
                             <span className={`px-1.5 py-0.5 rounded ${
-                              guestOrder.isPaid ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600"
+                              guestOrder.isPaid ? "bg-green-100 text-green-600" : "bg-primary-light text-primary-dark"
                             }`}>
                               {guestOrder.isPaid ? "оплачено" : "не оплачено"}
                             </span>
@@ -622,13 +622,13 @@ export default function OrdersPage() {
                     setSessionInfo(null);
                   }}
                   disabled={!!processingPayment}
-                  className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 border-2 border-orange-200 hover:border-orange-400 transition-all disabled:opacity-50"
+                  className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-primary-light to-primary-50 border-2 border-primary-200 hover:border-primary-300 transition-all disabled:opacity-50"
                 >
                   <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-2">
-                    <Icon name="payments" size={24} className="text-orange-500" />
+                    <Icon name="payments" size={24} className="text-primary" />
                   </div>
-                  <span className="font-semibold text-orange-700">Наличными</span>
-                  <span className="text-xs text-orange-500">
+                  <span className="font-semibold text-primary-dark">Наличными</span>
+                  <span className="text-xs text-primary">
                     {sessionInfo && sessionInfo.guestCount > 1
                       ? formatPrice(sessionInfo.myTotal)
                       : formatPrice(paymentModalOrder.total)} TJS
@@ -704,7 +704,7 @@ export default function OrdersPage() {
                     {selectedOrder.tableName || `Стол #${selectedOrder.tableNumber}`}
                   </h2>
                   {selectedOrder.restaurantName && (
-                    <p className="text-sm text-orange-500">{selectedOrder.restaurantName}</p>
+                    <p className="text-sm text-primary">{selectedOrder.restaurantName}</p>
                   )}
                   <p className="text-sm text-gray-400">{formatDate(selectedOrder.createdAt)}</p>
                 </div>
@@ -734,7 +734,7 @@ export default function OrdersPage() {
                     key={item.id}
                     className={`p-4 rounded-xl border ${
                       isCancelled ? "bg-red-50 border-red-100 opacity-60" :
-                      isPending ? "bg-orange-50 border-orange-100" :
+                      isPending ? "bg-primary-light border-primary-50" :
                       "bg-gray-50 border-gray-100"
                     }`}
                   >
@@ -746,7 +746,7 @@ export default function OrdersPage() {
                           </span>
                           <span className={`text-xs px-2 py-0.5 rounded-full ${
                             isCancelled ? "bg-red-100 text-red-600" :
-                            isPending ? "bg-orange-100 text-orange-600" :
+                            isPending ? "bg-primary-light text-primary-dark" :
                             "bg-green-100 text-green-600"
                           }`}>
                             {itemStatusConfig[normalizedItemStatus]?.label || "Активно"}
@@ -799,7 +799,7 @@ export default function OrdersPage() {
                 </div>
                 <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-200">
                   <span>Итого</span>
-                  <span className="text-orange-500">{formatPrice(selectedOrder.total)} TJS</span>
+                  <span className="text-primary">{formatPrice(selectedOrder.total)} TJS</span>
                 </div>
               </div>
 

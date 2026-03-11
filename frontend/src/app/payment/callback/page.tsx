@@ -45,8 +45,8 @@ function PaymentCallbackContent() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto animate-pulse">
-            <Icon name="sync" size={32} className="text-orange-500 animate-spin" />
+          <div className="w-16 h-16 rounded-full bg-primary-light flex items-center justify-center mx-auto animate-pulse">
+            <Icon name="sync" size={32} className="text-primary animate-spin" />
           </div>
           <p className="text-muted">Проверяем статус оплаты...</p>
         </div>
@@ -257,8 +257,8 @@ export default function PaymentCallbackPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto animate-pulse">
-            <Icon name="sync" size={32} className="text-orange-500 animate-spin" />
+          <div className="w-16 h-16 rounded-full bg-primary-light flex items-center justify-center mx-auto animate-pulse">
+            <Icon name="sync" size={32} className="text-primary animate-spin" />
           </div>
           <p className="text-muted">Загрузка...</p>
         </div>

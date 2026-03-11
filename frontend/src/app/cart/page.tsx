@@ -47,8 +47,8 @@ export default function CartPage() {
         <Header title="Корзина" />
       
         <div className="flex flex-col items-center justify-center py-20 px-4">
-          <div className="w-24 h-24 rounded-full bg-orange-50 flex items-center justify-center mb-6">
-            <Icon name="shopping_cart" size={48} className="text-[ #f7df00]" />
+          <div className="w-24 h-24 rounded-full bg-primary-light flex items-center justify-center mb-6">
+            <Icon name="shopping_cart" size={48} className="text-primary" />
           </div>
           <h2 className="text-xl font-bold text-foreground mb-2">
             Корзина пуста
@@ -168,7 +168,7 @@ export default function CartPage() {
                       value={item.note || ""}
                       onChange={(e) => updateItemNote(item.id, e.target.value)}
                       placeholder="Например: без лука, острый соус отдельно..."
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[ #f7df00] focus:border-transparent resize-none transition-all"
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
                       rows={2}
                     />
                   </div>

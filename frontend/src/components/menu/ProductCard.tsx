@@ -38,20 +38,20 @@ export function ProductCard({
         isInactive
           ? "cursor-not-allowed border-border"
           : isInCart
-          ? "border-[ #f7df00] bg-orange-50/30 shadow-md"
+          ? "border-primary bg-primary-light/30 shadow-md"
           : "border-border hover:scale-[1.02] hover:shadow-md active:scale-[0.98]"
       }`}
     >
       {/* In cart checkmark */}
       {isInCart && !isInactive && (
-        <div className="absolute top-2 left-2 z-20 w-6 h-6 rounded-full bg-[ #f7df00] flex items-center justify-center animate-scale-in shadow-md">
+        <div className="absolute top-2 left-2 z-20 w-6 h-6 rounded-full bg-primary flex items-center justify-center animate-scale-in shadow-md">
           <Icon name="check" size={16} className="text-white" />
         </div>
       )}
 
       {/* Quantity badge */}
       {isInCart && quantity > 0 && !isInactive && (
-        <div className="absolute top-2 right-2 z-20 min-w-6 h-6 px-1.5 rounded-full bg-[ #f7df00] flex items-center justify-center animate-scale-in shadow-md">
+        <div className="absolute top-2 right-2 z-20 min-w-6 h-6 px-1.5 rounded-full bg-primary flex items-center justify-center animate-scale-in shadow-md">
           <span className="text-white text-xs font-bold">{quantity}</span>
         </div>
       )}
@@ -76,14 +76,14 @@ export function ProductCard({
         )}
         {isInactive && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/60">
-            <span className="text-white font-semibold text-sm bg-[ #f7df00] px-3 py-1.5 rounded-full shadow-md">
+            <span className="text-white font-semibold text-sm bg-primary px-3 py-1.5 rounded-full shadow-md">
               Недоступно
             </span>
           </div>
         )}
         {product.rating > 0 && !isInactive && !isInCart && (
           <div className="absolute top-2 right-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm">
-            <Icon name="star" size={14} className="text-orange-400" filled />
+            <Icon name="star" size={14} className="text-primary-300" filled />
             <span className="text-xs font-medium text-foreground">
               {product.rating.toFixed(1)}
             </span>
@@ -109,17 +109,17 @@ export function ProductCard({
 
         {/* Increment/decrement control when in cart */}
         {isInCart && !isInactive && (
-          <div className="flex items-center justify-between mt-3 bg-orange-50 rounded-lg p-1">
+          <div className="flex items-center justify-between mt-3 bg-primary-light rounded-lg p-1">
             <button
               onClick={(e) => { e.stopPropagation(); onRemove?.(product); }}
-              className="w-8 h-8 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-full bg-primary hover:bg-primary-dark flex items-center justify-center transition-colors"
             >
               <Icon name="remove" size={20} className="text-white" />
             </button>
             <span className="font-bold text-primary">{formatPrice(product.basePrice)} TJS</span>
             <button
               onClick={(e) => { e.stopPropagation(); onAdd?.(product); }}
-              className="w-8 h-8 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-full bg-primary hover:bg-primary-dark flex items-center justify-center transition-colors"
             >
               <Icon name="add" size={20} className="text-white" />
             </button>
@@ -131,7 +131,7 @@ export function ProductCard({
       {!isInCart && !isInactive && (
         <button
           onClick={(e) => { e.stopPropagation(); onAdd?.(product); }}
-          className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-[ #f7df00] hover:bg-[ #f7df00] hover:scale-110 shadow-lg flex items-center justify-center z-10 transition-all duration-150 active:scale-95"
+          className="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-primary hover:bg-primary-dark hover:scale-110 shadow-lg flex items-center justify-center z-10 transition-all duration-150 active:scale-95"
         >
           <Icon name="add" size={24} className="text-white" />
         </button>

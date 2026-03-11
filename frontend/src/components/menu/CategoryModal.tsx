@@ -80,7 +80,7 @@ export function CategoryModal({
             className="overflow-y-auto max-h-[calc(70vh-80px)] pb-6 pt-2 scroll-smooth overscroll-contain"
             style={{
               scrollbarWidth: "thin",
-              scrollbarColor: "rgba(251, 146, 60, 0.3) transparent"
+              scrollbarColor: "rgba(247, 223, 0, 0.3) transparent"
             }}
           >
             {/* All categories button */}
@@ -89,25 +89,25 @@ export function CategoryModal({
               onClick={() => handleSelect(null)}
               className={`w-full flex items-center gap-4 px-4 py-3.5 mx-2 my-1 rounded-2xl transition-all duration-200 ${
                 selectedId === null
-                  ? "bg-gradient-to-r from-orange-50 to-orange-100 shadow-sm"
+                  ? "bg-gradient-to-r from-primary-light to-primary-50 shadow-sm"
                   : "hover:bg-gray-50"
               }`}
               style={{ width: "calc(100% - 16px)" }}
             >
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${
                 selectedId === null
-                  ? "bg-gradient-to-br from-orange-400 to-[ #f7df00] text-white shadow-md shadow-orange-200"
+                  ? "bg-gradient-to-br from-primary-300 to-primary text-white shadow-md shadow-primary-200"
                   : "bg-gray-100 text-gray-500"
               }`}>
                 <Icon name="grid_view" size={24} />
               </div>
               <span className={`font-semibold text-base ${
-                selectedId === null ? "text-[ #f7df00]" : "text-gray-700"
+                selectedId === null ? "text-primary-dark" : "text-gray-700"
               }`}>
                 Все категории
               </span>
               {selectedId === null && (
-                <div className="ml-auto w-6 h-6 rounded-full bg-[ #f7df00] flex items-center justify-center">
+                <div className="ml-auto w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                   <Icon name="check" size={16} className="text-white" />
                 </div>
               )}
@@ -121,7 +121,7 @@ export function CategoryModal({
                 onClick={() => handleSelect(category.id)}
                 className={`w-full flex items-center gap-4 px-4 py-3.5 mx-2 my-1 rounded-2xl transition-all duration-200 ${
                   selectedId === category.id
-                    ? "bg-gradient-to-r from-orange-50 to-orange-100 shadow-sm"
+                    ? "bg-gradient-to-r from-primary-light to-primary-50 shadow-sm"
                     : "hover:bg-gray-50"
                 }`}
                 style={{
@@ -131,18 +131,18 @@ export function CategoryModal({
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${
                   selectedId === category.id
-                    ? "bg-gradient-to-br from-orange-400 to-[ #f7df00] text-white shadow-md shadow-orange-200"
+                    ? "bg-gradient-to-br from-primary-300 to-primary text-white shadow-md shadow-primary-200"
                     : "bg-gray-100 text-gray-500"
                 }`}>
                   <Icon name={category.icon} size={24} />
                 </div>
                 <span className={`font-semibold text-base ${
-                  selectedId === category.id ? "text-[ #f7df00]" : "text-gray-700"
+                  selectedId === category.id ? "text-primary-dark" : "text-gray-700"
                 }`}>
                   {category.name}
                 </span>
                 {selectedId === category.id && (
-                  <div className="ml-auto w-6 h-6 rounded-full bg-[#f7df00] flex items-center justify-center">
+                  <div className="ml-auto w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                     <Icon name="check" size={16} className="text-white" />
                   </div>
                 )}

@@ -34,7 +34,7 @@ export function SearchBar({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-10 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all shadow-sm"
+          className="w-full pl-10 pr-10 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm"
         />
         {value && (
           <button
@@ -52,7 +52,7 @@ export function SearchBar({
             onClick={() => onViewChange("1x1")}
             className={`p-2.5 rounded-lg transition-all ${
               gridView === "1x1"
-                ? "bg-[ #f7df00] text-white shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "bg-white text-gray-500 border border-border hover:bg-gray-50"
             }`}
           >
@@ -62,7 +62,7 @@ export function SearchBar({
             onClick={() => onViewChange("2x2")}
             className={`p-2.5 rounded-lg transition-all ${
               gridView === "2x2"
-                ? "bg-[ #f7df00] text-white shadow-sm"
+                ? "bg-primary text-white shadow-sm"
                 : "bg-white text-gray-500 border border-border hover:bg-gray-50"
             }`}
           >

@@ -112,9 +112,9 @@ function HomeContent() {
   // Loading state while checking for QR
   if (isQrMode === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
         <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-orange-200 overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
             <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
           </div>
           <p className="text-gray-500 font-medium">Загрузка...</p>
@@ -126,9 +126,9 @@ function HomeContent() {
   // QR mode loading
   if (isQrMode) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
         <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-orange-200 overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
             <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
           </div>
           <p className="text-gray-500 font-medium">Загрузка меню...</p>
@@ -139,11 +139,11 @@ function HomeContent() {
 
   // Mode selection UI with soft design
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30 pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-full h-64 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -left-32 w-64 h-64 bg-orange-200/30 rounded-full blur-3xl" />
-        <div className="absolute -top-16 right-0 w-48 h-48 bg-amber-200/30 rounded-full blur-3xl" />
+        <div className="absolute -top-32 -left-32 w-64 h-64 bg-primary-200/30 rounded-full blur-3xl" />
+        <div className="absolute -top-16 right-0 w-48 h-48 bg-primary-100/30 rounded-full blur-3xl" />
       </div>
 
       <Header title="Oson eats" />
@@ -153,7 +153,7 @@ function HomeContent() {
         {/* Welcome Hero */}
         <div className="text-center py-6">
           <div className="relative inline-block">
-            <div className="w-24 h-24 rounded-3xl bg-white flex items-center justify-center shadow-xl shadow-orange-200/50 transform rotate-3 overflow-hidden">
+            <div className="w-24 h-24 rounded-3xl bg-white flex items-center justify-center shadow-xl shadow-primary-200/50 transform rotate-3 overflow-hidden">
               <Image src="/assets/logo.jpg" alt="Oson eats" width={96} height={96} className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg">
@@ -179,7 +179,7 @@ function HomeContent() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Найти ресторан..."
-              className="w-full pl-12 pr-12 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent shadow-sm transition-all text-base"
+              className="w-full pl-12 pr-12 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm transition-all text-base"
             />
             {searchQuery && (
               <button
@@ -233,9 +233,9 @@ export default function HomePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-white">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary-light to-white">
           <div className="animate-pulse flex flex-col items-center gap-4">
-            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-orange-200 overflow-hidden">
+            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg shadow-primary-200 overflow-hidden">
               <Image src="/assets/logo.jpg" alt="Logo" width={80} height={80} className="w-full h-full object-cover" />
             </div>
             <p className="text-gray-500 font-medium">Загрузка...</p>

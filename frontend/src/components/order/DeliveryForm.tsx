@@ -142,13 +142,13 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
       </div>
 
       {/* Delivery fee info */}
-      <div className="bg-orange-50 rounded-xl p-4 border border-orange-100">
+      <div className="bg-primary-light rounded-xl p-4 border border-primary-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Icon name="delivery_dining" size={20} className="text-[ #f7df00]" />
-            <span className="text-sm text-orange-700">Стоимость доставки</span>
+            <Icon name="delivery_dining" size={20} className="text-primary" />
+            <span className="text-sm text-foreground">Стоимость доставки</span>
           </div>
-          <span className="font-bold text-orange-600">
+          <span className="font-bold text-primary-dark">
             {deliveryFee > 0 ? `${formatPrice(deliveryFee)} TJS` : "Бесплатно"}
           </span>
         </div>
@@ -175,7 +175,7 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
               type="button"
               onClick={handleGetLocation}
               disabled={isLoadingLocation || isSubmitting}
-              className="flex items-center gap-1 text-sm text-[ #f7df00] hover:text-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1 text-sm text-primary hover:text-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoadingLocation ? (
                 <>
@@ -194,7 +194,7 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
             value={deliveryAddress}
             onChange={(e) => setDeliveryAddress(e.target.value)}
             placeholder="Улица, дом, квартира, подъезд, этаж..."
-            className="w-full px-4 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 bg-white border border-border rounded-xl text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             rows={3}
             required
             disabled={isSubmitting}
