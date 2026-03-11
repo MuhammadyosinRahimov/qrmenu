@@ -1,0 +1,56 @@
+"use client";
+
+import { useEffect } from "react";
+import { useOrderModeStore } from "@/stores/orderModeStore";
+import { useCartStore } from "@/stores/cartStore";
+import { useTableStore } from "@/stores/tableStore";
+
+const CACHE_EXPIRY_MS = 3 * 60 * 60 * 1000; // 3 hours
+
+export function CacheManager() {
+  const { mode, clearMode } = useOrderModeStore();
+  const { clearCart } = useCartStore();
+  const { clearTable } = useTableStore();
+
+  useEffect(() => {
+    // Check global last activity timestamp
+    const lastActivity = localStorage.getItem("yalla_last_activity");
+    const now = Date.now();
+
+    if (lastActivity) {
+      const timeSinceLastActivity = now - parseInt(lastActivity, 10);
+      
+      // If time since last activity is greater than expiry, clear EVERYTHING
+      if (timeSinceLastActivity > CACHE_EXPIRY_MS) {
+        console.log("CacheManager: Cache expired. Clearing all session data.");
+        
+        // Clear stores
+        clearMode();
+        clearCart();
+        clearTable();
+
+        // Hard clear the specific localStorage keys just to be absolutely certain
+        localStorage.removeItem("order-mode-storage");
+        localStorage.removeItem("cart-storage");
+        localStorage.removeItem("table-storage");
+        
+        // Clear sessionStorage as well
+        sessionStorage.clear();
+      }
+    }
+
+    // Update the last activity timestamp
+    localStorage.setItem("yalla_last_activity", now.toString());
+
+    // Setup an interval to ping activity while the tab is open
+    const activityInterval = setInterval(() => {
+      localStorage.setItem("yalla_last_activity", Date.now().toString());
+    }, 60000); // Update every minute while active
+
+    return () => {
+      clearInterval(activityInterval);
+    };
+  }, [clearMode, clearCart, clearTable]);
+
+  return null; // This is a logic-only component
+}

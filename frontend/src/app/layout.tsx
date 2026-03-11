@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { StoreHydration } from "@/components/StoreHydration";
+import { CacheManager } from "@/components/layout/CacheManager";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -40,6 +41,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jakarta.variable} antialiased`}>
+        <CacheManager />
         <StoreHydration />
         <Providers>{children}</Providers>
       </body>
