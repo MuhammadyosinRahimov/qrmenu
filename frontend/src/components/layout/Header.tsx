@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTableStore } from "@/stores/tableStore";
 
 interface HeaderProps {
@@ -24,9 +25,14 @@ export function Header({ title, showTable = true }: HeaderProps) {
   return (
     <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-border z-40 safe-area-inset-top">
       <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
-        <h1 className="text-lg font-bold text-foreground">
-          {displayName}
-        </h1>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+            <Image src="/assets/logo.jpg" alt="Logo" width={32} height={32} className="w-full h-full object-cover" />
+          </div>
+          <h1 className="text-lg font-bold text-foreground truncate max-w-[180px]">
+            {displayName}
+          </h1>
+        </div>
         {showTable && displayTable && (
           <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
             <span className="text-muted text-sm">Стол</span>

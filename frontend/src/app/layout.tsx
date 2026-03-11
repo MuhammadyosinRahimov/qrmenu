@@ -13,6 +13,10 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Oson eats",
   description: "Scan QR code to view restaurant menu ",
+  icons: {
+    icon: "/assets/logo.jpg",
+    apple: "/assets/logo.jpg",
+  },
 };
 
 export const viewport: Viewport = {
