@@ -95,7 +95,7 @@ export const useOrderModeStore = create<OrderModeState>()(
         }),
     }),
     {
-      name: "order-mode-storage",
+      name: "order-mode-storage-v2",
       storage: createJSONStorage(() => sessionStorage),
     }
   )

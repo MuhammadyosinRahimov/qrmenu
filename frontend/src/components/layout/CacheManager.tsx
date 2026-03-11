@@ -69,8 +69,20 @@ export function CacheManager() {
       localStorage.setItem("yalla_last_activity", Date.now().toString());
     }, 60000); // Update every minute while active
 
+    // Listen for tab close / app exit
+    const handleExit = () => {
+      // Hard clear everything when the user actually closes the window or tab
+      localStorage.clear();
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", handleExit);
+    window.addEventListener("pagehide", handleExit);
+
     return () => {
       clearInterval(activityInterval);
+      window.removeEventListener("beforeunload", handleExit);
+      window.removeEventListener("pagehide", handleExit);
     };
   }, [clearMode, clearCart, clearTable]);
 
