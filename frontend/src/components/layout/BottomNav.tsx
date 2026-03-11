@@ -13,6 +13,7 @@ interface NavItem {
   label: string;
   badge?: () => number;
   qrOnly?: boolean; // показывать только в QR-режиме
+  hideInQr?: boolean; // скрывать в QR-режиме
 }
 
 export function BottomNav() {
@@ -28,7 +29,8 @@ export function BottomNav() {
       href: isOnMenuPage ? "/" : "/",
       icon: "home",
       filledIcon: "home",
-      label: "Главная"
+      label: "Главная",
+      hideInQr: true
     },
     {
       href: "/menu",
@@ -58,7 +60,7 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 safe-area-inset-bottom z-50">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {navItems
-          .filter((item) => !item.qrOnly || mode === "qr")
+          .filter((item) => (!item.qrOnly || mode === "qr") && !(item.hideInQr && mode === "qr"))
           .map((item) => {
           const active = isActive(item.href);
           const badgeCount = item.badge?.() || 0;
