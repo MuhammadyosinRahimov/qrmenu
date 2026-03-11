@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { CartItem } from "@/types";
-import { useOrderModeStore, isQrMode } from "./orderModeStore";
+import { useOrderModeStore } from "./orderModeStore";
 
 interface CartState {
   items: CartItem[];
@@ -97,9 +97,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "cart-storage",
-      storage: createJSONStorage(() =>
-        isQrMode() ? sessionStorage : localStorage
-      ),
+      storage: createJSONStorage(() => sessionStorage),
       skipHydration: true,
     }
   )

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { getImageUrl } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
@@ -81,11 +80,10 @@ export default function CartPage() {
                 {/* Image */}
                 <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                   {getImageUrl(item.imageUrl) ? (
-                    <Image
+                    <img
                       src={getImageUrl(item.imageUrl)!}
                       alt={item.productName}
-                      fill
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
