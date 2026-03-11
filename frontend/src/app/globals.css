@@ -2,15 +2,15 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #1f2937;
-  --primary: #f97316;
-  --primary-dark: #ea580c;
+  --foreground: #0f2c5e;
+  --primary: #f7df00;
+  --primary-dark: #f7df00;
   --surface: #f9fafb;
   --surface-light: #f3f4f6;
   --border: #e5e7eb;
   --muted: #6b7280;
   --success: #22c55e;
-  --warning: #f97316;
+  --warning: #f7df00;
   --error: #ef4444;
 }
 
@@ -54,7 +54,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: #f7df00;
 }
 
 /* Hide scrollbar for horizontal scrolling categories */
