@@ -205,17 +205,25 @@ export default function CheckoutPage() {
 
   // Handle order completion - redirect to payment or orders page
   const handlePaymentRedirect = (order: Order) => {
-    // Если есть PaymentLink для takeaway/delivery — редирект на оплату
-    if (order.paymentLink && (mode === "takeaway" || mode === "delivery")) {
-      // Подставляем сумму в ссылку (формат: {amount})
-      const paymentUrl = order.paymentLink.replace("{amount}", String(order.total));
+    // Если есть PaymentLink — редирект на оплату (для ВСЕХ режимов)
+    if (order.paymentLink) {
+      let paymentUrl = order.paymentLink;
+
+      // DC Bank использует параметр &s= для суммы
+      // Заменяем &s=& на &s=СУММА& или &s= в конце на &s=СУММА
+      if (paymentUrl.includes("&s=")) {
+        paymentUrl = paymentUrl.replace(/&s=(&|$)/, `&s=${order.total}$1`);
+      } else if (paymentUrl.includes("{amount}")) {
+        // Альтернативный формат с плейсхолдером
+        paymentUrl = paymentUrl.replace("{amount}", String(order.total));
+      }
+
       showToast("Переход к оплате...", "success");
-      // Редирект на внешнюю страницу оплаты
       window.location.href = paymentUrl;
       return;
     }
 
-    // Для остальных режимов — на страницу заказов
+    // Если нет PaymentLink — на страницу заказов
     showToast("Заказ оформлен!", "success");
     router.push("/orders");
   };
@@ -279,7 +287,7 @@ export default function CheckoutPage() {
         handlePaymentRedirect(order);
       } else if (mode === "dinein" && selectedRestaurantId && (dineInTableNumber || modeTableNumber)) {
         const tableNum = dineInTableNumber || modeTableNumber;
-        await createDineInOrder({
+        const order = await createDineInOrder({
           restaurantId: selectedRestaurantId,
           tableNumber: tableNum!,
           items: orderItems,
@@ -288,8 +296,8 @@ export default function CheckoutPage() {
 
         clearCart();
         clearMode();
-        showToast("Заказ успешно оформлен!", "success");
-        router.push("/orders");
+        // Redirect to payment for dinein
+        handlePaymentRedirect(order);
       } else {
         // QR mode (original flow)
         if (!tableId && !tableNumber) {
@@ -323,10 +331,11 @@ export default function CheckoutPage() {
           // No active order or error - will create new
         }
 
+        let order: Order;
         if (activeOrder && activeOrder.status !== "Cancelled") {
-          await addItemsToOrder(activeOrder.id, orderItems);
+          order = await addItemsToOrder(activeOrder.id, orderItems);
         } else {
-          await createOrder({
+          order = await createOrder({
             tableId: resolvedTableId!,
             specialInstructions: specialInstructions || undefined,
             items: orderItems,
@@ -334,8 +343,8 @@ export default function CheckoutPage() {
         }
 
         clearCart();
-        showToast("Заказ успешно оформлен!", "success");
-        router.push("/orders");
+        // Redirect to payment for QR mode
+        handlePaymentRedirect(order);
       }
     } catch (err: unknown) {
       const error = err as { response?: { data?: { error?: string } }; message?: string };
