@@ -203,8 +203,19 @@ export default function CheckoutPage() {
     router.push("/");
   };
 
-  // Handle order completion - always go to orders page
-  const handlePaymentRedirect = (_order: Order) => {
+  // Handle order completion - redirect to payment or orders page
+  const handlePaymentRedirect = (order: Order) => {
+    // Если есть PaymentLink для takeaway/delivery — редирект на оплату
+    if (order.paymentLink && (mode === "takeaway" || mode === "delivery")) {
+      // Подставляем сумму в ссылку (формат: {amount})
+      const paymentUrl = order.paymentLink.replace("{amount}", String(order.total));
+      showToast("Переход к оплате...", "success");
+      // Редирект на внешнюю страницу оплаты
+      window.location.href = paymentUrl;
+      return;
+    }
+
+    // Для остальных режимов — на страницу заказов
     showToast("Заказ оформлен!", "success");
     router.push("/orders");
   };
