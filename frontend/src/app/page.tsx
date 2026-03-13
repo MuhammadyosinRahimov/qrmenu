@@ -197,7 +197,6 @@ function HomeContent() {
         {mode !== "qr" && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <RestaurantList
-              mode={mode}
               onSelectRestaurant={handleSelectRestaurant}
               searchQuery={searchQuery}
             />

@@ -66,43 +66,34 @@ export default function CartPage() {
     <div className="min-h-screen bg-background pb-56">
       <Header title="Корзина" />
 
-      <div className="p-4">
-        {/* Grid layout - 2 columns */}
-        <div className="grid grid-cols-2 gap-3">
-          {items.map((item) => {
-            const isNoteExpanded = expandedNotes.has(item.id);
+      <div className="p-4 space-y-3">
+        {items.map((item) => {
+          const isNoteExpanded = expandedNotes.has(item.id);
 
-            return (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
-              >
-                {/* Image with quantity badge */}
-                <div className="relative aspect-[4/3] bg-gray-100">
-                  {getImageUrl(item.imageUrl) ? (
-                    <img
-                      src={getImageUrl(item.imageUrl)!}
-                      alt={item.productName}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Icon
-                        name="restaurant"
-                        size={32}
-                        className="text-muted"
-                      />
-                    </div>
-                  )}
-                  {/* Quantity badge */}
-                  <div className="absolute top-2 left-2 w-7 h-7 rounded-lg bg-gray-800/80 backdrop-blur-sm flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">{item.quantity}</span>
+          return (
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3"
+            >
+              {/* Изображение слева - квадратное */}
+              <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                {getImageUrl(item.imageUrl) ? (
+                  <img
+                    src={getImageUrl(item.imageUrl)!}
+                    alt={item.productName}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Icon name="restaurant" size={24} className="text-gray-300" />
                   </div>
-                </div>
+                )}
+              </div>
 
-                {/* Name and size */}
-                <div className="p-2">
-                  <h3 className="font-bold text-sm text-foreground line-clamp-1">
+              {/* Контент справа */}
+              <div className="flex-1 flex flex-col justify-between min-w-0">
+                <div>
+                  <h3 className="font-semibold text-gray-800 line-clamp-1">
                     {item.productName}
                   </h3>
                   {item.sizeName && (
@@ -113,61 +104,64 @@ export default function CartPage() {
                       + {item.addonNames.join(", ")}
                     </p>
                   )}
-                </div>
-
-                {/* Pill-bar selector */}
-                <div className="px-2 pb-2">
-                  <div className="flex items-center justify-between rounded-full h-10 bg-gray-100">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                    >
-                      <Icon name="remove" size={18} className="text-gray-700" />
-                    </button>
-                    <span className="font-bold text-sm text-foreground">
-                      {formatPrice(item.totalPrice)} TJS
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                    >
-                      <Icon name="add" size={18} className="text-gray-700" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Note toggle - compact */}
-                <div className="px-2 pb-2">
-                  <button
-                    onClick={() => toggleNoteExpanded(item.id)}
-                    className="w-full flex items-center justify-center gap-1 py-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <Icon name="edit_note" size={14} />
-                    <span>{item.note ? "Комментарий" : "Добавить"}</span>
-                  </button>
-
-                  {isNoteExpanded && (
-                    <div className="mt-1 animate-in slide-in-from-top-2 duration-200">
-                      <textarea
-                        value={item.note || ""}
-                        onChange={(e) => updateItemNote(item.id, e.target.value)}
-                        placeholder="Комментарий..."
-                        className="w-full px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
-                        rows={2}
-                      />
-                    </div>
-                  )}
-
+                  {/* Комментарий */}
                   {item.note && !isNoteExpanded && (
-                    <p className="text-xs text-gray-400 italic line-clamp-1 text-center">
+                    <p className="text-xs text-gray-400 italic line-clamp-1 mt-0.5">
                       {item.note}
                     </p>
                   )}
                 </div>
+
+                {/* Цена и управление количеством */}
+                <div className="flex items-center justify-between mt-2">
+                  <span className="font-bold text-primary">
+                    {formatPrice(item.totalPrice)} TJS
+                  </span>
+
+                  {/* Кнопки +/- */}
+                  <div className="flex items-center gap-1 bg-gray-100 rounded-full px-1">
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    >
+                      <Icon name="remove" size={16} className="text-gray-600" />
+                    </button>
+                    <span className="w-6 text-center font-medium text-gray-800">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    >
+                      <Icon name="add" size={16} className="text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Кнопка комментария */}
+                <button
+                  onClick={() => toggleNoteExpanded(item.id)}
+                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors mt-1"
+                >
+                  <Icon name="edit_note" size={14} />
+                  <span>{item.note ? "Изменить" : "Добавить комментарий"}</span>
+                </button>
+
+                {isNoteExpanded && (
+                  <div className="mt-2 animate-in slide-in-from-top-2 duration-200">
+                    <textarea
+                      value={item.note || ""}
+                      onChange={(e) => updateItemNote(item.id, e.target.value)}
+                      placeholder="Комментарий к блюду..."
+                      className="w-full px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
+                      rows={2}
+                    />
+                  </div>
+                )}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Summary */}
@@ -204,7 +198,7 @@ export default function CartPage() {
             variant="navy"
             size="lg"
           >
-            <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#dda15e]" />
+            <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#40916c]" />
             Оформить заказ
           </Button>
         </div>

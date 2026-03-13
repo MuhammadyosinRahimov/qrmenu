@@ -1,13 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
 import { ProductCard } from "./ProductCard";
 import { ProductListCard } from "./ProductListCard";
 import { Icon } from "@/components/ui/Icon";
 import { useUIStore } from "@/stores/uiStore";
-import type { Product } from "@/types";
+import type { Product, Category } from "@/types";
 
 interface ProductGridProps {
   products: Product[];
+  categories?: Category[];
+  categoryRefs?: React.MutableRefObject<Map<string, HTMLDivElement>>;
   isLoading?: boolean;
   cartItems?: Map<string, number>; // productId -> quantity
   onAdd?: (product: Product) => void;
@@ -16,12 +19,41 @@ interface ProductGridProps {
 
 export function ProductGrid({
   products,
+  categories,
+  categoryRefs,
   isLoading,
   cartItems,
   onAdd,
   onRemove,
 }: ProductGridProps) {
   const { gridView } = useUIStore();
+
+  // Группировка по категориям
+  const groupedProducts = useMemo(() => {
+    if (!categories || categories.length === 0) {
+      return [{ category: null as Category | null, products }];
+    }
+
+    const groups: { category: Category | null; products: Product[] }[] = [];
+    const sortedCategories = [...categories].sort((a, b) => a.sortOrder - b.sortOrder);
+
+    sortedCategories.forEach(category => {
+      const categoryProducts = products.filter(p => p.categoryId === category.id);
+      if (categoryProducts.length > 0) {
+        groups.push({ category, products: categoryProducts });
+      }
+    });
+
+    // Товары без категории
+    const uncategorizedProducts = products.filter(
+      p => !categories.some(c => c.id === p.categoryId)
+    );
+    if (uncategorizedProducts.length > 0) {
+      groups.push({ category: null, products: uncategorizedProducts });
+    }
+
+    return groups;
+  }, [categories, products]);
 
   if (isLoading) {
     return (
@@ -56,38 +88,64 @@ export function ProductGrid({
     );
   }
 
+  // Рендер с группировкой по категориям
   return (
-    <div className="px-4">
-      {/* Products grid */}
-      <div className={gridView === "2x2" ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}>
-        {products.map((product) => {
-          const quantity = cartItems?.get(product.id) || 0;
+    <div className="space-y-6">
+      {groupedProducts.map((group, idx) => (
+        <div
+          key={group.category?.id || `uncategorized-${idx}`}
+          ref={(el) => {
+            if (group.category && el && categoryRefs?.current) {
+              categoryRefs.current.set(group.category.id, el);
+            }
+          }}
+        >
+          {/* Заголовок категории */}
+          {group.category && (
+            <div className="px-4 mb-3 flex items-center gap-2">
+              {group.category.icon && (
+                <span className="text-xl">{group.category.icon}</span>
+              )}
+              <h2 className="text-lg font-bold text-gray-800">
+                {group.category.name}
+              </h2>
+            </div>
+          )}
 
-          if (gridView === "1x1") {
-            return (
-              <ProductListCard
-                key={product.id}
-                product={product}
-                isInCart={quantity > 0}
-                quantity={quantity}
-                onAdd={onAdd}
-                onRemove={onRemove}
-              />
-            );
-          }
+          {/* Товары категории */}
+          <div className="px-4">
+            <div className={gridView === "2x2" ? "grid grid-cols-2 gap-3" : "flex flex-col gap-3"}>
+              {group.products.map((product) => {
+                const quantity = cartItems?.get(product.id) || 0;
 
-          return (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isInCart={quantity > 0}
-              quantity={quantity}
-              onAdd={onAdd}
-              onRemove={onRemove}
-            />
-          );
-        })}
-      </div>
+                if (gridView === "1x1") {
+                  return (
+                    <ProductListCard
+                      key={product.id}
+                      product={product}
+                      isInCart={quantity > 0}
+                      quantity={quantity}
+                      onAdd={onAdd}
+                      onRemove={onRemove}
+                    />
+                  );
+                }
+
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isInCart={quantity > 0}
+                    quantity={quantity}
+                    onAdd={onAdd}
+                    onRemove={onRemove}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

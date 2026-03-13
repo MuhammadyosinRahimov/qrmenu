@@ -4,20 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getRestaurants, PublicRestaurant } from "@/lib/api";
 import { RestaurantCard } from "./RestaurantCard";
 import { Icon } from "@/components/ui/Icon";
-import { OrderMode } from "@/stores/orderModeStore";
 
 interface RestaurantListProps {
-  mode: OrderMode;
   onSelectRestaurant: (restaurant: PublicRestaurant) => void;
   searchQuery?: string;
 }
 
-export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: RestaurantListProps) {
-  const apiMode = mode === "delivery" ? "delivery" : mode === "takeaway" ? "takeaway" : undefined;
-
+export function RestaurantList({ onSelectRestaurant, searchQuery = "" }: RestaurantListProps) {
   const { data: restaurants = [], isLoading, error } = useQuery({
-    queryKey: ["restaurants", apiMode],
-    queryFn: () => getRestaurants(apiMode),
+    queryKey: ["restaurants"],
+    queryFn: () => getRestaurants(),
   });
 
   // Filter restaurants by search query
@@ -31,31 +27,6 @@ export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: R
     );
   });
 
-  const getModeTitle = () => {
-    switch (mode) {
-      case "delivery":
-        return "Рестораны с доставкой";
-      case "takeaway":
-        return "Рестораны с самовывозом";
-      case "dinein":
-        return "Выберите ресторан";
-      default:
-        return "Рестораны";
-    }
-  };
-
-  const getModeIcon = () => {
-    switch (mode) {
-      case "delivery":
-        return "delivery_dining";
-      case "takeaway":
-        return "takeout_dining";
-      case "dinein":
-        return "restaurant";
-      default:
-        return "store";
-    }
-  };
 
   if (isLoading) {
     return (
@@ -103,13 +74,9 @@ export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: R
           <Icon name="store" size={32} className="text-gray-400" />
         </div>
         <p className="text-gray-600 font-medium mb-1">
-          {mode === "delivery"
-            ? "Нет ресторанов с доставкой"
-            : mode === "takeaway"
-            ? "Нет ресторанов с самовывозом"
-            : "Нет доступных ресторанов"}
+          Нет доступных ресторанов
         </p>
-        <p className="text-gray-400 text-sm">Попробуйте выбрать другой способ заказа</p>
+        <p className="text-gray-400 text-sm">Попробуйте позже</p>
       </div>
     );
   }
@@ -136,7 +103,7 @@ export function RestaurantList({ mode, onSelectRestaurant, searchQuery = "" }: R
           key={restaurant.id}
           restaurant={restaurant}
           onSelect={onSelectRestaurant}
-          showDeliveryFee={mode === "delivery"}
+          showDeliveryFee={false}
         />
       ))}
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, Suspense } from "react";
+import { useState, useMemo, useEffect, useCallback, Suspense, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
@@ -32,6 +32,9 @@ function MenuContent() {
     categories: Category[];
     products: Product[];
   } | null>(null);
+
+  // Refs для скролла к категориям
+  const categoryRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   // Обработать table и menu параметры из QR-кода
   const urlMenuId = searchParams.get("menu");
@@ -152,22 +155,35 @@ function MenuContent() {
   const categories = isRestaurantMode ? (restaurantMenuData?.categories || []) : apiCategories;
   const allProducts = isRestaurantMode ? (restaurantMenuData?.products || []) : apiProducts;
 
-  // Filter products by selected category
-  const categoryFilteredProducts = useMemo(() => {
-    if (!selectedCategory) return allProducts;
-    return allProducts.filter((p) => p.categoryId === selectedCategory);
-  }, [allProducts, selectedCategory]);
-
+  // Показываем ВСЕ товары, не фильтруем по категории (непрерывный скролл)
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return categoryFilteredProducts;
+    if (!searchQuery.trim()) return allProducts;
 
     const query = searchQuery.toLowerCase();
-    return categoryFilteredProducts.filter(
+    return allProducts.filter(
       (p) =>
         p.name.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query)
     );
-  }, [categoryFilteredProducts, searchQuery]);
+  }, [allProducts, searchQuery]);
+
+  // Скролл к категории вместо фильтрации
+  const handleCategoryClick = useCallback((categoryId: string | null) => {
+    setSelectedCategory(categoryId);
+    if (categoryId && categoryRefs.current.has(categoryId)) {
+      const element = categoryRefs.current.get(categoryId);
+      if (element) {
+        const headerOffset = 180; // Отступ для header + категории
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }
+    }
+  }, []);
 
   const isLoading = isRestaurantMode
     ? !restaurantMenuData
@@ -231,12 +247,14 @@ function MenuContent() {
           <CategoryList
             categories={categories}
             selectedId={selectedCategory}
-            onSelect={setSelectedCategory}
+            onSelect={handleCategoryClick}
           />
         )}
 
         <ProductGrid
           products={filteredProducts}
+          categories={categories}
+          categoryRefs={categoryRefs}
           isLoading={isLoading}
           cartItems={cartItemsMap}
           onAdd={handleAdd}

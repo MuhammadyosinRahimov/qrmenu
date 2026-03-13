@@ -16,6 +16,8 @@ import {
   createDeliveryOrder,
   createTakeawayOrder,
   createDineInOrder,
+  getPublicTableOrders,
+  type PublicTableOrders,
 } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -98,6 +100,9 @@ export default function CheckoutPage() {
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [pauseMessage, setPauseMessage] = useState("");
 
+  // Public table orders (for showing existing orders before auth)
+  const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
+
   // Check restaurant status
   useEffect(() => {
     const checkRestaurantStatus = async () => {
@@ -115,6 +120,21 @@ export default function CheckoutPage() {
     };
     checkRestaurantStatus();
   }, [restaurantId]);
+
+  // Load public table orders for QR mode
+  useEffect(() => {
+    const loadPublicOrders = async () => {
+      if (mode === "qr" && tableId && !isAuthenticated) {
+        try {
+          const data = await getPublicTableOrders(tableId);
+          setPublicOrders(data);
+        } catch {
+          setPublicOrders(null);
+        }
+      }
+    };
+    loadPublicOrders();
+  }, [mode, tableId, isAuthenticated]);
 
   // Update step when authentication changes
   useEffect(() => {
@@ -419,6 +439,28 @@ export default function CheckoutPage() {
         {/* Phone step */}
         {step === "phone" && (
           <div className="space-y-6">
+            {/* Show existing table orders for QR mode */}
+            {mode === "qr" && publicOrders?.hasActiveSession && (
+              <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <Icon name="group" size={20} className="text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-blue-800">
+                      {publicOrders.guestCount} {publicOrders.guestCount === 1 ? "гость" : publicOrders.guestCount < 5 ? "гостя" : "гостей"} уже заказали
+                    </p>
+                    <p className="text-sm text-blue-600">
+                      Общий счёт: {formatPrice(publicOrders.tableTotal)} TJS
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-blue-600 mt-2">
+                  Ваш заказ добавится к общему счёту стола
+                </p>
+              </div>
+            )}
+
             <div className="text-center">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-300 to-primary flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-200">
                 <Icon name="phone_iphone" size={40} className="text-white" />
@@ -455,6 +497,16 @@ export default function CheckoutPage() {
         {/* OTP step */}
         {step === "otp" && (
           <div className="space-y-6">
+            {/* Show existing table orders for QR mode */}
+            {mode === "qr" && publicOrders?.hasActiveSession && (
+              <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 text-center">
+                <p className="text-sm text-blue-700">
+                  <span className="font-medium">{publicOrders.guestCount} {publicOrders.guestCount === 1 ? "гость" : "гостей"}</span> уже за столом •
+                  Счёт: <span className="font-medium">{formatPrice(publicOrders.tableTotal)} TJS</span>
+                </p>
+              </div>
+            )}
+
             <div className="text-center">
               <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${
                 mode === "qr"

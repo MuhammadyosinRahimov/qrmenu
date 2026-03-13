@@ -9,7 +9,7 @@ import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useOrderStore } from "@/stores/orderStore";
-import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl } from "@/lib/api";
+import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, type PublicTableOrders } from "@/lib/api";
 import { Header } from "@/components/layout/Header";
 
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -54,6 +54,8 @@ export default function OrdersPage() {
   const [paymentModalOrder, setPaymentModalOrder] = useState<Order | null>(null);
   const [sessionInfo, setSessionInfo] = useState<GuestSessionInfo | null>(null);
   const [loadingSessionInfo, setLoadingSessionInfo] = useState(false);
+  const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
+  const [loadingPublicOrders, setLoadingPublicOrders] = useState(false);
 
   // Clear cart when order is completed (but keep table info for QR mode)
   const clearOrderData = useCallback((orderType?: OrderType) => {
@@ -90,6 +92,24 @@ export default function OrdersPage() {
     };
     loadSessionInfo();
   }, [mode, tableId, isAuthenticated, orders]);
+
+  // Load public orders when not authenticated but in QR mode
+  useEffect(() => {
+    const loadPublicOrders = async () => {
+      if (!isAuthenticated && mode === "qr" && tableId) {
+        setLoadingPublicOrders(true);
+        try {
+          const data = await getPublicTableOrders(tableId);
+          setPublicOrders(data);
+        } catch {
+          setPublicOrders(null);
+        } finally {
+          setLoadingPublicOrders(false);
+        }
+      }
+    };
+    loadPublicOrders();
+  }, [isAuthenticated, mode, tableId]);
 
   // Update pending orders count - use ref to avoid infinite loop
   const prevPendingCountRef = useRef<number>(-1);
@@ -262,6 +282,137 @@ export default function OrdersPage() {
   });
 
   if (!isAuthenticated) {
+    // If QR mode and has table orders - show them
+    if (mode === "qr" && tableId && (loadingPublicOrders || publicOrders?.hasActiveSession)) {
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
+          <Header title="Заказы стола" />
+
+          {/* Auth banner */}
+          <div className="p-4 bg-gradient-to-r from-primary-light to-primary-50 border-b border-primary-100">
+            <div className="flex items-center justify-between max-w-lg mx-auto">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
+                  <Icon name="person_add" size={20} className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium text-primary-dark">Войдите, чтобы сделать заказ</p>
+                  <p className="text-sm text-primary">Добавьте блюда к общему счёту</p>
+                </div>
+              </div>
+              <Button
+                onClick={() => router.push("/checkout")}
+                size="sm"
+              >
+                Войти
+              </Button>
+            </div>
+          </div>
+
+          <div className="p-4 space-y-4 max-w-lg mx-auto">
+            {loadingPublicOrders ? (
+              <div className="space-y-4">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="bg-white rounded-2xl p-4 animate-pulse border border-gray-100 shadow-sm">
+                    <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
+                    <div className="h-3 bg-gray-200 rounded w-2/3 mb-2" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  </div>
+                ))}
+              </div>
+            ) : publicOrders?.hasActiveSession && (
+              <>
+                {/* Guest count info */}
+                <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                      <Icon name="group" size={20} className="text-blue-500" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-blue-800">
+                        {publicOrders.guestCount} {publicOrders.guestCount === 1 ? "гость" : publicOrders.guestCount < 5 ? "гостя" : "гостей"} за столом
+                      </p>
+                      <p className="text-sm text-blue-600">
+                        Общий счёт: {formatPrice(publicOrders.tableTotal)} TJS
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Orders list */}
+                <div className="space-y-3">
+                  {publicOrders.orders.map((order, idx) => (
+                    <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                      <div className={`px-4 py-2 flex items-center justify-between ${
+                        order.isPaid
+                          ? "bg-gradient-to-r from-green-50 to-emerald-50"
+                          : "bg-gradient-to-r from-primary-light to-primary-50"
+                      }`}>
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            name={order.isPaid ? "check_circle" : "schedule"}
+                            size={16}
+                            className={order.isPaid ? "text-green-500" : "text-primary"}
+                          />
+                          <span className={`text-sm font-medium ${
+                            order.isPaid ? "text-green-700" : "text-primary-dark"
+                          }`}>
+                            {order.maskedPhone || `Гость ${idx + 1}`}
+                          </span>
+                        </div>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          order.isPaid
+                            ? "bg-green-100 text-green-700"
+                            : "bg-primary-100 text-primary-dark"
+                        }`}>
+                          {order.isPaid ? "Оплачено" : "Не оплачено"}
+                        </span>
+                      </div>
+                      <div className="p-4 space-y-2">
+                        {order.items.map((item, i) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <span className="text-gray-600">
+                              {item.quantity}x {item.productName}
+                              {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                            </span>
+                            <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                          </div>
+                        ))}
+                        <div className="flex justify-between pt-2 border-t border-gray-100">
+                          <span className="text-sm font-medium text-gray-600">Итого:</span>
+                          <span className="font-semibold text-gray-800">{formatPrice(order.subtotal)} TJS</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Total and service fee info */}
+                <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>Обслуживание ({publicOrders.serviceFeePercent}%)</span>
+                    <span>включено</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-200">
+                    <span>Итого за стол</span>
+                    <span className="text-primary">{formatPrice(publicOrders.tableTotal)} TJS</span>
+                  </div>
+                </div>
+
+                {/* CTA to add order */}
+                <Button onClick={() => router.push("/menu")} className="w-full" size="lg">
+                  <Icon name="add" size={20} className="mr-2" />
+                  Добавить свой заказ
+                </Button>
+              </>
+            )}
+          </div>
+          <BottomNav />
+        </div>
+      );
+    }
+
+    // Standard not authenticated view
     return (
       <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
         <Header title="Мои заказы" />
@@ -648,8 +799,8 @@ export default function OrdersPage() {
                   </span>
                 </button>
 
-                {/* Online payment */}
-                {(paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
+                {/* Online payment - скрываем в QR-режиме */}
+                {mode !== "qr" && (paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
                   <button
                     onClick={() => handleDcPayment(paymentModalOrder)}
                     disabled={!!processingPayment}
@@ -684,7 +835,8 @@ export default function OrdersPage() {
                     <span className="text-xs text-purple-500">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
                   </button>
 
-                  {(paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
+                  {/* Скрываем оплату картой DC в QR-режиме */}
+                  {mode !== "qr" && (paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
                     <button
                       onClick={handlePayForTableOnline}
                       disabled={!!processingPayment}

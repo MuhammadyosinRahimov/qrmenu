@@ -13,7 +13,9 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://yalla-co-menu-b
 
 // SignalR Hub URL
 export const getSignalRUrl = (): string => {
-  return `${API_BASE_URL}/hubs/orders`;
+  // Убираем /api из базового URL для SignalR
+  const baseUrl = API_BASE_URL.replace('/api', '');
+  return `${baseUrl}/hubs/orders`;
 };
 
 // Helper to build full image URL from relative path
@@ -242,6 +244,39 @@ export const payForTable = async (sessionId: string, paymentMethod: 'cash' | 'on
 }> => {
   const { data } = await api.post(`/tablesessions/${sessionId}/pay-table`, { paymentMethod });
   return data;
+};
+
+// Public table orders (without authentication)
+export interface PublicTableOrders {
+  hasActiveSession: boolean;
+  guestCount: number;
+  tableTotal: number;
+  serviceFeePercent: number;
+  orders: {
+    maskedPhone?: string;
+    itemCount: number;
+    subtotal: number;
+    isPaid: boolean;
+    items: {
+      productName: string;
+      sizeName?: string;
+      quantity: number;
+      totalPrice: number;
+    }[];
+  }[];
+}
+
+export const getPublicTableOrders = async (tableId: string): Promise<PublicTableOrders | null> => {
+  try {
+    // Use axios without token for public endpoint
+    const { data } = await axios.get<PublicTableOrders>(
+      `${API_BASE_URL}/api/tablesessions/public/table-orders`,
+      { params: { tableId } }
+    );
+    return data;
+  } catch {
+    return null;
+  }
 };
 
 // Public Restaurants
