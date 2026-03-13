@@ -46,7 +46,7 @@ export function CategoryList({
   return (
     <>
       {/* Gradient fade edges for scroll indication */}
-      <div className="relative bg-white border-b border-gray-100">
+      <div className="sticky top-14 z-30 relative bg-white border-b border-gray-100 shadow-sm">
         {/* Left fade */}
         <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
         {/* Right fade */}
