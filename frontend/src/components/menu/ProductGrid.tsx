@@ -102,10 +102,7 @@ export function ProductGrid({
         >
           {/* Заголовок категории */}
           {group.category && (
-            <div className="px-4 mb-3 flex items-center gap-2">
-              {group.category.icon && (
-                <span className="text-xl">{group.category.icon}</span>
-              )}
+            <div className="px-4 mb-3">
               <h2 className="text-lg font-bold text-gray-800">
                 {group.category.name}
               </h2>

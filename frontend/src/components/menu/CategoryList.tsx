@@ -46,20 +46,20 @@ export function CategoryList({
   return (
     <>
       {/* Gradient fade edges for scroll indication */}
-      <div className="relative">
+      <div className="relative bg-white border-b border-gray-100">
         {/* Left fade */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-primary-light to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
         {/* Right fade */}
-        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-primary-light to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-2 overflow-x-auto no-scrollbar px-4 py-3 scroll-smooth"
+          className="flex gap-1 overflow-x-auto no-scrollbar px-4 scroll-smooth"
         >
           {/* Burger menu button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-primary-300 to-primary text-white shadow-md shadow-primary-200 hover:shadow-lg hover:shadow-primary-300 hover:scale-105 transition-all duration-300 flex-shrink-0"
+            className="flex items-center justify-center w-10 h-10 my-1 rounded-xl bg-[#1b4332] text-white hover:bg-[#14532d] transition-all duration-200 flex-shrink-0"
           >
             <Icon name="menu" size={20} />
           </button>
@@ -67,14 +67,16 @@ export function CategoryList({
           <button
             ref={(el) => { if (el) categoryRefs.current.set(null, el); }}
             onClick={() => handleSelect(null)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 flex-shrink-0 ${
+            className={`relative flex items-center gap-1.5 px-4 py-3 whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
               selectedId === null
-                ? "bg-gradient-to-r from-primary-300 to-primary text-white shadow-md shadow-primary-200 scale-105"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:text-primary-dark hover:shadow-sm"
+                ? "text-[#1b4332] font-bold"
+                : "text-gray-500 hover:text-gray-800"
             }`}
           >
-            <Icon name="grid_view" size={18} />
-            <span className="text-sm font-semibold">Все</span>
+            <span className="text-sm">{selectedId === null ? "Все" : "Все"}</span>
+            {selectedId === null && (
+              <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#1b4332] to-[#dda15e] rounded-full" />
+            )}
           </button>
 
           {categories.map((category) => (
@@ -82,14 +84,16 @@ export function CategoryList({
               key={category.id}
               ref={(el) => { if (el) categoryRefs.current.set(category.id, el); }}
               onClick={() => handleSelect(category.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all duration-300 flex-shrink-0 ${
+              className={`relative flex items-center gap-1.5 px-4 py-3 whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
                 selectedId === category.id
-                  ? "bg-gradient-to-r from-primary-300 to-primary text-white shadow-md shadow-primary-200 scale-105"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300 hover:text-primary-dark hover:shadow-sm"
+                  ? "text-[#1b4332] font-bold"
+                  : "text-gray-500 hover:text-gray-800"
               }`}
             >
-              <Icon name={category.icon} size={18} />
-              <span className="text-sm font-semibold">{category.name}</span>
+              <span className="text-sm">{category.name}</span>
+              {selectedId === category.id && (
+                <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#1b4332] to-[#dda15e] rounded-full" />
+              )}
             </button>
           ))}
         </div>

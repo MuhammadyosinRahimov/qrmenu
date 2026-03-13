@@ -84,10 +84,14 @@ export default function CheckoutPage() {
   const getInitialStep = (): Step => {
     // If not authenticated, ALWAYS start at phone input
     if (!isAuthenticated) return "phone";
-    // QR mode goes directly to OTP step (order will be submitted after)
-    if (mode === "qr") return "otp";
+    // For QR mode when already authenticated, start at "phone" step
+    // The useEffect will immediately trigger auto-submit
+    if (mode === "qr") return "phone";
     return "details";
   };
+
+  // Track if we're auto-submitting for authenticated QR users
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
 
   const [step, setStep] = useState<Step>(getInitialStep);
   const [phone, setPhone] = useState("");
@@ -139,14 +143,16 @@ export default function CheckoutPage() {
   // Update step when authentication changes
   useEffect(() => {
     if (!isAuthenticated) {
-      // If the user loses authentication (e.g. storage cleared) while on the final details screen, 
+      // If the user loses authentication (e.g. storage cleared) while on the final details screen,
       // forcefully step back to phone. But do NOT interrupt if they are typing OTP!
       if (step === "details") {
         setStep("phone");
       }
+      setIsAutoSubmitting(false);
     } else if (isAuthenticated && step === "phone") {
-      // QR mode: submit order directly when authenticated
+      // QR mode: submit order directly when authenticated (no OTP needed again)
       if (mode === "qr") {
+        setIsAutoSubmitting(true);
         handleSubmitOrder();
       } else {
         setStep("details");
@@ -421,58 +427,77 @@ export default function CheckoutPage() {
         {/* Phone step */}
         {step === "phone" && (
           <div className="space-y-6">
-            {/* Show existing table orders for QR mode */}
-            {mode === "qr" && publicOrders?.hasActiveSession && (
-              <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                    <Icon name="group" size={20} className="text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-blue-800">
-                      {publicOrders.guestCount} {publicOrders.guestCount === 1 ? "гость" : publicOrders.guestCount < 5 ? "гостя" : "гостей"} уже заказали
-                    </p>
-                    <p className="text-sm text-blue-600">
-                      Общий счёт: {formatPrice(publicOrders.tableTotal)} TJS
-                    </p>
-                  </div>
+            {/* Auto-submitting state for authenticated QR users */}
+            {isAutoSubmitting ? (
+              <div className="text-center py-12">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#1b4332] to-[#14532d] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#1b4332]/20 animate-pulse">
+                  <Icon name="receipt_long" size={40} className="text-[#dda15e]" />
                 </div>
-                <p className="text-sm text-blue-600 mt-2">
-                  Ваш заказ добавится к общему счёту стола
-                </p>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">Оформляем заказ...</h2>
+                <p className="text-gray-500">Пожалуйста, подождите</p>
+                {submitError && (
+                  <div className="mt-4 bg-red-50 border border-red-100 rounded-xl p-3 flex items-center gap-2">
+                    <Icon name="error" size={20} className="text-red-500" />
+                    <p className="text-red-600 text-sm">{submitError}</p>
+                  </div>
+                )}
               </div>
+            ) : (
+              <>
+                {/* Show existing table orders for QR mode */}
+                {mode === "qr" && publicOrders?.hasActiveSession && (
+                  <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <Icon name="group" size={20} className="text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-blue-800">
+                          {publicOrders.guestCount} {publicOrders.guestCount === 1 ? "гость" : publicOrders.guestCount < 5 ? "гостя" : "гостей"} уже заказали
+                        </p>
+                        <p className="text-sm text-blue-600">
+                          Общий счёт: {formatPrice(publicOrders.tableTotal)} TJS
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-blue-600 mt-2">
+                      Ваш заказ добавится к общему счёту стола
+                    </p>
+                  </div>
+                )}
+
+                <div className="text-center">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-300 to-primary flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-200">
+                    <Icon name="phone_iphone" size={40} className="text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите номер телефона</h2>
+                  <p className="text-gray-500">Мы отправим SMS с кодом подтверждения</p>
+                </div>
+
+                <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+                  <Input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => handlePhoneChange(e.target.value)}
+                    placeholder="+992"
+                    className="text-center text-xl font-medium"
+                    error={error || undefined}
+                  />
+                </div>
+
+                <Button
+                  onClick={handleSendOtp}
+                  className="w-full"
+                  variant="navy"
+                  size="lg"
+                  isLoading={isLoading}
+                  disabled={phone.replace(/\D/g, "").length !== 12}
+                >
+                  <Icon name="send" size={20} className="mr-2 text-[#dda15e]" />
+                  Получить код
+                </Button>
+              </>
             )}
-
-            <div className="text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-300 to-primary flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary-200">
-                <Icon name="phone_iphone" size={40} className="text-white" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Введите номер телефона</h2>
-              <p className="text-gray-500">Мы отправим SMS с кодом подтверждения</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-              <Input
-                type="tel"
-                value={phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="+992"
-                className="text-center text-xl font-medium"
-                error={error || undefined}
-              />
-            </div>
-
-            <Button
-              onClick={handleSendOtp}
-              className="w-full"
-              variant="navy"
-              size="lg"
-              isLoading={isLoading}
-              disabled={phone.replace(/\D/g, "").length !== 12}
-            >
-              <Icon name="send" size={20} className="mr-2 text-[#dda15e]" />
-              Получить код
-            </Button>
           </div>
         )}
 
