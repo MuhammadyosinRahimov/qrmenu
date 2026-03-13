@@ -25,7 +25,7 @@ const statusConfig: Record<
   { label: string; variant: "default" | "success" | "warning" | "error" | "primary"; icon: string; color: string }
 > = {
   Pending: { label: "Ожидает подтверждения", variant: "warning", icon: "schedule", color: "orange" },
-  Confirmed: { label: "Готовится", variant: "primary", icon: "restaurant", color: "blue" },
+  Confirmed: { label: "Подтверждён", variant: "success", icon: "check_circle", color: "green" },
   Cancelled: { label: "Отменён", variant: "error", icon: "cancel", color: "red" },
 };
 
@@ -564,24 +564,24 @@ export default function OrdersPage() {
               {/* Status header with gradient */}
               <div className={`px-4 py-3 flex items-center justify-between ${
                 normalizedStatus === "Pending" ? "bg-gradient-to-r from-primary-light to-primary-50" :
-                normalizedStatus === "Confirmed" ? "bg-gradient-to-r from-blue-50 to-indigo-50" :
+                normalizedStatus === "Confirmed" ? "bg-gradient-to-r from-green-50 to-emerald-50" :
                 "bg-gradient-to-r from-red-50 to-rose-50"
               }`}>
                 <div className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     normalizedStatus === "Pending" ? "bg-primary-50" :
-                    normalizedStatus === "Confirmed" ? "bg-blue-100" :
+                    normalizedStatus === "Confirmed" ? "bg-green-100" :
                     "bg-red-100"
                   }`}>
                     <Icon name={status.icon} size={18} className={
                       normalizedStatus === "Pending" ? "text-primary-dark" :
-                      normalizedStatus === "Confirmed" ? "text-blue-500" :
+                      normalizedStatus === "Confirmed" ? "text-green-500" :
                       "text-red-500"
                     } />
                   </div>
                   <span className={`font-medium text-sm ${
                     normalizedStatus === "Pending" ? "text-primary-dark" :
-                    normalizedStatus === "Confirmed" ? "text-blue-700" :
+                    normalizedStatus === "Confirmed" ? "text-green-700" :
                     "text-red-700"
                   }`}>
                     {status.label}
@@ -799,8 +799,8 @@ export default function OrdersPage() {
                   </span>
                 </button>
 
-                {/* Online payment - скрываем в QR-режиме */}
-                {mode !== "qr" && (paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
+                {/* Online payment */}
+                {(paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
                   <button
                     onClick={() => handleDcPayment(paymentModalOrder)}
                     disabled={!!processingPayment}
@@ -835,8 +835,8 @@ export default function OrdersPage() {
                     <span className="text-xs text-purple-500">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
                   </button>
 
-                  {/* Скрываем оплату картой DC в QR-режиме */}
-                  {mode !== "qr" && (paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
+                  {/* Online payment for table */}
+                  {(paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
                     <button
                       onClick={handlePayForTableOnline}
                       disabled={!!processingPayment}

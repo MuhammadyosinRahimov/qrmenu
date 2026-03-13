@@ -25,13 +25,13 @@ export function BottomNav() {
   const isOnMenuPage = pathname === "/menu" || pathname.startsWith("/menu");
 
   const navItems: NavItem[] = [
-    {
-      href: isOnMenuPage ? "/" : "/",
-      icon: "home",
-      filledIcon: "home",
-      label: "Главная",
-      hideInQr: true
-    },
+    // {
+    //   href: isOnMenuPage ? "/" : "/",
+    //   icon: "home",
+    //   filledIcon: "home",
+    //   label: "Главная",
+    //   hideInQr: true
+    // },
     {
       href: "/menu",
       icon: "home",
@@ -49,9 +49,9 @@ export function BottomNav() {
   ];
 
   const isActive = (href: string) => {
-    if (href === "/") {
+    if (href === "/menu") {
       // "Главная" активна на главной странице И на странице меню (в режиме доставки/ресторана)
-      return pathname === "/" || (isOnMenuPage && mode !== "qr");
+      return pathname === "/menu" || (isOnMenuPage && mode !== "qr");
     }
     return pathname.startsWith(href);
   };
