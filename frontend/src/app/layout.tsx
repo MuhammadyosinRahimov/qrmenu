@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   title: "Oson eats",
   description: "Scan QR code to view restaurant menu ",
   icons: {
-    icon: "/assets/logo.jpg",
-    apple: "/assets/logo.jpg",
+    icon: "/assets/logo.png",
+    apple: "/assets/logo.png",
   },
 };
 
