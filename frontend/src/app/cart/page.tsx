@@ -78,7 +78,7 @@ export default function CartPage() {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
               >
                 {/* Image with quantity badge */}
-                <div className="relative aspect-square bg-gray-100">
+                <div className="relative aspect-[4/3] bg-gray-100">
                   {getImageUrl(item.imageUrl) ? (
                     <img
                       src={getImageUrl(item.imageUrl)!}

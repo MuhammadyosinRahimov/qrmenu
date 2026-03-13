@@ -248,6 +248,19 @@ export default function OrdersPage() {
     });
   };
 
+  // Sort orders: active (Pending/Confirmed + not paid) first, then inactive
+  const sortedOrders = [...orders].sort((a, b) => {
+    const statusA = normalizeOrderStatus(a.status);
+    const statusB = normalizeOrderStatus(b.status);
+    const isActiveA = (statusA === "Pending" || statusA === "Confirmed") && !a.isPaid;
+    const isActiveB = (statusB === "Pending" || statusB === "Confirmed") && !b.isPaid;
+
+    if (isActiveA && !isActiveB) return -1;
+    if (!isActiveA && isActiveB) return 1;
+    // If both same priority, sort by date (newest first)
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
@@ -381,7 +394,7 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {orders.map((order) => {
+        {sortedOrders.map((order) => {
           if (!order) return null;
           const normalizedStatus = normalizeOrderStatus(order.status);
           const status = statusConfig[normalizedStatus] || { label: String(order.status) || "Неизвестно", variant: "default" as const, icon: "help", color: "gray" };
