@@ -31,7 +31,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { showToast } = useToast();
   const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
-  const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError, phone: authPhone } =
+  const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError, phone: authPhone, checkAuth } =
     useAuthStore();
   const { tableId, tableNumber, restaurantId: tableRestaurantId, onlinePaymentAvailable } = useTableStore();
   const {
@@ -106,6 +106,11 @@ export default function CheckoutPage() {
 
   // Public table orders (for showing existing orders before auth)
   const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
+
+  // Check token expiration on mount
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   // Check restaurant status
   useEffect(() => {

@@ -2,6 +2,16 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { sendOtp as apiSendOtp, verifyOtp as apiVerifyOtp } from "@/lib/api";
 
+// Helper function to check if JWT token is expired
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+};
+
 interface AuthState {
   token: string | null;
   userId: string | null;
@@ -13,11 +23,12 @@ interface AuthState {
   verifyOtp: (phone: string, code: string) => Promise<void>;
   logout: () => void;
   clearError: () => void;
+  checkAuth: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       token: null,
       userId: null,
       phone: null,
@@ -77,6 +88,25 @@ export const useAuthStore = create<AuthState>()(
       },
 
       clearError: () => set({ error: null }),
+
+      checkAuth: () => {
+        const state = get();
+        if (state.token && isTokenExpired(state.token)) {
+          // Token expired - log out
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("auth-storage");
+          }
+          set({
+            token: null,
+            userId: null,
+            phone: null,
+            isAuthenticated: false,
+          });
+          return false;
+        }
+        return state.isAuthenticated;
+      },
     }),
     {
       name: "auth-storage",

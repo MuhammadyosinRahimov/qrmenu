@@ -53,12 +53,12 @@ api.interceptors.response.use(
       localStorage.removeItem("auth-storage");
 
       // Redirect to checkout to re-authenticate
+      // If already on checkout - do NOT reload to avoid infinite loop
+      // Let React handle the state update
       if (!window.location.pathname.includes("/checkout")) {
         window.location.href = "/checkout";
-      } else {
-        // If already on checkout, reload to show login form
-        window.location.reload();
       }
+      // If already on checkout, do nothing - React will handle the auth state
     }
     return Promise.reject(error);
   }
