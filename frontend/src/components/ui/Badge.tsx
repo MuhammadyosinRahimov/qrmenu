@@ -14,9 +14,9 @@ export function Badge({
   const variants = {
     default: "bg-gray-100 text-muted",
     success: "bg-green-100 text-green-600",
-  warning: "bg-[#f7df00] text-[#0f2c5e]",
+  warning: "bg-[#dda15e] text-[#1b4332]",
     error: "bg-red-100 text-red-600",
-  primary: "bg-[#f7df00] text-[#0f2c5e]",
+  primary: "bg-[#dda15e] text-[#1b4332]",
   };
 
   const sizes = {

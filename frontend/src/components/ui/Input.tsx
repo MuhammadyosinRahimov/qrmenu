@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           className={`
             w-full px-4 py-3 bg-white border border-border rounded-xl
             text-foreground placeholder:text-muted shadow-sm
-            focus:outline-none focus:ring-2 focus:ring-[#f7df00] focus:border-transparent
+            focus:outline-none focus:ring-2 focus:ring-[#2d6a4f] focus:border-transparent
             transition-all duration-200
             ${error ? "border-error ring-error/20" : ""}
             ${className}

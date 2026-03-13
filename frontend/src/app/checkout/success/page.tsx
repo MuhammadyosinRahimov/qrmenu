@@ -39,14 +39,14 @@ export default function CheckoutSuccessPage() {
         {tableNumber && (
           <div className="bg-primary-light rounded-xl p-4 border border-primary-200">
             <p className="text-muted text-sm mb-1">Номер стола</p>
-            <p className="text-3xl font-bold text-[#0f2c5e]">{tableNumber}</p>
+            <p className="text-3xl font-bold text-[#1b4332]">{tableNumber}</p>
           </div>
         )}
 
         {/* Info */}
         <div className="bg-white rounded-xl p-4 text-left space-y-3 border border-border shadow-sm">
           <div className="flex items-start gap-3">
-            <Icon name="schedule" size={20} className="text-[#0f2c5e] mt-0.5" />
+            <Icon name="schedule" size={20} className="text-[#1b4332] mt-0.5" />
             <div>
               <p className="text-foreground font-medium">Время ожидания</p>
               <p className="text-muted text-sm">
@@ -55,7 +55,7 @@ export default function CheckoutSuccessPage() {
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Icon name="notifications" size={20} className="text-[#0f2c5e] mt-0.5" />
+            <Icon name="notifications" size={20} className="text-[#1b4332] mt-0.5" />
             <div>
               <p className="text-foreground font-medium">Мы вас позовём</p>
               <p className="text-muted text-sm">

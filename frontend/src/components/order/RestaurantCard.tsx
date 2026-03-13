@@ -92,7 +92,7 @@ export function RestaurantCard({
         {showDeliveryFee && restaurant.deliveryEnabled && (
           <div className="absolute top-3 right-3">
             <div className="px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow-lg">
-              <span className="text-sm font-semibold text-[#0f2c5e]">
+              <span className="text-sm font-semibold text-[#1b4332]">
                 {restaurant.deliveryFee > 0
                   ? `${formatPrice(restaurant.deliveryFee)} TJS`
                   : "Бесплатно"}

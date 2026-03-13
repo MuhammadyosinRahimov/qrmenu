@@ -44,7 +44,7 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-background pb-20">
         <Header title="Корзина" />
-      
+
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="w-24 h-24 rounded-full bg-primary-light flex items-center justify-center mb-6">
             <Icon name="shopping_cart" size={48} className="text-primary" />
@@ -66,19 +66,19 @@ export default function CartPage() {
     <div className="min-h-screen bg-background pb-56">
       <Header title="Корзина" />
 
-      <div className="p-4 space-y-4">
-        {items.map((item) => {
-          const isNoteExpanded = expandedNotes.has(item.id);
+      <div className="p-4">
+        {/* Grid layout - 2 columns */}
+        <div className="grid grid-cols-2 gap-3">
+          {items.map((item) => {
+            const isNoteExpanded = expandedNotes.has(item.id);
 
-          return (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-border"
-            >
-              {/* Main item content */}
-              <div className="p-4 flex gap-4">
-                {/* Image */}
-                <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+            return (
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
+              >
+                {/* Image with quantity badge */}
+                <div className="relative aspect-square bg-gray-100">
                   {getImageUrl(item.imageUrl) ? (
                     <img
                       src={getImageUrl(item.imageUrl)!}
@@ -89,99 +89,85 @@ export default function CartPage() {
                     <div className="w-full h-full flex items-center justify-center">
                       <Icon
                         name="restaurant"
-                        size={28}
+                        size={32}
                         className="text-muted"
                       />
                     </div>
                   )}
+                  {/* Quantity badge */}
+                  <div className="absolute top-2 left-2 w-7 h-7 rounded-lg bg-gray-800/80 backdrop-blur-sm flex items-center justify-center">
+                    <span className="text-white text-sm font-bold">{item.quantity}</span>
+                  </div>
                 </div>
 
-                {/* Details */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-foreground text-lg leading-tight">
+                {/* Name and size */}
+                <div className="p-2">
+                  <h3 className="font-bold text-sm text-foreground line-clamp-1">
                     {item.productName}
                   </h3>
                   {item.sizeName && (
-                    <p className="text-sm text-muted mt-0.5">{item.sizeName}</p>
+                    <p className="text-xs text-gray-400">{item.sizeName}</p>
                   )}
                   {item.addonNames.length > 0 && (
-                    <p className="text-sm text-muted mt-0.5 line-clamp-1">
+                    <p className="text-xs text-gray-400 line-clamp-1">
                       + {item.addonNames.join(", ")}
                     </p>
                   )}
+                </div>
 
-                  <div className="flex items-center justify-between mt-3">
-                    <span className="text-primary font-bold text-lg">
+                {/* Pill-bar selector */}
+                <div className="px-2 pb-2">
+                  <div className="flex items-center justify-between rounded-full h-10 bg-gray-100">
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    >
+                      <Icon name="remove" size={18} className="text-gray-700" />
+                    </button>
+                    <span className="font-bold text-sm text-foreground">
                       {formatPrice(item.totalPrice)} TJS
                     </span>
-
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
-                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-[#0f2c5e] transition-colors shadow-sm"
-                      >
-                        <Icon name="remove" size={20} />
-                      </button>
-                      <span className="w-10 text-center font-bold text-lg text-foreground">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                        className="w-9 h-9 rounded-full bg-[#f7df00] hover:bg-[#e0c800] flex items-center justify-center text-[#0f2c5e] transition-colors shadow-sm"
-                      >
-                        <Icon name="add" size={20} />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    >
+                      <Icon name="add" size={18} className="text-gray-700" />
+                    </button>
                   </div>
                 </div>
+
+                {/* Note toggle - compact */}
+                <div className="px-2 pb-2">
+                  <button
+                    onClick={() => toggleNoteExpanded(item.id)}
+                    className="w-full flex items-center justify-center gap-1 py-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <Icon name="edit_note" size={14} />
+                    <span>{item.note ? "Комментарий" : "Добавить"}</span>
+                  </button>
+
+                  {isNoteExpanded && (
+                    <div className="mt-1 animate-in slide-in-from-top-2 duration-200">
+                      <textarea
+                        value={item.note || ""}
+                        onChange={(e) => updateItemNote(item.id, e.target.value)}
+                        placeholder="Комментарий..."
+                        className="w-full px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
+                        rows={2}
+                      />
+                    </div>
+                  )}
+
+                  {item.note && !isNoteExpanded && (
+                    <p className="text-xs text-gray-400 italic line-clamp-1 text-center">
+                      {item.note}
+                    </p>
+                  )}
+                </div>
               </div>
-
-              {/* Note section */}
-              <div className="px-4 pb-4">
-                <button
-                  onClick={() => toggleNoteExpanded(item.id)}
-                  className="w-full flex items-center justify-between py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <Icon name="edit_note" size={18} />
-                    <span>
-                      {item.note
-                        ? "Изменить комментарий"
-                        : "Добавить комментарий"}
-                    </span>
-                  </div>
-                  <Icon
-                    name={isNoteExpanded ? "expand_less" : "expand_more"}
-                    size={20}
-                  />
-                </button>
-
-                {isNoteExpanded && (
-                  <div className="mt-2 animate-in slide-in-from-top-2 duration-200">
-                    <textarea
-                      value={item.note || ""}
-                      onChange={(e) => updateItemNote(item.id, e.target.value)}
-                      placeholder="Например: без лука, острый соус отдельно..."
-                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
-                      rows={2}
-                    />
-                  </div>
-                )}
-
-                {item.note && !isNoteExpanded && (
-                  <p className="text-sm text-gray-500 italic line-clamp-1 mt-1">
-                    <Icon name="comment" size={14} className="inline mr-1" />
-                    {item.note}
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Summary */}
@@ -206,7 +192,7 @@ export default function CartPage() {
             )}
             <div className="flex justify-between text-xl font-bold text-foreground pt-2 border-t border-gray-100">
               <span>Итого</span>
-              <span className="text-[#0f2c5e]">
+              <span className="text-[#1b4332]">
                 {formatPrice(finalTotal)} TJS
               </span>
             </div>
@@ -218,7 +204,7 @@ export default function CartPage() {
             variant="navy"
             size="lg"
           >
-            <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#f7df00]" />
+            <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#dda15e]" />
             Оформить заказ
           </Button>
         </div>
