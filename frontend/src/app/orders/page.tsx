@@ -113,11 +113,14 @@ export default function OrdersPage() {
   }, [isAuthenticated, mode, tableId]);
 
   // Update pending orders count - use ref to avoid infinite loop
+  // Only count active orders (Pending/Confirmed AND not paid)
   const prevPendingCountRef = useRef<number>(-1);
   useEffect(() => {
-    const newPendingCount = orders.filter(
-      (o) => normalizeOrderStatus(o.status) === "Pending" || normalizeOrderStatus(o.status) === "Confirmed"
-    ).length;
+    const newPendingCount = orders.filter((o) => {
+      const status = normalizeOrderStatus(o.status);
+      const isActive = (status === "Pending" || status === "Confirmed") && !o.isPaid;
+      return isActive;
+    }).length;
     // Only update if the count actually changed
     if (prevPendingCountRef.current !== newPendingCount) {
       prevPendingCountRef.current = newPendingCount;
