@@ -23,13 +23,12 @@ export function CacheManager() {
       clearCart();
       clearTable();
       
-      // Explicitly delete legacy keys, AND auth tokens per user request
+      // Explicitly delete legacy keys (but NOT auth - keep phone/token)
       localStorage.removeItem("order-mode-storage");
       localStorage.removeItem("cart-storage");
       localStorage.removeItem("table-storage");
-      localStorage.removeItem("current-mode"); 
-      localStorage.removeItem("auth-storage");
-      localStorage.removeItem("token");
+      localStorage.removeItem("current-mode");
+      // НЕ удаляем auth-storage и token - сохраняем авторизацию
       sessionStorage.clear();
       
       // Mark as cleared so we never do this hard wipe again
@@ -76,8 +75,12 @@ export function CacheManager() {
 
     // Listen for tab close / app exit
     const handleExit = () => {
-      // User explicitly requested to delete authentication and EVERYTHING on window close
-      localStorage.clear();
+      // Очищаем данные сессии, но НЕ auth - сохраняем телефон и токен
+      localStorage.removeItem("table-storage-v2");
+      localStorage.removeItem("cart-storage-v2");
+      localStorage.removeItem("order-mode-storage-v2");
+      localStorage.removeItem("current-mode");
+      localStorage.removeItem("yalla_last_activity");
       sessionStorage.clear();
     };
 

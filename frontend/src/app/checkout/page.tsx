@@ -371,7 +371,7 @@ export default function CheckoutPage() {
   // Redirect to cart if empty
   useEffect(() => {
     if (items.length === 0) {
-      router.push("/cart");
+      router.push("/orders");
     }
   }, [items.length, router]);
 
