@@ -50,6 +50,7 @@ export default function OrdersPage() {
   const { showToast } = useToast();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [cancellingItemId, setCancellingItemId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'active' | 'history'>('active');
   const [processingPayment, setProcessingPayment] = useState<string | null>(null);
   const [paymentModalOrder, setPaymentModalOrder] = useState<Order | null>(null);
   const [sessionInfo, setSessionInfo] = useState<GuestSessionInfo | null>(null);
@@ -281,6 +282,19 @@ export default function OrdersPage() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
+  // Filter orders by tab
+  const filteredOrders = sortedOrders.filter((order) => {
+    const status = normalizeOrderStatus(order.status);
+    const isActive = (status === "Pending" || status === "Confirmed") && !order.isPaid;
+
+    if (activeTab === 'active') {
+      return isActive;
+    } else {
+      // История: отменённые или оплаченные
+      return !isActive;
+    }
+  });
+
   if (!isAuthenticated) {
     // If QR mode and has table orders - show them
     if (mode === "qr" && tableId && (loadingPublicOrders || publicOrders?.hasActiveSession)) {
@@ -497,7 +511,30 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
       <Header title="Мои заказы" />
-    
+
+      {/* Tab buttons */}
+      <div className="flex gap-2 p-4 bg-white border-b">
+        <button
+          onClick={() => setActiveTab('active')}
+          className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all ${
+            activeTab === 'active'
+              ? 'bg-primary text-white'
+              : 'bg-gray-100 text-gray-600'
+          }`}
+        >
+          Активные заказы
+        </button>
+        <button
+          onClick={() => setActiveTab('history')}
+          className={`flex-1 py-2 px-4 rounded-xl font-medium transition-all ${
+            activeTab === 'history'
+              ? 'bg-primary text-white'
+              : 'bg-gray-100 text-gray-600'
+          }`}
+        >
+          История
+        </button>
+      </div>
 
       <div className="p-4 space-y-4 max-w-lg mx-auto">
         {/* Other guests' orders section */}
@@ -545,7 +582,21 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {sortedOrders.map((order) => {
+        {/* Empty state for current tab */}
+        {filteredOrders.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 px-4">
+            <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+              <Icon name={activeTab === 'active' ? "receipt_long" : "history"} size={32} className="text-gray-400" />
+            </div>
+            <p className="text-gray-500 text-center">
+              {activeTab === 'active'
+                ? "Нет активных заказов"
+                : "История заказов пуста"}
+            </p>
+          </div>
+        )}
+
+        {filteredOrders.map((order) => {
           if (!order) return null;
           const normalizedStatus = normalizeOrderStatus(order.status);
           const status = statusConfig[normalizedStatus] || { label: String(order.status) || "Неизвестно", variant: "default" as const, icon: "help", color: "gray" };
