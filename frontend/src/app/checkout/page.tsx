@@ -36,7 +36,6 @@ export default function CheckoutPage() {
   const { tableId, tableNumber, restaurantId: tableRestaurantId, onlinePaymentAvailable } = useTableStore();
   const {
     mode,
-    setMode,
     selectedRestaurantId,
     selectedRestaurantName,
     deliveryAddress,
@@ -47,35 +46,6 @@ export default function CheckoutPage() {
     setCustomerPhone,
     clearMode,
   } = useOrderModeStore();
-
-  // Mode cycle for non-QR modes: delivery -> dinein -> takeaway -> delivery
-  const cycleMode = () => {
-    if (mode === "delivery") {
-      setMode("dinein");
-    } else if (mode === "dinein") {
-      setMode("takeaway");
-    } else if (mode === "takeaway") {
-      setMode("delivery");
-    }
-  };
-
-  const getModeIcon = () => {
-    switch (mode) {
-      case "delivery": return "delivery_dining";
-      case "dinein": return "restaurant";
-      case "takeaway": return "takeout_dining";
-      default: return "restaurant";
-    }
-  };
-
-  const getModeLabel = () => {
-    switch (mode) {
-      case "delivery": return "Доставка";
-      case "dinein": return "В ресторане";
-      case "takeaway": return "Самовывоз";
-      default: return "";
-    }
-  };
 
   // Determine the effective restaurant ID
   const restaurantId = mode === "qr" ? tableRestaurantId : selectedRestaurantId;

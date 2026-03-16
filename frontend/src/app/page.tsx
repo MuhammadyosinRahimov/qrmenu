@@ -136,7 +136,7 @@ function HomeContent() {
     );
   }
 
-  // Mode selection UI with soft design
+  // QR-only mode: show "Scan QR" message
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
       {/* Decorative background elements */}
@@ -146,78 +146,52 @@ function HomeContent() {
       </div>
 
       <Header title="Oson eats" />
-    
 
       <div className="relative p-4 space-y-8 max-w-md mx-auto">
         {/* Welcome Hero */}
-        <div className="text-center py-6">
+        <div className="text-center py-12">
           <div className="relative inline-block">
-            <div className="w-24 h-24 rounded-3xl bg-white flex items-center justify-center shadow-xl shadow-primary-200/50 transform rotate-3 overflow-hidden">
+            <div className="w-28 h-28 rounded-3xl bg-white flex items-center justify-center shadow-xl shadow-primary-200/50 overflow-hidden">
               <img src="/assets/logo.jpg" alt="Oson eats" className="w-full h-full object-cover" />
             </div>
-            <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg">
-              <Icon name="check" size={18} className="text-white" />
-            </div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mt-6 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 mt-8 mb-3">
             Добро пожаловать!
           </h1>
           <p className="text-gray-500 text-lg">
-            Выберите способ заказа
+            Oson eats
           </p>
         </div>
 
-        {/* Search input */}
-        {mode !== "qr" && (
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Icon name="search" size={22} className="text-gray-400" />
+        {/* QR scan card - main focus */}
+        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-lg">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center mb-6">
+              <Icon name="qr_code_scanner" size={40} className="text-primary" />
             </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Найти ресторан..."
-              className="w-full pl-12 pr-12 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent shadow-sm transition-all text-base"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center"
-              >
-                <div className="w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors">
-                  <Icon name="close" size={14} className="text-gray-500" />
-                </div>
-              </button>
-            )}
+            <h2 className="text-xl font-bold text-gray-800 mb-2">
+              Отсканируйте QR-код
+            </h2>
+            <p className="text-gray-500">
+              Найдите QR-код на вашем столе и отсканируйте его камерой телефона для просмотра меню и оформления заказа
+            </p>
           </div>
-        )}
+        </div>
 
-        {/* Restaurant list - show for all users */}
-        {mode !== "qr" && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <RestaurantList
-              onSelectRestaurant={handleSelectRestaurant}
-              searchQuery={searchQuery}
-            />
-          </div>
-        )}
-
-        {/* QR hint card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-gray-100 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              <Icon name="qr_code" size={24} className="text-gray-500" />
+        {/* Help info */}
+        <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <Icon name="help" size={20} className="text-blue-500" />
             </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-800">
-                Есть QR-код на столе?
-              </p>
-              <p className="text-sm text-gray-500">
-                Отсканируйте его для быстрого заказа
+            <div>
+              <p className="font-medium text-blue-800 mb-1">Как это работает?</p>
+              <p className="text-sm text-blue-600">
+                1. Откройте камеру телефона<br />
+                2. Наведите на QR-код на столе<br />
+                3. Перейдите по ссылке
               </p>
             </div>
-            <Icon name="arrow_forward" size={20} className="text-gray-400" />
           </div>
         </div>
       </div>

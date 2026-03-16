@@ -35,7 +35,7 @@ interface OrderModeState {
 export const useOrderModeStore = create<OrderModeState>()(
   persist(
     (set) => ({
-      mode: "delivery",
+      mode: "qr",
       selectedRestaurantId: null,
       selectedRestaurantName: null,
       deliveryAddress: "",
@@ -75,7 +75,7 @@ export const useOrderModeStore = create<OrderModeState>()(
           sessionStorage.removeItem(QR_MODE_KEY);
         }
         set((state) => ({
-          mode: "delivery",
+          mode: "qr",
           selectedRestaurantId: null,
           selectedRestaurantName: null,
           deliveryAddress: "",

@@ -15,8 +15,6 @@ interface DeliveryFormProps {
 
 export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitError }: DeliveryFormProps) {
   const {
-    mode,
-    setMode,
     deliveryAddress,
     setDeliveryAddress,
     customerName,
@@ -27,35 +25,6 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
 
   const [error, setError] = useState<string | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-
-  // Mode cycle: delivery -> dinein -> takeaway -> delivery
-  const cycleMode = () => {
-    if (mode === "delivery") {
-      setMode("dinein");
-    } else if (mode === "dinein") {
-      setMode("takeaway");
-    } else if (mode === "takeaway") {
-      setMode("delivery");
-    }
-  };
-
-  const getModeIcon = () => {
-    switch (mode) {
-      case "delivery": return "delivery_dining";
-      case "dinein": return "restaurant";
-      case "takeaway": return "takeout_dining";
-      default: return "delivery_dining";
-    }
-  };
-
-  const getModeLabel = () => {
-    switch (mode) {
-      case "delivery": return "Доставка";
-      case "dinein": return "В ресторане";
-      case "takeaway": return "Самовывоз";
-      default: return "Доставка";
-    }
-  };
 
   // Get user's location and reverse geocode to address
   const handleGetLocation = () => {
@@ -204,18 +173,6 @@ export function DeliveryForm({ onSubmit, onBack, isSubmitting = false, submitErr
 
       {error && <p className="text-error text-sm text-center">{error}</p>}
       {submitError && <p className="text-error text-sm text-center">{submitError}</p>}
-
-      {/* Compact mode selector */}
-      <button
-        onClick={cycleMode}
-        className="w-full h-10 bg-white rounded-full border border-gray-200 shadow-sm flex items-center justify-between px-4 hover:bg-gray-50 transition-colors"
-      >
-        <div className="flex items-center gap-2">
-          <Icon name={getModeIcon()} size={16} className="text-[#dda15e]" />
-          <span className="text-sm font-medium text-gray-700">{getModeLabel()}</span>
-        </div>
-        <Icon name="chevron_right" size={18} className="text-gray-400" />
-      </button>
 
       <div className="space-y-3">
         <Button

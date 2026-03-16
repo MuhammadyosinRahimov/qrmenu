@@ -37,7 +37,6 @@ export function BottomNav() {
       icon: "home",
       filledIcon: "home",
       label: "Меню",
-      qrOnly: true, // показывать только в QR-режиме
     },
     {
       href: "/orders",
