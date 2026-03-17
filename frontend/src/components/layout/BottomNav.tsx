@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { useOrderStore } from "@/stores/orderStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
+import { useTableStore } from "@/stores/tableStore";
 
 interface NavItem {
   href: string;
@@ -20,9 +22,25 @@ export function BottomNav() {
   const pathname = usePathname();
   const pendingCount = useOrderStore((state) => state.pendingCount);
   const mode = useOrderModeStore((state) => state.mode);
+  const { tableNumber, menuId } = useTableStore();
 
   // Check if user is on menu page
   const isOnMenuPage = pathname === "/menu" || pathname.startsWith("/menu");
+
+  // Build QR-aware URLs
+  const menuUrl = useMemo(() => {
+    if (mode === "qr" && tableNumber) {
+      return `/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`;
+    }
+    return "/menu";
+  }, [mode, tableNumber, menuId]);
+
+  const ordersUrl = useMemo(() => {
+    if (mode === "qr" && tableNumber) {
+      return `/orders?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`;
+    }
+    return "/orders";
+  }, [mode, tableNumber, menuId]);
 
   const navItems: NavItem[] = [
     // {
@@ -33,13 +51,13 @@ export function BottomNav() {
     //   hideInQr: true
     // },
     {
-      href: "/menu",
+      href: menuUrl,
       icon: "home",
       filledIcon: "home",
       label: "Меню",
     },
     {
-      href: "/orders",
+      href: ordersUrl,
       icon: "receipt_long",
       filledIcon: "receipt_long",
       label: "Заказы",
@@ -48,11 +66,16 @@ export function BottomNav() {
   ];
 
   const isActive = (href: string) => {
-    if (href === "/menu") {
-      // "Главная" активна на главной странице И на странице меню (в режиме доставки/ресторана)
-      return pathname === "/menu" || (isOnMenuPage && mode !== "qr");
+    // Extract base path without query params
+    const basePath = href.split('?')[0];
+    if (basePath === "/menu") {
+      // "Меню" активна на странице меню
+      return pathname === "/menu" || pathname.startsWith("/menu");
     }
-    return pathname.startsWith(href);
+    if (basePath === "/orders") {
+      return pathname === "/orders" || pathname.startsWith("/orders");
+    }
+    return pathname.startsWith(basePath);
   };
 
   return (

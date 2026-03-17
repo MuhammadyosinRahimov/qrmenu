@@ -7,6 +7,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useTableStore } from "@/stores/tableStore";
 import { Header } from "@/components/layout/Header";
+import { useCallback } from "react";
 
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
@@ -17,7 +18,16 @@ export default function CartPage() {
   const { items, updateQuantity, updateItemNote, removeItem, getSubtotal, getTax, getTotal } =
     useCartStore();
   const { mode, deliveryFee } = useOrderModeStore();
-  const { tableId } = useTableStore();
+  const { tableId, tableNumber, menuId } = useTableStore();
+
+  // Navigate to menu with QR params preserved
+  const navigateToMenu = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/menu");
+    }
+  }, [mode, tableNumber, menuId, router]);
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const [tableOrders, setTableOrders] = useState<PublicTableOrders | null>(null);
   const [loadingTableOrders, setLoadingTableOrders] = useState(false);
@@ -72,7 +82,7 @@ export default function CartPage() {
           <p className="text-muted text-center mb-6">
             Добавьте блюда из меню, чтобы сделать заказ
           </p>
-          <Button onClick={() => router.push("/menu")}>Перейти в меню</Button>
+          <Button onClick={navigateToMenu}>Перейти в меню</Button>
         </div>
         <BottomNav />
       </div>

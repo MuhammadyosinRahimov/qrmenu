@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -33,7 +33,7 @@ export default function CheckoutPage() {
   const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
   const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError, phone: authPhone, checkAuth } =
     useAuthStore();
-  const { tableId, tableNumber, restaurantId: tableRestaurantId, onlinePaymentAvailable } = useTableStore();
+  const { tableId, tableNumber, menuId, restaurantId: tableRestaurantId, onlinePaymentAvailable } = useTableStore();
   const {
     mode,
     selectedRestaurantId,
@@ -49,6 +49,31 @@ export default function CheckoutPage() {
 
   // Determine the effective restaurant ID
   const restaurantId = mode === "qr" ? tableRestaurantId : selectedRestaurantId;
+
+  // Build QR-aware URL
+  const getMenuUrl = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      return `/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`;
+    }
+    return "/menu";
+  }, [mode, tableNumber, menuId]);
+
+  const getOrdersUrl = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      return `/orders?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`;
+    }
+    return "/orders";
+  }, [mode, tableNumber, menuId]);
+
+  // Navigate to menu with QR params preserved
+  const navigateToMenu = useCallback(() => {
+    router.push(getMenuUrl());
+  }, [router, getMenuUrl]);
+
+  // Navigate to orders with QR params preserved
+  const navigateToOrders = useCallback(() => {
+    router.push(getOrdersUrl());
+  }, [router, getOrdersUrl]);
 
   // Determine initial step based on mode and authentication
   const getInitialStep = (): Step => {
@@ -208,7 +233,7 @@ export default function CheckoutPage() {
   const handlePaymentRedirect = (order: Order) => {
     // Всегда редирект на страницу заказов (без редиректа в банк)
     showToast("Заказ оформлен!", "success");
-    router.push("/orders");
+    navigateToOrders();
   };
 
   const handleSubmitOrder = async (dineInTableNumber?: number) => {
@@ -338,12 +363,12 @@ export default function CheckoutPage() {
     }
   };
 
-  // Redirect to cart if empty
+  // Redirect to orders if cart is empty
   useEffect(() => {
     if (items.length === 0) {
-      router.push("/orders");
+      router.push(getOrdersUrl());
     }
-  }, [items.length, router]);
+  }, [items.length, router, getOrdersUrl]);
 
   if (items.length === 0) {
     return null;
@@ -698,7 +723,7 @@ export default function CheckoutPage() {
               <Button onClick={() => setShowPauseModal(false)} variant="outline" className="w-full">
                 Понятно
               </Button>
-              <Button onClick={() => router.push("/menu")} variant="secondary" className="w-full">
+              <Button onClick={navigateToMenu} variant="secondary" className="w-full">
                 Вернуться в меню
               </Button>
             </div>

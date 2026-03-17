@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTableStore } from "@/stores/tableStore";
+import { useOrderModeStore } from "@/stores/orderModeStore";
 import { checkPaymentStatus } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -10,7 +11,26 @@ import { Icon } from "@/components/ui/Icon";
 function PaymentCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tableNumber = useTableStore((state) => state.tableNumber);
+  const { tableNumber, menuId } = useTableStore();
+  const mode = useOrderModeStore((state) => state.mode);
+
+  // Navigate to menu with QR params preserved
+  const navigateToMenu = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/menu");
+    }
+  }, [mode, tableNumber, menuId, router]);
+
+  // Navigate to orders with QR params preserved
+  const navigateToOrders = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/orders?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/orders");
+    }
+  }, [mode, tableNumber, menuId, router]);
 
   const status = searchParams.get("status");
   const orderId = searchParams.get("orderId");
@@ -107,14 +127,14 @@ function PaymentCallbackContent() {
           {/* Actions */}
           <div className="space-y-3 pt-4">
             <Button
-              onClick={() => router.push("/orders")}
+              onClick={navigateToOrders}
               className="w-full"
               size="lg"
             >
               Мои заказы
             </Button>
             <Button
-              onClick={() => router.push("/menu")}
+              onClick={navigateToMenu}
               variant="outline"
               className="w-full"
               size="lg"
@@ -162,14 +182,14 @@ function PaymentCallbackContent() {
           {/* Actions */}
           <div className="space-y-3 pt-4">
             <Button
-              onClick={() => router.push("/orders")}
+              onClick={navigateToOrders}
               className="w-full"
               size="lg"
             >
               Мои заказы
             </Button>
             <Button
-              onClick={() => router.push("/menu")}
+              onClick={navigateToMenu}
               variant="outline"
               className="w-full"
               size="lg"
@@ -205,14 +225,14 @@ function PaymentCallbackContent() {
           {/* Actions */}
           <div className="space-y-3 pt-4">
             <Button
-              onClick={() => router.push("/orders")}
+              onClick={navigateToOrders}
               className="w-full"
               size="lg"
             >
               Мои заказы
             </Button>
             <Button
-              onClick={() => router.push("/menu")}
+              onClick={navigateToMenu}
               variant="outline"
               className="w-full"
               size="lg"
@@ -241,7 +261,7 @@ function PaymentCallbackContent() {
           </p>
         </div>
         <Button
-          onClick={() => router.push("/menu")}
+          onClick={navigateToMenu}
           className="w-full"
           size="lg"
         >

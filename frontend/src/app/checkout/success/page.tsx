@@ -1,16 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
+import { useOrderModeStore } from "@/stores/orderModeStore";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
-  const tableNumber = useTableStore((state) => state.tableNumber);
+  const { tableNumber, menuId } = useTableStore();
   const clearCart = useCartStore((state) => state.clearCart);
+  const mode = useOrderModeStore((state) => state.mode);
+
+  // Navigate to menu with QR params preserved
+  const navigateToMenu = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/menu");
+    }
+  }, [mode, tableNumber, menuId, router]);
+
+  // Navigate to orders with QR params preserved
+  const navigateToOrders = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/orders?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/orders");
+    }
+  }, [mode, tableNumber, menuId, router]);
 
   // Clear cart after successful order
   useEffect(() => {
@@ -68,14 +88,14 @@ export default function CheckoutSuccessPage() {
         {/* Actions */}
         <div className="space-y-3 pt-4">
           <Button
-            onClick={() => router.push("/orders")}
+            onClick={navigateToOrders}
             className="w-full"
             size="lg"
           >
             Мои заказы
           </Button>
           <Button
-            onClick={() => router.push("/menu")}
+            onClick={navigateToMenu}
             variant="outline"
             className="w-full"
             size="lg"
