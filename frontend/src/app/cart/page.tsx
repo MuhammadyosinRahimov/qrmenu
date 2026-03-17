@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getImageUrl } from "@/lib/api";
+import { getImageUrl, getPublicTableOrders, PublicTableOrders } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
+import { useTableStore } from "@/stores/tableStore";
 import { Header } from "@/components/layout/Header";
 
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -16,12 +17,27 @@ export default function CartPage() {
   const { items, updateQuantity, updateItemNote, removeItem, getSubtotal, getTax, getTotal } =
     useCartStore();
   const { mode, deliveryFee } = useOrderModeStore();
+  const { tableId } = useTableStore();
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+  const [tableOrders, setTableOrders] = useState<PublicTableOrders | null>(null);
+  const [loadingTableOrders, setLoadingTableOrders] = useState(false);
 
   const isDelivery = mode === "delivery";
   const isQrMode = mode === "qr";
-  // Service fee only for QR/dine-in mode
-  const serviceFee = isQrMode ? getTax() : 0;
+
+  // Load table orders in QR mode
+  useEffect(() => {
+    if (isQrMode && tableId) {
+      setLoadingTableOrders(true);
+      getPublicTableOrders(tableId)
+        .then(setTableOrders)
+        .finally(() => setLoadingTableOrders(false));
+    }
+  }, [isQrMode, tableId]);
+
+  // Calculate service fee - use session data if available, otherwise use local calculation
+  const sessionServiceFeePercent = tableOrders?.serviceFeePercent ?? 10;
+  const serviceFee = isQrMode ? Math.round(getSubtotal() * sessionServiceFeePercent / 100) : 0;
   const finalTotal = getSubtotal() + serviceFee + (isDelivery ? deliveryFee : 0);
 
   const formatPrice = (price: number) => {
@@ -40,7 +56,8 @@ export default function CartPage() {
     });
   };
 
-  if (items.length === 0) {
+  // Empty cart but table has orders - show table orders
+  if (items.length === 0 && (!tableOrders || tableOrders.orders.length === 0)) {
     return (
       <div className="min-h-screen bg-background pb-20">
         <Header title="Корзина" />
@@ -66,7 +83,62 @@ export default function CartPage() {
     <div className="min-h-screen bg-background pb-56">
       <Header title="Корзина" />
 
-      <div className="p-4 space-y-3">
+      <div className="p-4 space-y-4">
+        {/* Table Orders Section - shows orders from other guests */}
+        {isQrMode && tableOrders?.hasActiveSession && tableOrders.orders.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+              <Icon name="group" size={16} />
+              Заказы стола ({tableOrders.guestCount} {tableOrders.guestCount === 1 ? 'гость' : tableOrders.guestCount < 5 ? 'гостя' : 'гостей'})
+            </h3>
+            {tableOrders.orders.map((order, idx) => (
+              <div key={idx} className="bg-gray-50 rounded-xl p-3 mb-2 border border-gray-100">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-xs text-gray-400">
+                    {order.maskedPhone || `Гость ${idx + 1}`}
+                  </p>
+                  {order.isPaid && (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                      Оплачено
+                    </span>
+                  )}
+                </div>
+                {order.items.map((item, i) => (
+                  <div key={i} className="flex justify-between text-sm py-1">
+                    <span className="text-gray-600">
+                      {item.productName}
+                      {item.sizeName && <span className="text-gray-400 text-xs"> ({item.sizeName})</span>}
+                      <span className="text-gray-400"> x{item.quantity}</span>
+                    </span>
+                    <span className="text-gray-700 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                  </div>
+                ))}
+                <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between text-sm">
+                  <span className="text-gray-500">Подитог</span>
+                  <span className="font-medium">{formatPrice(order.subtotal)} TJS</span>
+                </div>
+              </div>
+            ))}
+            <div className="bg-primary-light rounded-xl p-3 border border-primary-200">
+              <div className="flex justify-between text-sm font-medium text-primary">
+                <span>Общая сумма стола</span>
+                <span>{formatPrice(tableOrders.tableTotal)} TJS</span>
+              </div>
+              <p className="text-xs text-primary-600 mt-1">
+                Включает обслуживание {tableOrders.serviceFeePercent}%
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* My Cart Items */}
+        {items.length > 0 && isQrMode && tableOrders?.orders.length > 0 && (
+          <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+            <Icon name="person" size={16} />
+            Мои новые блюда
+          </h3>
+        )}
+
         {items.map((item) => {
           const isNoteExpanded = expandedNotes.has(item.id);
 
@@ -174,7 +246,7 @@ export default function CartPage() {
             </div>
             {isQrMode && (
               <div className="flex justify-between text-muted">
-                <span>Обслуживание (10%)</span>
+                <span>Обслуживание ({sessionServiceFeePercent}%)</span>
                 <span>{formatPrice(serviceFee)} TJS</span>
               </div>
             )}

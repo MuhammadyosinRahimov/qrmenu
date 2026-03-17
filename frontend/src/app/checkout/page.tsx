@@ -100,10 +100,10 @@ export default function CheckoutPage() {
     checkRestaurantStatus();
   }, [restaurantId]);
 
-  // Load public table orders for QR mode
+  // Load public table orders for QR mode (always load to get serviceFeePercent)
   useEffect(() => {
     const loadPublicOrders = async () => {
-      if (mode === "qr" && tableId && !isAuthenticated) {
+      if (mode === "qr" && tableId) {
         try {
           const data = await getPublicTableOrders(tableId);
           setPublicOrders(data);
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
       }
     };
     loadPublicOrders();
-  }, [mode, tableId, isAuthenticated]);
+  }, [mode, tableId]);
 
   // Update step when authentication changes
   useEffect(() => {
@@ -605,14 +605,23 @@ export default function CheckoutPage() {
                       <span>Подитог</span>
                       <span>{formatPrice(getSubtotal())} TJS</span>
                     </div>
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <span>Обслуживание (10%)</span>
-                      <span>{formatPrice(getTax())} TJS</span>
-                    </div>
-                    <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">
-                      <span>Итого</span>
-                      <span className="text-primary">{formatPrice(getTotal())} TJS</span>
-                    </div>
+                    {(() => {
+                      const serviceFeePercent = publicOrders?.serviceFeePercent ?? 10;
+                      const serviceFee = Math.round(getSubtotal() * serviceFeePercent / 100);
+                      const total = getSubtotal() + serviceFee;
+                      return (
+                        <>
+                          <div className="flex justify-between text-sm text-gray-500">
+                            <span>Обслуживание ({serviceFeePercent}%)</span>
+                            <span>{formatPrice(serviceFee)} TJS</span>
+                          </div>
+                          <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-100">
+                            <span>Итого</span>
+                            <span className="text-primary">{formatPrice(total)} TJS</span>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 

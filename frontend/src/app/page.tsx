@@ -35,17 +35,23 @@ function HomeContent() {
         try {
           const sessionInfo = await getMySessionInfo(tableId);
 
-          // If no session or all orders are paid, clear the context
-          if (!sessionInfo || sessionInfo.myOrderIsPaid) {
+          // Get current cart items
+          const cartItems = useCartStore.getState().items;
+
+          // Only clear if:
+          // 1. No active session exists, OR
+          // 2. All MY orders are paid AND cart is empty (user truly finished)
+          const shouldClear = !sessionInfo ||
+            (sessionInfo.myOrderIsPaid && cartItems.length === 0);
+
+          if (shouldClear) {
             clearTable();
             clearCart();
             clearMode();
           }
         } catch {
-          // If error (e.g., session not found), clear context
-          clearTable();
-          clearCart();
-          clearMode();
+          // If error, don't clear immediately - could be temporary network issue
+          // Only clear if it's a 404 (session not found)
         }
       }
     };
@@ -92,13 +98,9 @@ function HomeContent() {
     // No table param - show mode selection
     setIsQrMode(false);
 
-    // Clear QR mode if user came directly without ?table= param
-    // This allows users to exit QR mode by visiting the site directly
-    if (mode === "qr") {
-      clearMode();
-      clearTable();
-      clearCart();
-    }
+    // DON'T clear QR mode here - user might be navigating between pages
+    // The first useEffect handles clearing when session is truly completed
+    // This prevents accidental loss of cart/context during navigation
   }, [searchParams, router, setTable, setMode, mode, clearMode, clearTable, clearCart]);
 
 
