@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, Suspense, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -19,8 +19,10 @@ import type { Product, Category } from "@/types";
 
 function MenuContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const setTable = useTableStore((state) => state.setTable);
   const menuId = useTableStore((state) => state.menuId);
+  const tableNumber = useTableStore((state) => state.tableNumber);
   const { mode, setMode, setTableNumber, selectedRestaurantId, selectedRestaurantName } = useOrderModeStore();
   const { items: cartItems, addItem, removeItem, updateQuantity } = useCartStore();
   const { gridView, setGridView } = useUIStore();
@@ -137,6 +139,15 @@ function MenuContent() {
 
     loadData();
   }, [urlTableParam, urlMenuId, setTable, setMode, setTableNumber, isRestaurantMode]);
+
+  // Restore URL params from store if missing (e.g., after page refresh)
+  useEffect(() => {
+    // Only restore if we're in QR mode with table info in store but not in URL
+    if (!urlTableParam && tableNumber && mode === "qr" && !isRestaurantMode) {
+      const newUrl = `/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`;
+      router.replace(newUrl);
+    }
+  }, [urlTableParam, tableNumber, menuId, mode, isRestaurantMode, router]);
 
   // Use API queries only when NOT in restaurant mode
   const { data: apiCategories = [], isLoading: categoriesLoading } = useQuery({

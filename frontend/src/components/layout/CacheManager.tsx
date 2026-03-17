@@ -29,7 +29,14 @@ export function CacheManager() {
       localStorage.removeItem("table-storage");
       localStorage.removeItem("current-mode");
       // НЕ удаляем auth-storage и token - сохраняем авторизацию
-      sessionStorage.clear();
+      // НЕ удаляем table-storage-v2 - сохраняем контекст стола
+      // Селективная очистка sessionStorage - сохраняем важные ключи
+      const sessionKeysToKeep = ['table-storage-v2'];
+      Object.keys(sessionStorage).forEach(key => {
+        if (!sessionKeysToKeep.some(keepKey => key.includes(keepKey))) {
+          sessionStorage.removeItem(key);
+        }
+      });
       
       // Mark as cleared so we never do this hard wipe again
       localStorage.setItem("yalla_cache_cleared_v3", "true");
@@ -59,9 +66,14 @@ export function CacheManager() {
         localStorage.removeItem("order-mode-storage");
         localStorage.removeItem("cart-storage");
         localStorage.removeItem("table-storage");
-        
-        // Clear sessionStorage as well
-        sessionStorage.clear();
+
+        // Селективная очистка sessionStorage - сохраняем важные ключи
+        const sessionKeysToKeep = ['table-storage-v2'];
+        Object.keys(sessionStorage).forEach(key => {
+          if (!sessionKeysToKeep.some(keepKey => key.includes(keepKey))) {
+            sessionStorage.removeItem(key);
+          }
+        });
       }
     }
 

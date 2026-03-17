@@ -48,7 +48,9 @@ function HomeContent() {
               restaurantPhone: table.restaurantPhone,
               onlinePaymentAvailable: table.onlinePaymentAvailable,
             });
-            router.replace("/menu");
+            // Preserve URL params when redirecting to menu
+            const menuUrl = `/menu?table=${tableNumber}${menuParam ? `&menu=${menuParam}` : (table.menuId ? `&menu=${table.menuId}` : '')}`;
+            router.replace(menuUrl);
           })
           .catch(() => {
             setTable({
@@ -56,7 +58,9 @@ function HomeContent() {
               number: tableNumber,
               menuId: menuParam || undefined,
             });
-            router.replace("/menu");
+            // Preserve URL params when redirecting to menu
+            const menuUrl = `/menu?table=${tableNumber}${menuParam ? `&menu=${menuParam}` : ''}`;
+            router.replace(menuUrl);
           });
         return;
       }

@@ -41,7 +41,7 @@ const itemStatusConfig: Record<
 export default function OrdersPage() {
   const router = useRouter();
   const { isAuthenticated, userId } = useAuthStore();
-  const { onlinePaymentAvailable: tableOnlinePayment, tableId } = useTableStore();
+  const { onlinePaymentAvailable: tableOnlinePayment, tableId, tableNumber, menuId } = useTableStore();
   const { mode } = useOrderModeStore();
   const { clearCart } = useCartStore();
   const { clearMode } = useOrderModeStore();
@@ -69,6 +69,15 @@ export default function OrdersPage() {
     // Never clear table info - user might still be at the table
   }, [clearCart, clearMode]);
 
+  // Helper function to navigate to menu preserving QR params
+  const navigateToMenu = useCallback(() => {
+    if (mode === "qr" && tableNumber) {
+      router.push(`/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    } else {
+      router.push("/menu");
+    }
+  }, [mode, tableNumber, menuId, router]);
+
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: getOrders,
@@ -76,23 +85,25 @@ export default function OrdersPage() {
     refetchInterval: 30000, // Auto-refresh every 30 seconds as backup
   });
 
+  // Callback to load session info - used by initial load and SignalR updates
+  const loadSessionInfo = useCallback(async () => {
+    if (mode === "qr" && tableId && isAuthenticated) {
+      setLoadingSessionInfo(true);
+      try {
+        const info = await getMySessionInfo(tableId);
+        setSessionInfo(info);
+      } catch {
+        setSessionInfo(null);
+      } finally {
+        setLoadingSessionInfo(false);
+      }
+    }
+  }, [mode, tableId, isAuthenticated]);
+
   // Load session info for QR mode to show other guests' orders
   useEffect(() => {
-    const loadSessionInfo = async () => {
-      if (mode === "qr" && tableId && isAuthenticated) {
-        setLoadingSessionInfo(true);
-        try {
-          const info = await getMySessionInfo(tableId);
-          setSessionInfo(info);
-        } catch {
-          setSessionInfo(null);
-        } finally {
-          setLoadingSessionInfo(false);
-        }
-      }
-    };
     loadSessionInfo();
-  }, [mode, tableId, isAuthenticated, orders]);
+  }, [loadSessionInfo, orders]);
 
   // Load public orders when not authenticated but in QR mode
   useEffect(() => {
@@ -152,17 +163,32 @@ export default function OrdersPage() {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     });
 
+    // Handle table order updates (for shared table orders)
+    connection.on("TableOrderUpdated", () => {
+      // Refresh orders and session info when another guest updates the table order
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
+    });
+
     connection.start()
       .then(() => {
         connection.invoke("JoinCustomerGroup", userId);
+        // Join table group if in QR mode for shared table updates
+        if (mode === "qr" && tableId) {
+          connection.invoke("JoinTableGroup", tableId);
+        }
       })
       .catch((err) => console.error("SignalR connection error:", err));
 
     return () => {
       connection.invoke("LeaveCustomerGroup", userId).catch(() => {});
+      // Leave table group if joined
+      if (mode === "qr" && tableId) {
+        connection.invoke("LeaveTableGroup", tableId).catch(() => {});
+      }
       connection.stop();
     };
-  }, [isAuthenticated, userId, queryClient, showToast, clearOrderData]);
+  }, [isAuthenticated, userId, queryClient, showToast, clearOrderData, mode, tableId, loadSessionInfo]);
 
   const cancelItemMutation = useMutation({
     mutationFn: ({ orderId, itemId }: { orderId: string; itemId: string }) =>
@@ -417,7 +443,7 @@ export default function OrdersPage() {
                 </div>
 
                 {/* CTA to add order */}
-                <Button onClick={() => router.push("/menu")} className="w-full" size="lg">
+                <Button onClick={navigateToMenu} className="w-full" size="lg">
                   <Icon name="add" size={20} className="mr-2" />
                   Добавить свой заказ
                 </Button>
@@ -462,7 +488,7 @@ export default function OrdersPage() {
             <Icon name="arrow_forward" size={24} className="text-white" />
           </button>
 
-          <Button onClick={() => router.push("/menu")} variant="outline" className="w-full">
+          <Button onClick={navigateToMenu} variant="outline" className="w-full">
             <Icon name="restaurant_menu" size={20} className="mr-2" />
             Перейти в меню
           </Button>
@@ -504,7 +530,7 @@ export default function OrdersPage() {
           <p className="text-gray-500 text-center mb-6">
             Ваши заказы появятся здесь после оформления
           </p>
-          <Button onClick={() => router.push("/menu")}>Перейти в меню</Button>
+          <Button onClick={navigateToMenu}>Перейти в меню</Button>
         </div>
         <BottomNav />
       </div>
@@ -741,7 +767,7 @@ export default function OrdersPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => router.push("/menu")}
+                      onClick={navigateToMenu}
                     >
                       <Icon name="add" size={18} className="mr-1" />
                       Добавить
@@ -1026,7 +1052,7 @@ export default function OrdersPage() {
               <div className="space-y-2">
                 {normalizeOrderStatus(selectedOrder.status) !== "Cancelled" && (
                   <div className="grid grid-cols-2 gap-2">
-                    <Button onClick={() => router.push("/menu")} variant="outline">
+                    <Button onClick={navigateToMenu} variant="outline">
                       <Icon name="add" size={18} className="mr-1" />
                       Добавить
                     </Button>
