@@ -73,24 +73,15 @@ export function CacheManager() {
       localStorage.setItem("yalla_last_activity", Date.now().toString());
     }, 60000); // Update every minute while active
 
-    // Listen for tab close / app exit
-    const handleExit = () => {
-      // Очищаем данные сессии, но НЕ auth - сохраняем телефон и токен
-      localStorage.removeItem("table-storage-v2");
-      localStorage.removeItem("cart-storage-v2");
-      localStorage.removeItem("order-mode-storage-v2");
-      localStorage.removeItem("current-mode");
-      localStorage.removeItem("yalla_last_activity");
-      sessionStorage.clear();
-    };
-
-    window.addEventListener("beforeunload", handleExit);
-    window.addEventListener("pagehide", handleExit);
+    // REMOVED: beforeunload/pagehide handlers that cleared state on tab close
+    // State should persist until:
+    // 1. 3-hour timeout (handled above)
+    // 2. Session is closed by admin
+    // 3. User has paid and session is complete
+    // Navigation between pages should NOT clear state
 
     return () => {
       clearInterval(activityInterval);
-      window.removeEventListener("beforeunload", handleExit);
-      window.removeEventListener("pagehide", handleExit);
     };
   }, [clearMode, clearCart, clearTable]);
 

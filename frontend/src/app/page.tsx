@@ -4,9 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTableStore } from "@/stores/tableStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
-import { useCartStore } from "@/stores/cartStore";
-import { useAuthStore } from "@/stores/authStore";
-import { getTableByNumber, getMySessionInfo, PublicRestaurant } from "@/lib/api";
+import { getTableByNumber, PublicRestaurant } from "@/lib/api";
 import { RestaurantList } from "@/components/order";
 import { Header } from "@/components/layout/Header";
 
@@ -16,48 +14,17 @@ import { Icon } from "@/components/ui/Icon";
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { tableId, clearTable } = useTableStore();
   const setTable = useTableStore((state) => state.setTable);
-  const { mode, setMode, setRestaurant, clearMode } = useOrderModeStore();
-  const { clearCart } = useCartStore();
-  const { isAuthenticated } = useAuthStore();
+  const { setMode, setRestaurant } = useOrderModeStore();
 
   const [isQrMode, setIsQrMode] = useState<boolean | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Check if session is completed and clear context
-  useEffect(() => {
-    const checkAndClearSession = async () => {
-      const tableParam = searchParams.get("table");
-
-      // Only check if no QR param and we have stored table context
-      if (!tableParam && tableId && isAuthenticated) {
-        try {
-          const sessionInfo = await getMySessionInfo(tableId);
-
-          // Get current cart items
-          const cartItems = useCartStore.getState().items;
-
-          // Only clear if:
-          // 1. No active session exists, OR
-          // 2. All MY orders are paid AND cart is empty (user truly finished)
-          const shouldClear = !sessionInfo ||
-            (sessionInfo.myOrderIsPaid && cartItems.length === 0);
-
-          if (shouldClear) {
-            clearTable();
-            clearCart();
-            clearMode();
-          }
-        } catch {
-          // If error, don't clear immediately - could be temporary network issue
-          // Only clear if it's a 404 (session not found)
-        }
-      }
-    };
-
-    checkAndClearSession();
-  }, [tableId, isAuthenticated, searchParams, clearTable, clearCart, clearMode]);
+  // REMOVED: Aggressive session clearing logic
+  // State should ONLY be cleared when:
+  // 1. Session is explicitly closed by admin (checked via API when placing new order)
+  // 2. 3-hour timeout (handled by CacheManager)
+  // 3. User successfully pays (handled in checkout flow)
+  // Navigation between pages should NEVER clear cart/table state
 
   useEffect(() => {
     const tableParam = searchParams.get("table");
@@ -98,10 +65,12 @@ function HomeContent() {
     // No table param - show mode selection
     setIsQrMode(false);
 
-    // DON'T clear QR mode here - user might be navigating between pages
-    // The first useEffect handles clearing when session is truly completed
-    // This prevents accidental loss of cart/context during navigation
-  }, [searchParams, router, setTable, setMode, mode, clearMode, clearTable, clearCart]);
+    // State is preserved during navigation
+    // Clearing only happens via:
+    // 1. CacheManager (3-hour timeout)
+    // 2. Successful payment flow
+    // 3. Backend returns SESSION_CLOSED error
+  }, [searchParams, router, setTable, setMode]);
 
 
   const handleSelectRestaurant = (restaurant: PublicRestaurant) => {
