@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as signalR from "@microsoft/signalr";
@@ -38,7 +38,7 @@ const itemStatusConfig: Record<
   Cancelled: { label: "Отменено", variant: "error" },
 };
 
-export default function OrdersPage() {
+function OrdersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated, userId } = useAuthStore();
@@ -1270,5 +1270,13 @@ export default function OrdersPage() {
 
       <BottomNav />
     </div>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <OrdersPageContent />
+    </Suspense>
   );
 }

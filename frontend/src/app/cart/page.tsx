@@ -22,8 +22,36 @@ export default function CartPage() {
 
   // Navigate to menu with QR params preserved
   const navigateToMenu = useCallback(() => {
-    if (mode === "qr" && tableNumber) {
-      router.push(`/menu?table=${tableNumber}${menuId ? `&menu=${menuId}` : ''}`);
+    // Try zustand store first, fallback to sessionStorage for hydration edge cases
+    let effectiveTableNumber = tableNumber;
+    let effectiveMenuId = menuId;
+    let effectiveMode = mode;
+
+    // Fallback: read directly from sessionStorage if store values are null
+    if (typeof window !== "undefined" && !effectiveTableNumber) {
+      try {
+        const tableStorage = sessionStorage.getItem("table-storage-v2");
+        if (tableStorage) {
+          const parsed = JSON.parse(tableStorage);
+          if (parsed.state) {
+            effectiveTableNumber = parsed.state.tableNumber;
+            effectiveMenuId = effectiveMenuId || parsed.state.menuId;
+          }
+        }
+        const modeStorage = sessionStorage.getItem("order-mode-storage-v2");
+        if (modeStorage) {
+          const parsed = JSON.parse(modeStorage);
+          if (parsed.state) {
+            effectiveMode = parsed.state.mode || effectiveMode;
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to read from sessionStorage:", e);
+      }
+    }
+
+    if (effectiveMode === "qr" && effectiveTableNumber) {
+      router.push(`/menu?table=${effectiveTableNumber}${effectiveMenuId ? `&menu=${effectiveMenuId}` : ''}`);
     } else {
       router.push("/menu");
     }
@@ -142,7 +170,7 @@ export default function CartPage() {
         )}
 
         {/* My Cart Items */}
-        {items.length > 0 && isQrMode && tableOrders?.orders.length > 0 && (
+        {items.length > 0 && isQrMode && (tableOrders?.orders?.length ?? 0) > 0 && (
           <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
             <Icon name="person" size={16} />
             Мои новые блюда

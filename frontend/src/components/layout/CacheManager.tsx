@@ -1,16 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useCartStore } from "@/stores/cartStore";
-import { useTableStore } from "@/stores/tableStore";
 
 const CACHE_EXPIRY_MS = 3 * 60 * 60 * 1000; // 3 hours
 
 export function CacheManager() {
-  const { mode, clearMode } = useOrderModeStore();
   const { clearCart } = useCartStore();
-  const { clearTable } = useTableStore();
 
   useEffect(() => {
     // ONE-TIME WIPE FOR LEGACY USERS
@@ -19,10 +15,10 @@ export function CacheManager() {
     
     if (!hasBeenClearedV3) {
       console.log("CacheManager: Performing one-time wipe of legacy caches (v3).");
-      clearMode();
+      // НЕ вызываем clearTable() - сохраняем контекст стола!
+      // clearTable() записывает null в sessionStorage, что теряет данные стола
       clearCart();
-      clearTable();
-      
+
       // Explicitly delete legacy keys (but NOT auth - keep phone/token)
       localStorage.removeItem("order-mode-storage");
       localStorage.removeItem("cart-storage");
@@ -30,8 +26,9 @@ export function CacheManager() {
       localStorage.removeItem("current-mode");
       // НЕ удаляем auth-storage и token - сохраняем авторизацию
       // НЕ удаляем table-storage-v2 - сохраняем контекст стола
+      // НЕ удаляем order-mode-storage-v2 - сохраняем режим QR
       // Селективная очистка sessionStorage - сохраняем важные ключи
-      const sessionKeysToKeep = ['table-storage-v2'];
+      const sessionKeysToKeep = ['table-storage-v2', 'order-mode-storage-v2'];
       Object.keys(sessionStorage).forEach(key => {
         if (!sessionKeysToKeep.some(keepKey => key.includes(keepKey))) {
           sessionStorage.removeItem(key);
@@ -53,22 +50,21 @@ export function CacheManager() {
     if (lastActivity) {
       const timeSinceLastActivity = now - parseInt(lastActivity, 10);
       
-      // If time since last activity is greater than expiry, clear EVERYTHING
+      // If time since last activity is greater than expiry, clear cart only
+      // Table context and order mode should persist until user scans a new QR
       if (timeSinceLastActivity > CACHE_EXPIRY_MS) {
-        console.log("CacheManager: Cache expired. Clearing all session data.");
-        
-        // Clear stores
-        clearMode();
-        clearCart();
-        clearTable();
+        console.log("CacheManager: Cache expired. Clearing cart data.");
 
-        // Hard clear the specific localStorage keys just to be absolutely certain
+        // Only clear cart - preserve table and mode context
+        clearCart();
+
+        // Hard clear only legacy localStorage keys
         localStorage.removeItem("order-mode-storage");
         localStorage.removeItem("cart-storage");
         localStorage.removeItem("table-storage");
 
         // Селективная очистка sessionStorage - сохраняем важные ключи
-        const sessionKeysToKeep = ['table-storage-v2'];
+        const sessionKeysToKeep = ['table-storage-v2', 'order-mode-storage-v2'];
         Object.keys(sessionStorage).forEach(key => {
           if (!sessionKeysToKeep.some(keepKey => key.includes(keepKey))) {
             sessionStorage.removeItem(key);
@@ -95,7 +91,7 @@ export function CacheManager() {
     return () => {
       clearInterval(activityInterval);
     };
-  }, [clearMode, clearCart, clearTable]);
+  }, [clearCart]);
 
   return null; // This is a logic-only component
 }

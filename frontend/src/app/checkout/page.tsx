@@ -308,22 +308,41 @@ export default function CheckoutPage() {
         handlePaymentRedirect(order);
       } else {
         // QR mode (original flow)
-        if (!tableId && !tableNumber) {
+        // Try zustand store first, fallback to sessionStorage for hydration edge cases
+        let effectiveTableId = tableId;
+        let effectiveTableNumber = tableNumber;
+
+        if (typeof window !== "undefined" && !effectiveTableId && !effectiveTableNumber) {
+          try {
+            const tableStorage = sessionStorage.getItem("table-storage-v2");
+            if (tableStorage) {
+              const parsed = JSON.parse(tableStorage);
+              if (parsed.state) {
+                effectiveTableId = parsed.state.tableId;
+                effectiveTableNumber = parsed.state.tableNumber;
+              }
+            }
+          } catch (e) {
+            console.warn("Failed to read from sessionStorage:", e);
+          }
+        }
+
+        if (!effectiveTableId && !effectiveTableNumber) {
           setSubmitError("Стол не определён. Отсканируйте QR-код.");
           setIsSubmitting(false);
           return;
         }
 
-        let resolvedTableId = tableId;
+        let resolvedTableId = effectiveTableId;
 
-        if (!tableId || tableId.startsWith("table-")) {
-          if (!tableNumber) {
+        if (!effectiveTableId || effectiveTableId.startsWith("table-")) {
+          if (!effectiveTableNumber) {
             setSubmitError("Стол не определён. Отсканируйте QR-код.");
             setIsSubmitting(false);
             return;
           }
           try {
-            const table = await getTableByNumber(tableNumber);
+            const table = await getTableByNumber(effectiveTableNumber);
             resolvedTableId = table.id;
           } catch {
             setSubmitError("Не удалось найти стол. Попробуйте отсканировать QR-код снова.");
