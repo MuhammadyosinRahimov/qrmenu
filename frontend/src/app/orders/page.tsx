@@ -407,6 +407,10 @@ function OrdersPageContent() {
     }
   });
 
+  // Calculate my unpaid orders from filteredOrders (more reliable than sessionInfo)
+  const myUnpaidOrders = filteredOrders.filter(o => !o.isPaid);
+  const myUnpaidTotal = myUnpaidOrders.reduce((sum, o) => sum + o.total, 0);
+
   if (!isAuthenticated) {
     // If QR mode and has table orders - show them
     if (isQrContext && (loadingTableFromUrl || (tableId && (loadingPublicOrders || publicOrders?.hasActiveSession)))) {
@@ -716,7 +720,7 @@ function OrdersPageContent() {
                       </div>
                       <div>
                         <p className="font-semibold text-gray-800">
-                          Гость {guestIndex + 1}
+                          Стол {tableNumber}
                         </p>
                         <p className="text-xs text-gray-400">
                           {guestOrder.maskedPhone || `${guestOrder.itemCount} ${guestOrder.itemCount === 1 ? "позиция" : guestOrder.itemCount < 5 ? "позиции" : "позиций"}`}
@@ -1102,7 +1106,7 @@ function OrdersPageContent() {
       )}
 
       {/* Guest order payment modal */}
-      {selectedGuestOrder && sessionInfo && (
+      {selectedGuestOrder && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedGuestOrder(null)}>
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
@@ -1116,17 +1120,16 @@ function OrdersPageContent() {
             </div>
 
             {/* Pay for MY order */}
-            {sessionInfo.myTotal > 0 && !sessionInfo.myOrderIsPaid && (
+            {myUnpaidOrders.length > 0 && (
               <div className="space-y-3 mb-4">
                 <p className="text-sm text-gray-500 font-medium">Оплатить мой заказ</p>
                 <div className="grid grid-cols-2 gap-3">
-                  {/* Cash for my order */}
+                  {/* Cash for my order - pay all unpaid orders */}
                   <button
-                    onClick={() => {
-                      const myUnpaidOrder = filteredOrders.find(o => !o.isPaid);
-                      if (myUnpaidOrder) {
-                        handleCashPayment(myUnpaidOrder);
-                        setSelectedGuestOrder(null);
+                    onClick={async () => {
+                      setSelectedGuestOrder(null);
+                      for (const order of myUnpaidOrders) {
+                        await handleCashPayment(order);
                       }
                     }}
                     disabled={!!processingPayment}
@@ -1136,16 +1139,19 @@ function OrdersPageContent() {
                       <Icon name="payments" size={24} className="text-primary" />
                     </div>
                     <span className="font-semibold text-primary-dark">Наличными</span>
-                    <span className="text-xs text-primary">{formatPrice(sessionInfo.myTotal)} TJS</span>
+                    <span className="text-xs text-primary">{formatPrice(myUnpaidTotal)} TJS</span>
                   </button>
 
                   {/* DC for my order */}
-                  {sessionInfo.paymentLink && (
+                  {(sessionInfo?.paymentLink || myUnpaidOrders[0]?.paymentLink) && (
                     <button
                       onClick={() => {
-                        const amountInTiyn = Math.round(sessionInfo.myTotal * 100);
-                        const finalLink = sessionInfo.paymentLink!.replace('{amount}', amountInTiyn.toString());
-                        window.location.href = finalLink;
+                        const paymentLink = sessionInfo?.paymentLink || myUnpaidOrders[0]?.paymentLink;
+                        if (paymentLink) {
+                          const amountInTiyn = Math.round(myUnpaidTotal * 100);
+                          const finalLink = paymentLink.replace('{amount}', amountInTiyn.toString());
+                          window.location.href = finalLink;
+                        }
                       }}
                       disabled={!!processingPayment}
                       className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 hover:border-green-400 transition-all disabled:opacity-50"
@@ -1154,7 +1160,7 @@ function OrdersPageContent() {
                         <Icon name="credit_card" size={24} className="text-green-500" />
                       </div>
                       <span className="font-semibold text-green-700">Картой DC</span>
-                      <span className="text-xs text-green-500">{formatPrice(sessionInfo.myTotal)} TJS</span>
+                      <span className="text-xs text-green-500">{formatPrice(myUnpaidTotal)} TJS</span>
                     </button>
                   )}
                 </div>
@@ -1162,8 +1168,8 @@ function OrdersPageContent() {
             )}
 
             {/* Pay for entire table */}
-            {sessionInfo.tableUnpaidAmount > 0 && (
-              <div className={sessionInfo.myTotal > 0 && !sessionInfo.myOrderIsPaid ? "pt-4 border-t border-gray-100" : ""}>
+            {sessionInfo && sessionInfo.tableUnpaidAmount > 0 && (
+              <div className={myUnpaidOrders.length > 0 ? "pt-4 border-t border-gray-100" : ""}>
                 <p className="text-sm text-gray-500 font-medium mb-3">Оплатить за весь стол</p>
                 <div className="grid grid-cols-2 gap-3">
                   {/* Cash for table */}
@@ -1183,7 +1189,7 @@ function OrdersPageContent() {
                   </button>
 
                   {/* DC for table */}
-                  {sessionInfo.paymentLink && (
+                  {sessionInfo?.paymentLink && (
                     <button
                       onClick={() => {
                         handlePayForTableOnline();
