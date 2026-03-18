@@ -141,17 +141,11 @@ function OrdersPageContent() {
   }, [mode, tableId, isAuthenticated, isQrContext]);
 
   // Load session info for QR mode to show other guests' orders
+  // Note: Removed 'orders' from dependencies to prevent excessive API calls
+  // SignalR handlers will call loadSessionInfo when needed
   useEffect(() => {
     loadSessionInfo();
-  }, [loadSessionInfo, orders, tableId]); // Added tableId as direct dependency
-
-  // Additional effect to ensure sessionInfo loads when tableId becomes available from URL
-  // This handles the case where tableId is loaded asynchronously via loadTableFromUrl
-  useEffect(() => {
-    if (tableId && isQrContext && isAuthenticated && !sessionInfo && !loadingSessionInfo) {
-      loadSessionInfo();
-    }
-  }, [tableId, isQrContext, isAuthenticated, sessionInfo, loadingSessionInfo, loadSessionInfo]);
+  }, [loadSessionInfo, tableId]);
 
   // Load public orders when not authenticated but in QR mode
   useEffect(() => {
@@ -362,40 +356,6 @@ function OrdersPageContent() {
       window.location.href = finalLink;
     } else {
       showToast("Онлайн оплата недоступна", "error");
-    }
-  };
-
-  // Handle table payment (cash) - for guests without personal orders
-  const handleTableCashPayment = async () => {
-    if (!sessionInfo) return;
-    setProcessingPayment('table-cash');
-    try {
-      await payForTable(sessionInfo.sessionId, 'cash');
-      showToast("Официант скоро подойдёт для оплаты за стол", "success");
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      loadSessionInfo(); // Refresh session info
-    } catch (error) {
-      showToast("Ошибка запроса оплаты", "error");
-    } finally {
-      setProcessingPayment(null);
-    }
-  };
-
-  // Handle table payment (online) - for guests without personal orders
-  const handleTableOnlinePayment = async () => {
-    if (!sessionInfo) return;
-    setProcessingPayment('table-online');
-    try {
-      const result = await payForTable(sessionInfo.sessionId, 'online');
-      if (result.paymentLink) {
-        window.location.href = result.paymentLink;
-      } else {
-        showToast("Онлайн оплата недоступна", "error");
-      }
-    } catch (error) {
-      showToast("Ошибка создания платежа", "error");
-    } finally {
-      setProcessingPayment(null);
     }
   };
 
@@ -694,7 +654,7 @@ function OrdersPageContent() {
           </div>
         )}
 
-        {/* Other guests' orders section - displayed as cards */}
+        {/* Other guests' orders section - displayed as cards like user's own orders */}
         {isQrContext && sessionInfo && sessionInfo.otherOrders.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -706,9 +666,9 @@ function OrdersPageContent() {
             {sessionInfo.otherOrders.map((guestOrder, guestIndex) => (
               <div
                 key={guestOrder.orderId}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                {/* Status header with gradient - similar to user's own orders */}
+                {/* Status header with gradient */}
                 <div className={`px-4 py-3 flex items-center justify-between ${
                   guestOrder.isPaid
                     ? "bg-gradient-to-r from-green-50 to-emerald-50"
@@ -727,32 +687,37 @@ function OrdersPageContent() {
                     <span className={`font-medium text-sm ${
                       guestOrder.isPaid ? "text-green-700" : "text-primary-dark"
                     }`}>
-                      {guestOrder.isPaid ? "Оплачено" : "Ожидает оплаты"}
+                      {guestOrder.isPaid ? "Оплачено" : "Подтверждён"}
                     </span>
                   </div>
-                  <Badge variant={guestOrder.isPaid ? "success" : "warning"} size="sm">
-                    Гость {guestIndex + 1}
-                  </Badge>
+                  {guestOrder.isPaid && (
+                    <Badge variant="success" size="sm">
+                      <Icon name="check" size={12} className="mr-1" />
+                      Оплачено
+                    </Badge>
+                  )}
                 </div>
 
                 {/* Order content */}
                 <div className="p-4 space-y-3">
-                  {/* Guest info */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                      <Icon name="person" size={20} className="text-gray-400" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800">
-                        {guestOrder.maskedPhone || `Гость ${guestIndex + 1}`}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        {guestOrder.itemCount} {guestOrder.itemCount === 1 ? "позиция" : guestOrder.itemCount < 5 ? "позиции" : "позиций"}
-                      </p>
+                  {/* Table/Restaurant info - like in the image */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
+                        <Icon name="restaurant" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          Гость {guestIndex + 1}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {guestOrder.maskedPhone || `${guestOrder.itemCount} ${guestOrder.itemCount === 1 ? "позиция" : guestOrder.itemCount < 5 ? "позиции" : "позиций"}`}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Order items */}
+                  {/* Order items preview */}
                   <div className="space-y-1">
                     {guestOrder.items.map((item: GuestOrderItem, idx: number) => (
                       <div key={idx} className="flex justify-between text-sm">
@@ -773,6 +738,30 @@ function OrdersPageContent() {
                     </span>
                   </div>
                 </div>
+
+                {/* Action buttons - like in the image */}
+                {!guestOrder.isPaid && (
+                  <div className="px-4 pb-4 grid gap-2 grid-cols-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={navigateToMenu}
+                    >
+                      <Icon name="add" size={18} className="mr-1" />
+                      Добавить
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        // Show payment options for this guest's order
+                        showToast("Оплата доступна только для своих заказов", "info");
+                      }}
+                    >
+                      <Icon name="payments" size={18} className="mr-1" />
+                      Оплатить
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -794,68 +783,6 @@ function OrdersPageContent() {
                 <Icon name="add" size={18} className="mr-2" />
                 Добавить заказ
               </Button>
-            )}
-          </div>
-        )}
-
-        {/* Table bill section - show for ALL guests in QR mode when there are unpaid orders */}
-        {isQrContext && sessionInfo && sessionInfo.guestCount > 0 && (
-          <div className="bg-gradient-to-br from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200 mb-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
-                <Icon name="receipt_long" size={24} className="text-primary" />
-              </div>
-              <div>
-                <h3 className="font-bold text-primary-dark">Счёт стола</h3>
-                <p className="text-sm text-primary">
-                  {sessionInfo.guestCount} {sessionInfo.guestCount === 1 ? "гость" : sessionInfo.guestCount < 5 ? "гостя" : "гостей"}
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-4 mb-4 space-y-2">
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Подитог:</span>
-                <span className="font-medium">{formatPrice(sessionInfo.tableSubtotal)} TJS</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
-                <span className="font-medium">{formatPrice(sessionInfo.tableServiceFee)} TJS</span>
-              </div>
-              {sessionInfo.tablePaidAmount > 0 && (
-                <div className="flex justify-between text-sm text-green-600">
-                  <span>Уже оплачено:</span>
-                  <span className="font-medium">{formatPrice(sessionInfo.tablePaidAmount)} TJS</span>
-                </div>
-              )}
-              <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-100">
-                <span>К оплате:</span>
-                <span className="text-primary">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
-              </div>
-            </div>
-
-            {sessionInfo.tableUnpaidAmount > 0 && (
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  onClick={() => handleTableCashPayment()}
-                  variant="outline"
-                  className="w-full"
-                  disabled={!!processingPayment}
-                >
-                  <Icon name="payments" size={18} className="mr-2" />
-                  Наличными
-                </Button>
-                {tableOnlinePayment && (
-                  <Button
-                    onClick={() => handleTableOnlinePayment()}
-                    className="w-full"
-                    disabled={!!processingPayment}
-                  >
-                    <Icon name="credit_card" size={18} className="mr-2" />
-                    Картой
-                  </Button>
-                )}
-              </div>
             )}
           </div>
         )}

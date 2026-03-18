@@ -144,75 +144,94 @@ export default function CartPage() {
               Заказы стола ({tableOrders.guestCount} {tableOrders.guestCount === 1 ? 'гость' : tableOrders.guestCount < 5 ? 'гостя' : 'гостей'})
             </h3>
             {tableOrders.orders.map((order, idx) => (
-              <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+              <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                 {/* Status header with gradient */}
-                <div className={`px-4 py-2 flex items-center justify-between ${
+                <div className={`px-4 py-3 flex items-center justify-between ${
                   order.isPaid
                     ? "bg-gradient-to-r from-green-50 to-emerald-50"
                     : "bg-gradient-to-r from-primary-light to-primary-50"
                 }`}>
                   <div className="flex items-center gap-2">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       order.isPaid ? "bg-green-100" : "bg-primary-50"
                     }`}>
                       <Icon
-                        name={order.isPaid ? "check_circle" : "schedule"}
-                        size={14}
+                        name={order.isPaid ? "check_circle" : "check_circle"}
+                        size={18}
                         className={order.isPaid ? "text-green-500" : "text-primary-dark"}
                       />
                     </div>
                     <span className={`font-medium text-sm ${
                       order.isPaid ? "text-green-700" : "text-primary-dark"
                     }`}>
-                      {order.isPaid ? "Оплачено" : "Ожидает оплаты"}
+                      {order.isPaid ? "Оплачено" : "Подтверждён"}
                     </span>
                   </div>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-white/50 text-gray-600 font-medium">
-                    Гость {idx + 1}
-                  </span>
+                  {order.isPaid && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
+                      Оплачено
+                    </span>
+                  )}
                 </div>
 
                 {/* Order content */}
-                <div className="p-3 space-y-2">
-                  {/* Guest phone */}
-                  <div className="flex items-center gap-2">
-                    <Icon name="person" size={14} className="text-gray-400" />
-                    <span className="text-xs text-gray-500">
-                      {order.maskedPhone || `Гость ${idx + 1}`}
-                    </span>
+                <div className="p-4 space-y-3">
+                  {/* Guest info */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
+                        <Icon name="restaurant" size={20} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          Гость {idx + 1}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {order.maskedPhone || `${order.items.length} ${order.items.length === 1 ? "позиция" : order.items.length < 5 ? "позиции" : "позиций"}`}
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Order items */}
-                  {order.items.map((item, i) => (
-                    <div key={i} className="flex justify-between text-sm">
-                      <span className="text-gray-600">
-                        {item.productName}
-                        {item.sizeName && <span className="text-gray-400 text-xs"> ({item.sizeName})</span>}
-                        <span className="text-gray-400"> x{item.quantity}</span>
-                      </span>
-                      <span className="text-gray-700 font-medium">{formatPrice(item.totalPrice)} TJS</span>
-                    </div>
-                  ))}
+                  <div className="space-y-1">
+                    {order.items.map((item, i) => (
+                      <div key={i} className="flex justify-between text-sm">
+                        <span className="text-gray-600">
+                          {item.productName} <span className="text-gray-400">x{item.quantity}</span>
+                          {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                        </span>
+                        <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                      </div>
+                    ))}
+                  </div>
 
-                  {/* Total */}
-                  <div className="border-t border-gray-100 pt-2 flex justify-between">
+                  {/* Divider and total */}
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
                     <span className="text-sm text-gray-500">Итого</span>
-                    <span className="font-bold text-primary">{formatPrice(order.subtotal)} TJS</span>
+                    <span className="text-xl font-bold text-primary">{formatPrice(order.subtotal)} TJS</span>
                   </div>
                 </div>
+
+                {/* Action buttons */}
+                {!order.isPaid && (
+                  <div className="px-4 pb-4 grid gap-2 grid-cols-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={navigateToMenu}
+                    >
+                      <Icon name="add" size={18} className="mr-1" />
+                      Добавить
+                    </Button>
+                    <Button size="sm" disabled>
+                      <Icon name="payments" size={18} className="mr-1" />
+                      Оплатить
+                    </Button>
+                  </div>
+                )}
               </div>
             ))}
-
-            {/* Table total summary */}
-            <div className="bg-gradient-to-r from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200">
-              <div className="flex justify-between font-medium text-primary-dark">
-                <span>Общая сумма стола</span>
-                <span className="text-lg font-bold">{formatPrice(tableOrders.tableTotal)} TJS</span>
-              </div>
-              <p className="text-xs text-primary-600 mt-1">
-                Включает обслуживание {tableOrders.serviceFeePercent}%
-              </p>
-            </div>
           </div>
         )}
 
