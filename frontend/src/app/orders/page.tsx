@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { useToast } from "@/components/ui/Toast";
-import type { OrderStatus, OrderItemStatus, Order, GuestSessionInfo, OrderType, GuestOrderItem } from "@/types";
+import type { OrderStatus, OrderItemStatus, Order, GuestSessionInfo, OrderType, GuestOrderItem, GuestOrderSummary } from "@/types";
 import { normalizeOrderStatus, normalizeItemStatus, normalizeOrderType } from "@/types";
 
 const statusConfig: Record<
@@ -54,6 +54,7 @@ function OrdersPageContent() {
   const [activeTab, setActiveTab] = useState<'active' | 'history'>('active');
   const [processingPayment, setProcessingPayment] = useState<string | null>(null);
   const [paymentModalOrder, setPaymentModalOrder] = useState<Order | null>(null);
+  const [selectedGuestOrder, setSelectedGuestOrder] = useState<GuestOrderSummary | null>(null);
   const [sessionInfo, setSessionInfo] = useState<GuestSessionInfo | null>(null);
   const [loadingSessionInfo, setLoadingSessionInfo] = useState(false);
   const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
@@ -352,11 +353,47 @@ function OrdersPageContent() {
   // Handle DC card payment using paymentLink
   const handleDcPayment = (order: Order) => {
     if (order.paymentLink) {
-      const finalLink = order.paymentLink.replace('{amount}', order.total.toString());
+      // Умножаем на 100 для конвертации в тийины (копейки)
+      const amountInTiyn = Math.round(order.total * 100);
+      const finalLink = order.paymentLink.replace('{amount}', amountInTiyn.toString());
       window.location.href = finalLink;
     } else {
       showToast("Онлайн оплата недоступна", "error");
     }
+  };
+
+  // Open payment modal for another guest's order
+  const openPaymentModalForGuest = (guestOrder: GuestOrderSummary) => {
+    setSelectedGuestOrder(guestOrder);
+  };
+
+  // Handle cash payment for another guest's order
+  const handleGuestOrderCashPayment = async () => {
+    if (!selectedGuestOrder) return;
+    setProcessingPayment(selectedGuestOrder.orderId);
+    try {
+      await requestCashPayment(selectedGuestOrder.orderId);
+      showToast("Официант скоро подойдёт для оплаты", "success");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
+      setSelectedGuestOrder(null);
+    } catch {
+      showToast("Ошибка запроса оплаты", "error");
+    } finally {
+      setProcessingPayment(null);
+    }
+  };
+
+  // Handle DC card payment for another guest's order
+  const handleGuestOrderDcPayment = () => {
+    if (!selectedGuestOrder || !sessionInfo?.paymentLink) {
+      showToast("Онлайн оплата недоступна", "error");
+      return;
+    }
+    // Умножаем на 100 для конвертации в тийины (копейки)
+    const amountInTiyn = Math.round(selectedGuestOrder.total * 100);
+    const finalLink = sessionInfo.paymentLink.replace('{amount}', amountInTiyn.toString());
+    window.location.href = finalLink;
   };
 
   const formatPrice = (price: number) => {
@@ -752,10 +789,7 @@ function OrdersPageContent() {
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => {
-                        // Show payment options for this guest's order
-                        showToast("Оплата доступна только для своих заказов", "info");
-                      }}
+                      onClick={() => openPaymentModalForGuest(guestOrder)}
                     >
                       <Icon name="payments" size={18} className="mr-1" />
                       Оплатить
@@ -1092,6 +1126,77 @@ function OrdersPageContent() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Guest order payment modal */}
+      {selectedGuestOrder && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedGuestOrder(null)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-800">Оплатить заказ гостя</h3>
+              <button
+                onClick={() => setSelectedGuestOrder(null)}
+                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+              >
+                <Icon name="close" size={18} className="text-gray-500" />
+              </button>
+            </div>
+
+            {/* Guest order summary */}
+            <div className="mb-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+              <div className="flex items-center gap-2 mb-2">
+                <Icon name="person" size={18} className="text-blue-500" />
+                <span className="text-sm font-medium text-blue-700">
+                  {selectedGuestOrder.maskedPhone || "Гость"}
+                </span>
+              </div>
+              <div className="text-sm text-blue-600 space-y-1">
+                <div className="flex justify-between">
+                  <span>Позиций:</span>
+                  <span className="font-semibold">{selectedGuestOrder.itemCount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Итого:</span>
+                  <span className="font-semibold">{formatPrice(selectedGuestOrder.total)} TJS</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment buttons */}
+            <div className="space-y-3">
+              <p className="text-sm text-gray-500 font-medium">Способ оплаты</p>
+              <div className="grid grid-cols-2 gap-3">
+                {/* Cash payment */}
+                <button
+                  onClick={handleGuestOrderCashPayment}
+                  disabled={!!processingPayment}
+                  className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-primary-light to-primary-50 border-2 border-primary-200 hover:border-primary-300 transition-all disabled:opacity-50"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-2">
+                    <Icon name="payments" size={24} className="text-primary" />
+                  </div>
+                  <span className="font-semibold text-primary-dark">Наличными</span>
+                  <span className="text-xs text-primary">{formatPrice(selectedGuestOrder.total)} TJS</span>
+                </button>
+
+                {/* Online payment */}
+                {(sessionInfo?.onlinePaymentAvailable || tableOnlinePayment) && (
+                  <button
+                    onClick={handleGuestOrderDcPayment}
+                    disabled={!!processingPayment}
+                    className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 hover:border-green-400 transition-all disabled:opacity-50"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-2">
+                      <Icon name="credit_card" size={24} className="text-green-500" />
+                    </div>
+                    <span className="font-semibold text-green-700">Картой DC</span>
+                    <span className="text-xs text-green-500">{formatPrice(selectedGuestOrder.total)} TJS</span>
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

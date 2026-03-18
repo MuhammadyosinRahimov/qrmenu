@@ -205,6 +205,8 @@ export interface GuestSessionInfo {
   canPayForTable: boolean;
   myOrders: GuestOrderSummary[];
   otherOrders: GuestOrderSummary[];
+  paymentLink?: string;           // Ссылка для онлайн оплаты
+  onlinePaymentAvailable?: boolean; // Доступна ли онлайн оплата
 }
 
 export interface PayForTableResponse {
