@@ -226,6 +226,13 @@ function OrdersPageContent() {
       loadSessionInfo();
     });
 
+    // Handle new order from another guest at the same table
+    connection.on("NewOrder", () => {
+      // Refresh orders and session info when another guest creates a new order
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
+    });
+
     connection.start()
       .then(() => {
         connection.invoke("JoinCustomerGroup", userId);
@@ -662,6 +669,45 @@ function OrdersPageContent() {
             </div>
             <div className="space-y-2">
               <div className="h-16 bg-gray-200 rounded-lg" />
+            </div>
+          </div>
+        )}
+
+        {/* Table total summary card */}
+        {isQrContext && sessionInfo && !loadingSessionInfo && (
+          <div className="bg-gradient-to-r from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
+                  <Icon name="table_restaurant" size={20} className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-primary-dark">Стол #{tableNumber}</p>
+                  <p className="text-xs text-primary">
+                    {sessionInfo.guestCount} {sessionInfo.guestCount === 1 ? "гость" : sessionInfo.guestCount < 5 ? "гостя" : "гостей"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-2 bg-white/60 rounded-xl p-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Мой итого:</span>
+                <span className="font-semibold text-gray-800">{formatPrice(sessionInfo.myTotal)} TJS</span>
+              </div>
+              {sessionInfo.guestCount > 1 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Итого другие гости:</span>
+                  <span className="font-medium text-gray-700">{formatPrice(sessionInfo.tableTotal - sessionInfo.myTotal)} TJS</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm text-gray-500 pt-2 border-t border-gray-200">
+                <span>Обслуживание ({sessionInfo.serviceFeePercent}%)</span>
+                <span>включено</span>
+              </div>
+              <div className="flex justify-between font-bold text-lg pt-2 border-t border-primary-200">
+                <span className="text-primary-dark">Итого за стол</span>
+                <span className="text-primary">{formatPrice(sessionInfo.tableTotal)} TJS</span>
+              </div>
             </div>
           </div>
         )}
