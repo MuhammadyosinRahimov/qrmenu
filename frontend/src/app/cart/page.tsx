@@ -24,25 +24,35 @@ export default function CartPage() {
   const navigateToMenu = useCallback(() => {
     // Try zustand store first, fallback to sessionStorage for hydration edge cases
     let effectiveTableNumber = tableNumber;
+    let effectiveTableId = tableId;
     let effectiveMenuId = menuId;
     let effectiveMode = mode;
 
-    // Fallback: read directly from sessionStorage if store values are null
-    if (typeof window !== "undefined" && !effectiveTableNumber) {
+    // Always check sessionStorage as fallback for any missing value
+    if (typeof window !== "undefined") {
       try {
+        // Read table data from sessionStorage
         const tableStorage = sessionStorage.getItem("table-storage-v2");
         if (tableStorage) {
           const parsed = JSON.parse(tableStorage);
           if (parsed.state) {
-            effectiveTableNumber = parsed.state.tableNumber;
-            effectiveMenuId = effectiveMenuId || parsed.state.menuId;
+            if (!effectiveTableNumber) {
+              effectiveTableNumber = parsed.state.tableNumber;
+            }
+            if (!effectiveTableId) {
+              effectiveTableId = parsed.state.tableId;
+            }
+            if (!effectiveMenuId) {
+              effectiveMenuId = parsed.state.menuId;
+            }
           }
         }
+        // Read mode from sessionStorage
         const modeStorage = sessionStorage.getItem("order-mode-storage-v2");
         if (modeStorage) {
           const parsed = JSON.parse(modeStorage);
-          if (parsed.state) {
-            effectiveMode = parsed.state.mode || effectiveMode;
+          if (parsed.state && parsed.state.mode) {
+            effectiveMode = parsed.state.mode;
           }
         }
       } catch (e) {
@@ -50,12 +60,16 @@ export default function CartPage() {
       }
     }
 
+    // Navigate with table params if in QR mode with table info
     if (effectiveMode === "qr" && effectiveTableNumber) {
+      router.push(`/menu?table=${effectiveTableNumber}${effectiveMenuId ? `&menu=${effectiveMenuId}` : ''}`);
+    } else if (effectiveTableNumber) {
+      // Fallback: even if mode is not "qr", include table params if we have them
       router.push(`/menu?table=${effectiveTableNumber}${effectiveMenuId ? `&menu=${effectiveMenuId}` : ''}`);
     } else {
       router.push("/menu");
     }
-  }, [mode, tableNumber, menuId, router]);
+  }, [mode, tableNumber, tableId, menuId, router]);
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
   const [tableOrders, setTableOrders] = useState<PublicTableOrders | null>(null);
   const [loadingTableOrders, setLoadingTableOrders] = useState(false);
@@ -122,45 +136,78 @@ export default function CartPage() {
       <Header title="Корзина" />
 
       <div className="p-4 space-y-4">
-        {/* Table Orders Section - shows orders from other guests */}
+        {/* Table Orders Section - shows orders from other guests as cards */}
         {isQrMode && tableOrders?.hasActiveSession && tableOrders.orders.length > 0 && (
-          <div className="mb-4">
-            <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+          <div className="mb-4 space-y-4">
+            <h3 className="text-sm font-medium text-gray-500 flex items-center gap-2">
               <Icon name="group" size={16} />
               Заказы стола ({tableOrders.guestCount} {tableOrders.guestCount === 1 ? 'гость' : tableOrders.guestCount < 5 ? 'гостя' : 'гостей'})
             </h3>
             {tableOrders.orders.map((order, idx) => (
-              <div key={idx} className="bg-gray-50 rounded-xl p-3 mb-2 border border-gray-100">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs text-gray-400">
-                    {order.maskedPhone || `Гость ${idx + 1}`}
-                  </p>
-                  {order.isPaid && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                      Оплачено
+              <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                {/* Status header with gradient */}
+                <div className={`px-4 py-2 flex items-center justify-between ${
+                  order.isPaid
+                    ? "bg-gradient-to-r from-green-50 to-emerald-50"
+                    : "bg-gradient-to-r from-primary-light to-primary-50"
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                      order.isPaid ? "bg-green-100" : "bg-primary-50"
+                    }`}>
+                      <Icon
+                        name={order.isPaid ? "check_circle" : "schedule"}
+                        size={14}
+                        className={order.isPaid ? "text-green-500" : "text-primary-dark"}
+                      />
+                    </div>
+                    <span className={`font-medium text-sm ${
+                      order.isPaid ? "text-green-700" : "text-primary-dark"
+                    }`}>
+                      {order.isPaid ? "Оплачено" : "Ожидает оплаты"}
                     </span>
-                  )}
-                </div>
-                {order.items.map((item, i) => (
-                  <div key={i} className="flex justify-between text-sm py-1">
-                    <span className="text-gray-600">
-                      {item.productName}
-                      {item.sizeName && <span className="text-gray-400 text-xs"> ({item.sizeName})</span>}
-                      <span className="text-gray-400"> x{item.quantity}</span>
-                    </span>
-                    <span className="text-gray-700 font-medium">{formatPrice(item.totalPrice)} TJS</span>
                   </div>
-                ))}
-                <div className="border-t border-gray-200 mt-2 pt-2 flex justify-between text-sm">
-                  <span className="text-gray-500">Подитог</span>
-                  <span className="font-medium">{formatPrice(order.subtotal)} TJS</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-white/50 text-gray-600 font-medium">
+                    Гость {idx + 1}
+                  </span>
+                </div>
+
+                {/* Order content */}
+                <div className="p-3 space-y-2">
+                  {/* Guest phone */}
+                  <div className="flex items-center gap-2">
+                    <Icon name="person" size={14} className="text-gray-400" />
+                    <span className="text-xs text-gray-500">
+                      {order.maskedPhone || `Гость ${idx + 1}`}
+                    </span>
+                  </div>
+
+                  {/* Order items */}
+                  {order.items.map((item, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className="text-gray-600">
+                        {item.productName}
+                        {item.sizeName && <span className="text-gray-400 text-xs"> ({item.sizeName})</span>}
+                        <span className="text-gray-400"> x{item.quantity}</span>
+                      </span>
+                      <span className="text-gray-700 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                    </div>
+                  ))}
+
+                  {/* Total */}
+                  <div className="border-t border-gray-100 pt-2 flex justify-between">
+                    <span className="text-sm text-gray-500">Итого</span>
+                    <span className="font-bold text-primary">{formatPrice(order.subtotal)} TJS</span>
+                  </div>
                 </div>
               </div>
             ))}
-            <div className="bg-primary-light rounded-xl p-3 border border-primary-200">
-              <div className="flex justify-between text-sm font-medium text-primary">
+
+            {/* Table total summary */}
+            <div className="bg-gradient-to-r from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200">
+              <div className="flex justify-between font-medium text-primary-dark">
                 <span>Общая сумма стола</span>
-                <span>{formatPrice(tableOrders.tableTotal)} TJS</span>
+                <span className="text-lg font-bold">{formatPrice(tableOrders.tableTotal)} TJS</span>
               </div>
               <p className="text-xs text-primary-600 mt-1">
                 Включает обслуживание {tableOrders.serviceFeePercent}%

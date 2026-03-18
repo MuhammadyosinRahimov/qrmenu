@@ -312,14 +312,19 @@ export default function CheckoutPage() {
         let effectiveTableId = tableId;
         let effectiveTableNumber = tableNumber;
 
-        if (typeof window !== "undefined" && !effectiveTableId && !effectiveTableNumber) {
+        // Always check sessionStorage if any value is missing
+        if (typeof window !== "undefined" && (!effectiveTableId || !effectiveTableNumber)) {
           try {
             const tableStorage = sessionStorage.getItem("table-storage-v2");
             if (tableStorage) {
               const parsed = JSON.parse(tableStorage);
               if (parsed.state) {
-                effectiveTableId = parsed.state.tableId;
-                effectiveTableNumber = parsed.state.tableNumber;
+                if (!effectiveTableId) {
+                  effectiveTableId = parsed.state.tableId;
+                }
+                if (!effectiveTableNumber) {
+                  effectiveTableNumber = parsed.state.tableNumber;
+                }
               }
             }
           } catch (e) {

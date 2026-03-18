@@ -694,48 +694,87 @@ function OrdersPageContent() {
           </div>
         )}
 
-        {/* Other guests' orders section */}
+        {/* Other guests' orders section - displayed as cards */}
         {isQrContext && sessionInfo && sessionInfo.otherOrders.length > 0 && (
-          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
               <Icon name="group" size={18} className="text-gray-500" />
               <span className="text-sm font-medium text-gray-700">
-                Заказы за столом ({sessionInfo.guestCount} гостей)
+                Заказы других гостей ({sessionInfo.otherOrders.length})
               </span>
             </div>
-            <div className="space-y-3">
-              {sessionInfo.otherOrders.map((guestOrder) => (
-                <div key={guestOrder.orderId} className="bg-white p-3 rounded-lg border border-gray-100">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-600">
-                      {guestOrder.maskedPhone || "Гость"}
-                    </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      guestOrder.isPaid
-                        ? "bg-green-100 text-green-700"
-                        : "bg-primary-light text-primary-dark"
+            {sessionInfo.otherOrders.map((guestOrder, guestIndex) => (
+              <div
+                key={guestOrder.orderId}
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
+              >
+                {/* Status header with gradient - similar to user's own orders */}
+                <div className={`px-4 py-3 flex items-center justify-between ${
+                  guestOrder.isPaid
+                    ? "bg-gradient-to-r from-green-50 to-emerald-50"
+                    : "bg-gradient-to-r from-primary-light to-primary-50"
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      guestOrder.isPaid ? "bg-green-100" : "bg-primary-50"
                     }`}>
-                      {guestOrder.isPaid ? "Оплачено" : "Не оплачено"}
+                      <Icon
+                        name={guestOrder.isPaid ? "check_circle" : "schedule"}
+                        size={18}
+                        className={guestOrder.isPaid ? "text-green-500" : "text-primary-dark"}
+                      />
+                    </div>
+                    <span className={`font-medium text-sm ${
+                      guestOrder.isPaid ? "text-green-700" : "text-primary-dark"
+                    }`}>
+                      {guestOrder.isPaid ? "Оплачено" : "Ожидает оплаты"}
                     </span>
                   </div>
+                  <Badge variant={guestOrder.isPaid ? "success" : "warning"} size="sm">
+                    Гость {guestIndex + 1}
+                  </Badge>
+                </div>
+
+                {/* Order content */}
+                <div className="p-4 space-y-3">
+                  {/* Guest info */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
+                      <Icon name="person" size={20} className="text-gray-400" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800">
+                        {guestOrder.maskedPhone || `Гость ${guestIndex + 1}`}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {guestOrder.itemCount} {guestOrder.itemCount === 1 ? "позиция" : guestOrder.itemCount < 5 ? "позиции" : "позиций"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Order items */}
                   <div className="space-y-1">
                     {guestOrder.items.map((item: GuestOrderItem, idx: number) => (
                       <div key={idx} className="flex justify-between text-sm">
                         <span className="text-gray-600">
-                          {item.quantity}x {item.productName}
+                          {item.productName} <span className="text-gray-400">x{item.quantity}</span>
                           {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
                         </span>
-                        <span className="text-gray-500">{formatPrice(item.totalPrice)} TJS</span>
+                        <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
                       </div>
                     ))}
                   </div>
-                  <div className="flex justify-between mt-2 pt-2 border-t border-gray-100">
-                    <span className="text-sm font-medium">Итого:</span>
-                    <span className="text-sm font-semibold">{formatPrice(guestOrder.total)} TJS</span>
+
+                  {/* Divider and total */}
+                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Итого</span>
+                    <span className="text-xl font-bold text-primary">
+                      {formatPrice(guestOrder.total)} TJS
+                    </span>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         )}
 
