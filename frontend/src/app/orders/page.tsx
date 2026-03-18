@@ -1135,7 +1135,7 @@ function OrdersPageContent() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedGuestOrder(null)}>
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-gray-800">Оплатить заказ гостя</h3>
+              <h3 className="text-lg font-bold text-gray-800">Способ оплаты</h3>
               <button
                 onClick={() => setSelectedGuestOrder(null)}
                 className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
@@ -1144,31 +1144,13 @@ function OrdersPageContent() {
               </button>
             </div>
 
-            {/* Guest order summary */}
-            <div className="mb-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <div className="flex items-center gap-2 mb-2">
-                <Icon name="person" size={18} className="text-blue-500" />
-                <span className="text-sm font-medium text-blue-700">
-                  {selectedGuestOrder.maskedPhone || "Гость"}
-                </span>
-              </div>
-              <div className="text-sm text-blue-600 space-y-1">
-                <div className="flex justify-between">
-                  <span>Позиций:</span>
-                  <span className="font-semibold">{selectedGuestOrder.itemCount}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Итого:</span>
-                  <span className="font-semibold">{formatPrice(selectedGuestOrder.total)} TJS</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment buttons */}
-            <div className="space-y-3">
-              <p className="text-sm text-gray-500 font-medium">Способ оплаты</p>
+            {/* Pay for this guest only */}
+            <div className="space-y-3 mb-4">
+              <p className="text-sm text-gray-500 font-medium">
+                Оплатить заказ ({selectedGuestOrder.maskedPhone || "Гость"})
+              </p>
               <div className="grid grid-cols-2 gap-3">
-                {/* Cash payment */}
+                {/* Cash payment for guest */}
                 <button
                   onClick={handleGuestOrderCashPayment}
                   disabled={!!processingPayment}
@@ -1181,8 +1163,8 @@ function OrdersPageContent() {
                   <span className="text-xs text-primary">{formatPrice(selectedGuestOrder.total)} TJS</span>
                 </button>
 
-                {/* Online payment */}
-                {(sessionInfo?.onlinePaymentAvailable || tableOnlinePayment) && (
+                {/* DC payment for guest - only show if paymentLink is available */}
+                {sessionInfo?.paymentLink && (
                   <button
                     onClick={handleGuestOrderDcPayment}
                     disabled={!!processingPayment}
@@ -1197,6 +1179,44 @@ function OrdersPageContent() {
                 )}
               </div>
             </div>
+
+            {/* Pay for entire table */}
+            {sessionInfo && sessionInfo.tableUnpaidAmount > 0 && (
+              <div className="pt-4 border-t border-gray-100">
+                <p className="text-sm text-gray-500 font-medium mb-3">Оплатить за весь стол</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Cash for table */}
+                  <button
+                    onClick={() => {
+                      handlePayForTableCash();
+                      setSelectedGuestOrder(null);
+                    }}
+                    disabled={!!processingPayment}
+                    className="flex flex-col items-center p-3 rounded-xl bg-purple-50 border-2 border-purple-200 hover:border-purple-400 transition-all disabled:opacity-50"
+                  >
+                    <Icon name="groups" size={24} className="text-purple-500 mb-1" />
+                    <span className="text-sm font-semibold text-purple-700">Наличными</span>
+                    <span className="text-xs text-purple-500">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
+                  </button>
+
+                  {/* DC for table */}
+                  {sessionInfo?.paymentLink && (
+                    <button
+                      onClick={() => {
+                        handlePayForTableOnline();
+                        setSelectedGuestOrder(null);
+                      }}
+                      disabled={!!processingPayment}
+                      className="flex flex-col items-center p-3 rounded-xl bg-indigo-50 border-2 border-indigo-200 hover:border-indigo-400 transition-all disabled:opacity-50"
+                    >
+                      <Icon name="credit_score" size={24} className="text-indigo-500 mb-1" />
+                      <span className="text-sm font-semibold text-indigo-700">Картой DC</span>
+                      <span className="text-xs text-indigo-500">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getImageUrl, getPublicTableOrders, PublicTableOrders } from "@/lib/api";
+import { getImageUrl } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useTableStore } from "@/stores/tableStore";
@@ -71,24 +71,12 @@ export default function CartPage() {
     }
   }, [mode, tableNumber, tableId, menuId, router]);
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
-  const [tableOrders, setTableOrders] = useState<PublicTableOrders | null>(null);
-  const [loadingTableOrders, setLoadingTableOrders] = useState(false);
 
   const isDelivery = mode === "delivery";
   const isQrMode = mode === "qr";
 
-  // Load table orders in QR mode
-  useEffect(() => {
-    if (isQrMode && tableId) {
-      setLoadingTableOrders(true);
-      getPublicTableOrders(tableId)
-        .then(setTableOrders)
-        .finally(() => setLoadingTableOrders(false));
-    }
-  }, [isQrMode, tableId]);
-
-  // Calculate service fee - use session data if available, otherwise use local calculation
-  const sessionServiceFeePercent = tableOrders?.serviceFeePercent ?? 10;
+  // Service fee percent (default 10%)
+  const sessionServiceFeePercent = 10;
   const serviceFee = isQrMode ? Math.round(getSubtotal() * sessionServiceFeePercent / 100) : 0;
   const finalTotal = getSubtotal() + serviceFee + (isDelivery ? deliveryFee : 0);
 
@@ -108,8 +96,8 @@ export default function CartPage() {
     });
   };
 
-  // Empty cart but table has orders - show table orders
-  if (items.length === 0 && (!tableOrders || tableOrders.orders.length === 0)) {
+  // Empty cart
+  if (items.length === 0) {
     return (
       <div className="min-h-screen bg-background pb-20">
         <Header title="Корзина" />
@@ -136,113 +124,6 @@ export default function CartPage() {
       <Header title="Корзина" />
 
       <div className="p-4 space-y-4">
-        {/* Table Orders Section - shows orders from other guests as cards */}
-        {isQrMode && tableOrders?.hasActiveSession && tableOrders.orders.length > 0 && (
-          <div className="mb-4 space-y-4">
-            <h3 className="text-sm font-medium text-gray-500 flex items-center gap-2">
-              <Icon name="group" size={16} />
-              Заказы стола ({tableOrders.guestCount} {tableOrders.guestCount === 1 ? 'гость' : tableOrders.guestCount < 5 ? 'гостя' : 'гостей'})
-            </h3>
-            {tableOrders.orders.map((order, idx) => (
-              <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                {/* Status header with gradient */}
-                <div className={`px-4 py-3 flex items-center justify-between ${
-                  order.isPaid
-                    ? "bg-gradient-to-r from-green-50 to-emerald-50"
-                    : "bg-gradient-to-r from-primary-light to-primary-50"
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      order.isPaid ? "bg-green-100" : "bg-primary-50"
-                    }`}>
-                      <Icon
-                        name={order.isPaid ? "check_circle" : "check_circle"}
-                        size={18}
-                        className={order.isPaid ? "text-green-500" : "text-primary-dark"}
-                      />
-                    </div>
-                    <span className={`font-medium text-sm ${
-                      order.isPaid ? "text-green-700" : "text-primary-dark"
-                    }`}>
-                      {order.isPaid ? "Оплачено" : "Подтверждён"}
-                    </span>
-                  </div>
-                  {order.isPaid && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
-                      Оплачено
-                    </span>
-                  )}
-                </div>
-
-                {/* Order content */}
-                <div className="p-4 space-y-3">
-                  {/* Guest info */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
-                        <Icon name="restaurant" size={20} className="text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">
-                          Гость {idx + 1}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {order.maskedPhone || `${order.items.length} ${order.items.length === 1 ? "позиция" : order.items.length < 5 ? "позиции" : "позиций"}`}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Order items */}
-                  <div className="space-y-1">
-                    {order.items.map((item, i) => (
-                      <div key={i} className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          {item.productName} <span className="text-gray-400">x{item.quantity}</span>
-                          {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
-                        </span>
-                        <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Divider and total */}
-                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Итого</span>
-                    <span className="text-xl font-bold text-primary">{formatPrice(order.subtotal)} TJS</span>
-                  </div>
-                </div>
-
-                {/* Action buttons */}
-                {!order.isPaid && (
-                  <div className="px-4 pb-4 grid gap-2 grid-cols-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={navigateToMenu}
-                    >
-                      <Icon name="add" size={18} className="mr-1" />
-                      Добавить
-                    </Button>
-                    <Button size="sm" disabled>
-                      <Icon name="payments" size={18} className="mr-1" />
-                      Оплатить
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* My Cart Items */}
-        {items.length > 0 && isQrMode && (tableOrders?.orders?.length ?? 0) > 0 && (
-          <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
-            <Icon name="person" size={16} />
-            Мои новые блюда
-          </h3>
-        )}
-
         {items.map((item) => {
           const isNoteExpanded = expandedNotes.has(item.id);
 
