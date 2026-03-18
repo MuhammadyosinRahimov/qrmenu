@@ -215,6 +215,13 @@ function OrdersPageContent() {
     // Handle order updates
     connection.on("MyOrderUpdated", () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
+    });
+
+    // Handle order item cancellation
+    connection.on("OrderItemCancelled", () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
     });
 
     // Handle table order updates (for shared table orders)
