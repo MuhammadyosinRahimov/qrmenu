@@ -145,6 +145,14 @@ export default function OrdersPage() {
     loadSessionInfo();
   }, [loadSessionInfo, orders, tableId]); // Added tableId as direct dependency
 
+  // Additional effect to ensure sessionInfo loads when tableId becomes available from URL
+  // This handles the case where tableId is loaded asynchronously via loadTableFromUrl
+  useEffect(() => {
+    if (tableId && isQrContext && isAuthenticated && !sessionInfo && !loadingSessionInfo) {
+      loadSessionInfo();
+    }
+  }, [tableId, isQrContext, isAuthenticated, sessionInfo, loadingSessionInfo, loadSessionInfo]);
+
   // Load public orders when not authenticated but in QR mode
   useEffect(() => {
     const loadPublicOrders = async () => {
@@ -162,6 +170,9 @@ export default function OrdersPage() {
     };
     loadPublicOrders();
   }, [isAuthenticated, mode, tableId]);
+
+  // Ref for SignalR connection to share across useEffects
+  const connectionRef = useRef<signalR.HubConnection | null>(null);
 
   // Update pending orders count - use ref to avoid infinite loop
   // Only count active orders (Pending/Confirmed AND not paid)
@@ -191,6 +202,9 @@ export default function OrdersPage() {
       .withAutomaticReconnect()
       .build();
 
+    // Save to ref for use in other effects
+    connectionRef.current = connection;
+
     // Handle order status updates
     connection.on("MyOrderStatusUpdated", (updatedOrder: Order) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
@@ -213,22 +227,42 @@ export default function OrdersPage() {
     connection.start()
       .then(() => {
         connection.invoke("JoinCustomerGroup", userId);
-        // Join table group if in QR mode for shared table updates
-        if (mode === "qr" && tableId) {
-          connection.invoke("JoinTableGroup", tableId);
-        }
+        // Table group join is handled in a separate useEffect that watches tableId
       })
       .catch((err) => console.error("SignalR connection error:", err));
 
     return () => {
       connection.invoke("LeaveCustomerGroup", userId).catch(() => {});
-      // Leave table group if joined
-      if (mode === "qr" && tableId) {
-        connection.invoke("LeaveTableGroup", tableId).catch(() => {});
-      }
+      connectionRef.current = null;
       connection.stop();
     };
-  }, [isAuthenticated, userId, queryClient, showToast, clearOrderData, mode, tableId, loadSessionInfo]);
+  }, [isAuthenticated, userId, queryClient, showToast, loadSessionInfo]);
+
+  // Separate effect for joining Table group - fires when tableId becomes available
+  useEffect(() => {
+    const connection = connectionRef.current;
+    if (!connection) return;
+
+    const joinTableGroup = () => {
+      if (connection.state === signalR.HubConnectionState.Connected && tableId && isQrContext) {
+        connection.invoke("JoinTableGroup", tableId).catch(console.error);
+      }
+    };
+
+    // Try to join immediately if already connected
+    joinTableGroup();
+
+    // Also subscribe to reconnect events
+    const onReconnected = () => joinTableGroup();
+    connection.onreconnected(onReconnected);
+
+    return () => {
+      // Leave table group when tableId changes or component unmounts
+      if (connection.state === signalR.HubConnectionState.Connected && tableId) {
+        connection.invoke("LeaveTableGroup", tableId).catch(() => {});
+      }
+    };
+  }, [tableId, isQrContext]);
 
   const cancelItemMutation = useMutation({
     mutationFn: ({ orderId, itemId }: { orderId: string; itemId: string }) =>
@@ -718,9 +752,9 @@ export default function OrdersPage() {
           </div>
         )}
 
-        {/* Table payment section - for guests without personal orders but table has unpaid orders */}
-        {filteredOrders.length === 0 && isQrContext && sessionInfo && sessionInfo.tableUnpaidAmount > 0 && (
-          <div className="bg-gradient-to-br from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200">
+        {/* Table bill section - show for ALL guests in QR mode when there are unpaid orders */}
+        {isQrContext && sessionInfo && sessionInfo.guestCount > 0 && (
+          <div className="bg-gradient-to-br from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200 mb-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
                 <Icon name="receipt_long" size={24} className="text-primary" />
@@ -735,8 +769,12 @@ export default function OrdersPage() {
 
             <div className="bg-white rounded-xl p-4 mb-4 space-y-2">
               <div className="flex justify-between text-sm text-gray-600">
-                <span>Общая сумма:</span>
-                <span className="font-medium">{formatPrice(sessionInfo.tableTotal)} TJS</span>
+                <span>Подитог:</span>
+                <span className="font-medium">{formatPrice(sessionInfo.tableSubtotal)} TJS</span>
+              </div>
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
+                <span className="font-medium">{formatPrice(sessionInfo.tableServiceFee)} TJS</span>
               </div>
               {sessionInfo.tablePaidAmount > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
@@ -750,27 +788,29 @@ export default function OrdersPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                onClick={() => handleTableCashPayment()}
-                variant="outline"
-                className="w-full"
-                disabled={!!processingPayment}
-              >
-                <Icon name="payments" size={18} className="mr-2" />
-                Наличными
-              </Button>
-              {tableOnlinePayment && (
+            {sessionInfo.tableUnpaidAmount > 0 && (
+              <div className="grid grid-cols-2 gap-3">
                 <Button
-                  onClick={() => handleTableOnlinePayment()}
+                  onClick={() => handleTableCashPayment()}
+                  variant="outline"
                   className="w-full"
                   disabled={!!processingPayment}
                 >
-                  <Icon name="credit_card" size={18} className="mr-2" />
-                  Картой
+                  <Icon name="payments" size={18} className="mr-2" />
+                  Наличными
                 </Button>
-              )}
-            </div>
+                {tableOnlinePayment && (
+                  <Button
+                    onClick={() => handleTableOnlinePayment()}
+                    className="w-full"
+                    disabled={!!processingPayment}
+                  >
+                    <Icon name="credit_card" size={18} className="mr-2" />
+                    Картой
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         )}
 
