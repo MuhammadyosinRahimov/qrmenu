@@ -673,10 +673,11 @@ function OrdersPageContent() {
           </div>
         )}
 
-        {/* Table total summary card */}
-        {isQrContext && sessionInfo && !loadingSessionInfo && (
-          <div className="bg-gradient-to-r from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-100">
-            <div className="flex items-center justify-between mb-3">
+        {/* QR режим: одна объединённая карточка */}
+        {isQrContext && activeTab === 'active' && sessionInfo && !loadingSessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.length > 0) && (
+          <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            {/* Заголовок с номером стола и количеством гостей */}
+            <div className="px-4 py-3 bg-gradient-to-r from-primary-light to-primary-50 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
                   <Icon name="table_restaurant" size={20} className="text-primary" />
@@ -689,141 +690,117 @@ function OrdersPageContent() {
                 </div>
               </div>
             </div>
-            <div className="space-y-2 bg-white/60 rounded-xl p-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Мой итого:</span>
-                <span className="font-semibold text-gray-800">{formatPrice(sessionInfo.myTotal)} TJS</span>
-              </div>
-              {sessionInfo.guestCount > 1 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Итого другие гости:</span>
-                  <span className="font-medium text-gray-700">{formatPrice(sessionInfo.tableTotal - sessionInfo.myTotal)} TJS</span>
+
+            <div className="p-4 space-y-4">
+              {/* Мои заказы */}
+              {myUnpaidOrders.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="person" size={16} className="text-primary" />
+                    <span className="text-sm font-medium text-gray-700">Ваш заказ</span>
+                  </div>
+                  {myUnpaidOrders.map(order => (
+                    <div key={order.id} className="space-y-1 mb-2" onClick={() => setSelectedOrder(order)}>
+                      {order.items.map(item => {
+                        const normalizedItemStatus = normalizeItemStatus(item.status);
+                        const isCancelled = normalizedItemStatus === "Cancelled";
+                        return (
+                          <div key={item.id} className={`flex justify-between text-sm ${isCancelled ? "opacity-50" : ""}`}>
+                            <span className={`text-gray-600 ${isCancelled ? "line-through" : ""}`}>
+                              {item.productName} <span className="text-gray-400">x{item.quantity}</span>
+                              {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                            </span>
+                            <span className={`text-gray-800 font-medium ${isCancelled ? "line-through" : ""}`}>
+                              {formatPrice(item.totalPrice)} TJS
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                  <div className="flex justify-between text-sm pt-2 border-t border-gray-100 mt-2">
+                    <span className="text-gray-600">Ваш итого:</span>
+                    <span className="font-semibold text-gray-800">{formatPrice(sessionInfo.myTotal)} TJS</span>
+                  </div>
                 </div>
               )}
-              <div className="flex justify-between text-sm text-gray-500 pt-2 border-t border-gray-200">
-                <span>Обслуживание ({sessionInfo.serviceFeePercent}%)</span>
-                <span>включено</span>
-              </div>
-              <div className="flex justify-between font-bold text-lg pt-2 border-t border-primary-200">
-                <span className="text-primary-dark">Итого за стол</span>
-                <span className="text-primary">{formatPrice(sessionInfo.tableTotal)} TJS</span>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {/* Other guests' orders section - displayed as cards like user's own orders */}
-        {isQrContext && sessionInfo && sessionInfo.otherOrders.length > 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Icon name="group" size={18} className="text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">
-                Заказы других гостей ({sessionInfo.otherOrders.length})
-              </span>
-            </div>
-            {sessionInfo.otherOrders.map((guestOrder, guestIndex) => (
-              <div
-                key={guestOrder.orderId}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-              >
-                {/* Status header with gradient */}
-                <div className={`px-4 py-3 flex items-center justify-between ${
-                  guestOrder.isPaid
-                    ? "bg-gradient-to-r from-green-50 to-emerald-50"
-                    : "bg-gradient-to-r from-primary-light to-primary-50"
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      guestOrder.isPaid ? "bg-green-100" : "bg-primary-50"
-                    }`}>
-                      <Icon
-                        name={guestOrder.isPaid ? "check_circle" : "schedule"}
-                        size={18}
-                        className={guestOrder.isPaid ? "text-green-500" : "text-primary-dark"}
-                      />
-                    </div>
-                    <span className={`font-medium text-sm ${
-                      guestOrder.isPaid ? "text-green-700" : "text-primary-dark"
-                    }`}>
-                      {guestOrder.isPaid ? "Оплачено" : "Подтверждён"}
-                    </span>
+              {/* Заказы других гостей */}
+              {sessionInfo.otherOrders.length > 0 && (
+                <div className={myUnpaidOrders.length > 0 ? "pt-3 border-t border-gray-200" : ""}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Icon name="group" size={16} className="text-gray-500" />
+                    <span className="text-sm font-medium text-gray-500">Другие гости</span>
                   </div>
-                  {guestOrder.isPaid && (
-                    <Badge variant="success" size="sm">
-                      <Icon name="check" size={12} className="mr-1" />
-                      Оплачено
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Order content */}
-                <div className="p-4 space-y-3">
-                  {/* Table/Restaurant info - like in the image */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
-                        <Icon name="restaurant" size={20} className="text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-800">
-                          Стол {tableNumber}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {guestOrder.maskedPhone || `${guestOrder.itemCount} ${guestOrder.itemCount === 1 ? "позиция" : guestOrder.itemCount < 5 ? "позиции" : "позиций"}`}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Order items preview */}
-                  <div className="space-y-1">
-                    {guestOrder.items.map((item: GuestOrderItem, idx: number) => (
-                      <div key={idx} className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          {item.productName} <span className="text-gray-400">x{item.quantity}</span>
-                          {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                  {sessionInfo.otherOrders.map((guestOrder, idx) => (
+                    <div key={guestOrder.orderId} className="mb-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-gray-500">
+                          {guestOrder.maskedPhone || `Гость ${idx + 2}`}
                         </span>
-                        <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                        {guestOrder.isPaid && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-600">
+                            Оплачено
+                          </span>
+                        )}
                       </div>
-                    ))}
-                  </div>
-
-                  {/* Divider and total */}
-                  <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Итого</span>
-                    <span className="text-xl font-bold text-primary">
-                      {formatPrice(guestOrder.total)} TJS
-                    </span>
-                  </div>
+                      {guestOrder.items.map((item, i) => (
+                        <div key={i} className="flex justify-between text-sm">
+                          <span className="text-gray-500">
+                            {item.productName} <span className="text-gray-400">x{item.quantity}</span>
+                            {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                          </span>
+                          <span className="text-gray-600">{formatPrice(item.totalPrice)} TJS</span>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                {/* Action buttons - like in the image */}
-                {!guestOrder.isPaid && (
-                  <div className="px-4 pb-4 grid gap-2 grid-cols-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={navigateToMenu}
-                    >
-                      <Icon name="add" size={18} className="mr-1" />
-                      Добавить
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => openPaymentModalForGuest()}
-                    >
-                      <Icon name="payments" size={18} className="mr-1" />
-                      Оплатить
-                    </Button>
+              {/* Итого за стол */}
+              <div className="pt-3 border-t border-gray-200 space-y-1">
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Подитог</span>
+                  <span>{formatPrice(sessionInfo.tableSubtotal)} TJS</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Обслуживание ({sessionInfo.serviceFeePercent}%)</span>
+                  <span>{formatPrice(sessionInfo.tableServiceFee)} TJS</span>
+                </div>
+                {sessionInfo.tablePaidAmount > 0 && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Оплачено</span>
+                    <span>-{formatPrice(sessionInfo.tablePaidAmount)} TJS</span>
                   </div>
                 )}
+                <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-100">
+                  <span className="text-gray-800">
+                    {sessionInfo.tablePaidAmount > 0 ? "К оплате" : "Итого за стол"}
+                  </span>
+                  <span className="text-primary">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
+                </div>
               </div>
-            ))}
+
+              {/* Кнопки */}
+              {sessionInfo.tableUnpaidAmount > 0 && (
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Button variant="outline" size="sm" onClick={navigateToMenu}>
+                    <Icon name="add" size={18} className="mr-1" />
+                    Добавить
+                  </Button>
+                  <Button size="sm" onClick={() => openPaymentModalForGuest()}>
+                    <Icon name="payments" size={18} className="mr-1" />
+                    Оплатить
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Empty state for current tab */}
-        {filteredOrders.length === 0 && (
+        {/* Empty state for current tab - only show when no orders at all */}
+        {filteredOrders.length === 0 && !(isQrContext && activeTab === 'active' && sessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.length > 0)) && (
           <div className="flex flex-col items-center justify-center py-12 px-4">
             <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
               <Icon name={activeTab === 'active' ? "receipt_long" : "history"} size={32} className="text-gray-400" />
@@ -842,7 +819,8 @@ function OrdersPageContent() {
           </div>
         )}
 
-        {filteredOrders.map((order) => {
+        {/* НЕ QR режим ИЛИ история: отдельные карточки по-старому */}
+        {(!isQrContext || activeTab === 'history') && filteredOrders.map((order) => {
           if (!order) return null;
           const normalizedStatus = normalizeOrderStatus(order.status);
           const status = statusConfig[normalizedStatus] || { label: String(order.status) || "Неизвестно", variant: "default" as const, icon: "help", color: "gray" };
