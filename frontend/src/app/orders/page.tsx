@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as signalR from "@microsoft/signalr";
 import { useAuthStore } from "@/stores/authStore";
@@ -9,7 +9,7 @@ import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useOrderStore } from "@/stores/orderStore";
-import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, type PublicTableOrders } from "@/lib/api";
+import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, getTableByNumber, type PublicTableOrders } from "@/lib/api";
 import { Header } from "@/components/layout/Header";
 
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -40,9 +40,10 @@ const itemStatusConfig: Record<
 
 export default function OrdersPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isAuthenticated, userId } = useAuthStore();
-  const { onlinePaymentAvailable: tableOnlinePayment, tableId, tableNumber, menuId } = useTableStore();
-  const { mode } = useOrderModeStore();
+  const { onlinePaymentAvailable: tableOnlinePayment, tableId, tableNumber, menuId, setTable } = useTableStore();
+  const { mode, setMode } = useOrderModeStore();
   const { clearCart } = useCartStore();
   const { clearMode } = useOrderModeStore();
   const { setPendingCount } = useOrderStore();
@@ -57,6 +58,44 @@ export default function OrdersPage() {
   const [loadingSessionInfo, setLoadingSessionInfo] = useState(false);
   const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
   const [loadingPublicOrders, setLoadingPublicOrders] = useState(false);
+  const [loadingTableFromUrl, setLoadingTableFromUrl] = useState(false);
+
+  // Read URL params
+  const urlTableParam = searchParams.get("table");
+  const urlMenuParam = searchParams.get("menu");
+
+  // Determine if we're in QR context (from URL or store)
+  const isQrContext = mode === "qr" || !!urlTableParam;
+  const effectiveTableId = tableId;
+
+  // Populate store from URL params if needed (for direct navigation or refresh)
+  useEffect(() => {
+    const loadTableFromUrl = async () => {
+      // If we have URL params but no tableId in store, load from API
+      if (urlTableParam && !tableId) {
+        setLoadingTableFromUrl(true);
+        try {
+          const table = await getTableByNumber(parseInt(urlTableParam, 10));
+          setTable({
+            id: table.id,
+            number: table.number,
+            restaurantId: table.restaurantId,
+            restaurantName: table.restaurantName,
+            menuId: urlMenuParam || table.menuId,
+            menuName: table.menuName,
+            restaurantPhone: table.restaurantPhone,
+            onlinePaymentAvailable: table.onlinePaymentAvailable,
+          });
+          setMode("qr");
+        } catch (error) {
+          console.error("Failed to load table from URL params:", error);
+        } finally {
+          setLoadingTableFromUrl(false);
+        }
+      }
+    };
+    loadTableFromUrl();
+  }, [urlTableParam, urlMenuParam, tableId, setTable, setMode]);
 
   // Clear cart when order is completed (but keep table info for QR mode)
   const clearOrderData = useCallback((orderType?: OrderType) => {
@@ -87,7 +126,8 @@ export default function OrdersPage() {
 
   // Callback to load session info - used by initial load and SignalR updates
   const loadSessionInfo = useCallback(async () => {
-    if (mode === "qr" && tableId && isAuthenticated) {
+    // Use isQrContext to also consider URL params
+    if ((mode === "qr" || isQrContext) && tableId && isAuthenticated) {
       setLoadingSessionInfo(true);
       try {
         const info = await getMySessionInfo(tableId);
@@ -98,12 +138,12 @@ export default function OrdersPage() {
         setLoadingSessionInfo(false);
       }
     }
-  }, [mode, tableId, isAuthenticated]);
+  }, [mode, tableId, isAuthenticated, isQrContext]);
 
   // Load session info for QR mode to show other guests' orders
   useEffect(() => {
     loadSessionInfo();
-  }, [loadSessionInfo, orders]);
+  }, [loadSessionInfo, orders, tableId]); // Added tableId as direct dependency
 
   // Load public orders when not authenticated but in QR mode
   useEffect(() => {
@@ -284,6 +324,40 @@ export default function OrdersPage() {
     }
   };
 
+  // Handle table payment (cash) - for guests without personal orders
+  const handleTableCashPayment = async () => {
+    if (!sessionInfo) return;
+    setProcessingPayment('table-cash');
+    try {
+      await payForTable(sessionInfo.sessionId, 'cash');
+      showToast("Официант скоро подойдёт для оплаты за стол", "success");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo(); // Refresh session info
+    } catch (error) {
+      showToast("Ошибка запроса оплаты", "error");
+    } finally {
+      setProcessingPayment(null);
+    }
+  };
+
+  // Handle table payment (online) - for guests without personal orders
+  const handleTableOnlinePayment = async () => {
+    if (!sessionInfo) return;
+    setProcessingPayment('table-online');
+    try {
+      const result = await payForTable(sessionInfo.sessionId, 'online');
+      if (result.paymentLink) {
+        window.location.href = result.paymentLink;
+      } else {
+        showToast("Онлайн оплата недоступна", "error");
+      }
+    } catch (error) {
+      showToast("Ошибка создания платежа", "error");
+    } finally {
+      setProcessingPayment(null);
+    }
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("ru-RU").format(price);
   };
@@ -326,7 +400,7 @@ export default function OrdersPage() {
 
   if (!isAuthenticated) {
     // If QR mode and has table orders - show them
-    if (mode === "qr" && tableId && (loadingPublicOrders || publicOrders?.hasActiveSession)) {
+    if (isQrContext && (loadingTableFromUrl || (tableId && (loadingPublicOrders || publicOrders?.hasActiveSession)))) {
       return (
         <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
           <Header title="Заказы стола" />
@@ -353,7 +427,7 @@ export default function OrdersPage() {
           </div>
 
           <div className="p-4 space-y-4 max-w-lg mx-auto">
-            {loadingPublicOrders ? (
+            {(loadingTableFromUrl || loadingPublicOrders) ? (
               <div className="space-y-4">
                 {Array.from({ length: 2 }).map((_, i) => (
                   <div key={i} className="bg-white rounded-2xl p-4 animate-pulse border border-gray-100 shadow-sm">
@@ -566,8 +640,21 @@ export default function OrdersPage() {
       </div>
 
       <div className="p-4 space-y-4 max-w-lg mx-auto">
+        {/* Loading state for session info */}
+        {isQrContext && loadingSessionInfo && (
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 animate-pulse">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-5 h-5 bg-gray-200 rounded" />
+              <div className="h-4 bg-gray-200 rounded w-32" />
+            </div>
+            <div className="space-y-2">
+              <div className="h-16 bg-gray-200 rounded-lg" />
+            </div>
+          </div>
+        )}
+
         {/* Other guests' orders section */}
-        {mode === "qr" && sessionInfo && sessionInfo.otherOrders.length > 0 && (
+        {isQrContext && sessionInfo && sessionInfo.otherOrders.length > 0 && (
           <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
             <div className="flex items-center gap-2 mb-3">
               <Icon name="group" size={18} className="text-gray-500" />
@@ -617,11 +704,73 @@ export default function OrdersPage() {
             <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
               <Icon name={activeTab === 'active' ? "receipt_long" : "history"} size={32} className="text-gray-400" />
             </div>
-            <p className="text-gray-500 text-center">
+            <p className="text-gray-500 text-center mb-4">
               {activeTab === 'active'
-                ? "Нет активных заказов"
+                ? (isQrContext ? "У вас нет заказов" : "Нет активных заказов")
                 : "История заказов пуста"}
             </p>
+            {activeTab === 'active' && isQrContext && (
+              <Button onClick={navigateToMenu} size="sm">
+                <Icon name="add" size={18} className="mr-2" />
+                Добавить заказ
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* Table payment section - for guests without personal orders but table has unpaid orders */}
+        {filteredOrders.length === 0 && isQrContext && sessionInfo && sessionInfo.tableUnpaidAmount > 0 && (
+          <div className="bg-gradient-to-br from-primary-light to-primary-50 rounded-2xl p-4 border border-primary-200">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
+                <Icon name="receipt_long" size={24} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="font-bold text-primary-dark">Счёт стола</h3>
+                <p className="text-sm text-primary">
+                  {sessionInfo.guestCount} {sessionInfo.guestCount === 1 ? "гость" : sessionInfo.guestCount < 5 ? "гостя" : "гостей"}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-4 mb-4 space-y-2">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Общая сумма:</span>
+                <span className="font-medium">{formatPrice(sessionInfo.tableTotal)} TJS</span>
+              </div>
+              {sessionInfo.tablePaidAmount > 0 && (
+                <div className="flex justify-between text-sm text-green-600">
+                  <span>Уже оплачено:</span>
+                  <span className="font-medium">{formatPrice(sessionInfo.tablePaidAmount)} TJS</span>
+                </div>
+              )}
+              <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-100">
+                <span>К оплате:</span>
+                <span className="text-primary">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                onClick={() => handleTableCashPayment()}
+                variant="outline"
+                className="w-full"
+                disabled={!!processingPayment}
+              >
+                <Icon name="payments" size={18} className="mr-2" />
+                Наличными
+              </Button>
+              {tableOnlinePayment && (
+                <Button
+                  onClick={() => handleTableOnlinePayment()}
+                  className="w-full"
+                  disabled={!!processingPayment}
+                >
+                  <Icon name="credit_card" size={18} className="mr-2" />
+                  Картой
+                </Button>
+              )}
+            </div>
           </div>
         )}
 
