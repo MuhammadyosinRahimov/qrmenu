@@ -122,7 +122,7 @@ export default function CartPage() {
     }
   }, [items]);
 
-  // Handle size change - size price REPLACES base price
+  // Handle size change - size price REPLACES base price completely
   const handleSizeChange = (itemId: string, item: typeof items[0], sizeId: string) => {
     const sizes = productSizes[item.productId];
     if (!sizes) return;
@@ -130,19 +130,10 @@ export default function CartPage() {
     const newSize = sizes.find(s => s.id === sizeId);
     if (!newSize) return;
 
-    // Size price replaces the base product price (not adds to it)
-    // But we need to keep addon prices if any
-    const currentSize = sizes.find(s => s.id === item.sizeId);
-    const currentSizePrice = currentSize?.priceModifier || 0;
-    const newSizePrice = newSize.priceModifier;
-
-    // Calculate addon total (current unit price minus size/base price)
-    const addonTotal = currentSizePrice > 0
-      ? item.unitPrice - currentSizePrice
-      : 0; // If no size was selected, assume no addons for simplicity
-
-    // New unit price = new size price + addons
-    const newUnitPrice = newSizePrice > 0 ? newSizePrice + addonTotal : item.unitPrice;
+    // Size price REPLACES the base price completely
+    const newUnitPrice = newSize.priceModifier > 0
+      ? newSize.priceModifier
+      : item.unitPrice;
 
     updateItemSize(itemId, sizeId, newSize.name, newUnitPrice);
     setExpandedSizeSelector(null);

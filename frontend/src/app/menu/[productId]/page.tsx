@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getProduct, getImageUrl } from "@/lib/api";
@@ -26,14 +26,17 @@ export default function ProductPage() {
   });
 
   // Set default size when product loads
-  useMemo(() => {
-    if (product?.sizes) {
+  useEffect(() => {
+    if (product?.sizes && product.sizes.length > 0 && !selectedSizeId) {
       const defaultSize = product.sizes.find((s) => s.isDefault);
-      if (defaultSize && !selectedSizeId) {
+      if (defaultSize) {
         setSelectedSizeId(defaultSize.id);
+      } else {
+        // If no default, select the first size
+        setSelectedSizeId(product.sizes[0].id);
       }
     }
-  }, [product?.sizes, selectedSizeId]);
+  }, [product?.sizes]);
 
   // Calculate unit price - size price REPLACES base price if > 0
   const unitPrice = useMemo(() => {
