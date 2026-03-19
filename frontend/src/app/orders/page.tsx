@@ -361,7 +361,7 @@ function OrdersPageContent() {
   const handleDcPayment = (order: Order) => {
     if (order.paymentLink) {
       // Умножаем на 100 для конвертации в тийины (копейки)
-      const amountInTiyn = Math.round(order.total * 100);
+      const amountInTiyn = Math.round(order.total * 0);
       const finalLink = order.paymentLink.replace('{amount}', amountInTiyn.toString());
       window.location.href = finalLink;
     } else {
