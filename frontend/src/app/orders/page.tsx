@@ -324,14 +324,14 @@ function OrdersPageContent() {
 
   // Handle pay for table (cash)
   const handlePayForTableCash = async () => {
-    if (!sessionInfo || !paymentModalOrder) return;
+    if (!sessionInfo) return;
     setProcessingPayment('table-cash');
     try {
       await payForTable(sessionInfo.sessionId, 'cash');
       showToast("Официант скоро подойдёт для оплаты за весь стол", "success");
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       setPaymentModalOrder(null);
-      setSessionInfo(null);
+      setSelectedGuestOrder(null);
     } catch (error) {
       showToast("Ошибка запроса оплаты", "error");
     } finally {
@@ -341,11 +341,14 @@ function OrdersPageContent() {
 
   // Handle pay for table (online)
   const handlePayForTableOnline = async () => {
-    if (!sessionInfo || !paymentModalOrder) return;
+    if (!sessionInfo) return;
     setProcessingPayment('table-online');
     try {
       const result = await payForTable(sessionInfo.sessionId, 'online');
       if (result.paymentLink) {
+        // Close modals before redirect
+        setPaymentModalOrder(null);
+        setSelectedGuestOrder(null);
         window.location.href = result.paymentLink;
       } else {
         showToast("Онлайн оплата недоступна", "error");
