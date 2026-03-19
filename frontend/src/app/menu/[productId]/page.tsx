@@ -35,15 +35,18 @@ export default function ProductPage() {
     }
   }, [product?.sizes, selectedSizeId]);
 
-  // Calculate unit price (base + size modifier)
+  // Calculate unit price - size price REPLACES base price if > 0
   const unitPrice = useMemo(() => {
     if (!product) return 0;
-    let price = product.basePrice;
     if (selectedSizeId) {
       const size = product.sizes.find((s) => s.id === selectedSizeId);
-      if (size) price += size.priceModifier;
+      // If size has a price (priceModifier > 0), use it as the actual price
+      if (size && size.priceModifier > 0) {
+        return size.priceModifier;
+      }
     }
-    return price;
+    // Otherwise use base price
+    return product.basePrice;
   }, [product, selectedSizeId]);
 
   const totalPrice = useMemo(() => {
@@ -182,23 +185,34 @@ export default function ProductPage() {
         {/* Sizes */}
         {product.sizes.length > 0 && (
           <div>
-            <h3 className="text-sm font-semibold text-muted mb-3">Размер</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="text-sm font-semibold text-muted mb-3">Выберите размер</h3>
+            <div className="grid grid-cols-2 gap-3">
               {product.sizes.map((size) => (
                 <button
                   key={size.id}
                   onClick={() => setSelectedSizeId(size.id)}
-                  className={`px-4 py-2 rounded-xl border transition-all ${
+                  className={`relative p-4 rounded-2xl border-2 transition-all text-left ${
                     selectedSizeId === size.id
-                      ? "border-primary bg-primary-light text-primary-dark"
-                      : "border-border text-muted hover:border-primary-300"
+                      ? "border-primary bg-primary-light shadow-md"
+                      : "border-border bg-white hover:border-primary-300 hover:shadow-sm"
                   }`}
                 >
-                  <span className="text-sm font-medium">{size.name}</span>
+                  <span className={`block text-base font-semibold ${
+                    selectedSizeId === size.id ? "text-primary-dark" : "text-foreground"
+                  }`}>
+                    {size.name}
+                  </span>
                   {size.priceModifier > 0 && (
-                    <span className="text-xs ml-1">
-                      (+{formatPrice(size.priceModifier)} TJS)
+                    <span className={`block text-xl font-bold mt-1 ${
+                      selectedSizeId === size.id ? "text-primary" : "text-primary"
+                    }`}>
+                      {formatPrice(size.priceModifier)} TJS
                     </span>
+                  )}
+                  {selectedSizeId === size.id && (
+                    <div className="absolute top-3 right-3">
+                      <Icon name="check_circle" size={22} className="text-primary" />
+                    </div>
                   )}
                 </button>
               ))}

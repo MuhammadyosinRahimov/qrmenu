@@ -128,7 +128,7 @@ export default function CartPage() {
     }
   };
 
-  // Handle size change
+  // Handle size change - size price REPLACES base price
   const handleSizeChange = (itemId: string, item: typeof items[0], sizeId: string) => {
     const sizes = productSizes[item.productId];
     if (!sizes) return;
@@ -136,16 +136,19 @@ export default function CartPage() {
     const newSize = sizes.find(s => s.id === sizeId);
     if (!newSize) return;
 
-    // Calculate new unit price: base price + size modifier + addons
-    // We need to recalculate from base price
+    // Size price replaces the base product price (not adds to it)
+    // But we need to keep addon prices if any
     const currentSize = sizes.find(s => s.id === item.sizeId);
-    const currentSizeModifier = currentSize?.priceModifier || 0;
-    const newSizeModifier = newSize.priceModifier;
+    const currentSizePrice = currentSize?.priceModifier || 0;
+    const newSizePrice = newSize.priceModifier;
 
-    // Get base unit price (current unit price - current size modifier)
-    // But we also have addon prices included, so we just adjust the difference
-    const priceDifference = newSizeModifier - currentSizeModifier;
-    const newUnitPrice = item.unitPrice + priceDifference;
+    // Calculate addon total (current unit price minus size/base price)
+    const addonTotal = currentSizePrice > 0
+      ? item.unitPrice - currentSizePrice
+      : 0; // If no size was selected, assume no addons for simplicity
+
+    // New unit price = new size price + addons
+    const newUnitPrice = newSizePrice > 0 ? newSizePrice + addonTotal : item.unitPrice;
 
     updateItemSize(itemId, sizeId, newSize.name, newUnitPrice);
     setExpandedSizeSelector(null);
@@ -227,33 +230,40 @@ export default function CartPage() {
                   </button>
                   {/* Size selector dropdown */}
                   {expandedSizeSelector === item.id && (
-                    <div className="mt-2 p-2 bg-gray-50 rounded-xl border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                    <div className="mt-3 p-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm animate-in slide-in-from-top-2 duration-200">
                       {productSizes[item.productId] && productSizes[item.productId].length > 0 ? (
                         <>
-                          <p className="text-xs text-gray-500 mb-2">Выберите размер:</p>
-                          <div className="flex flex-wrap gap-1">
+                          <p className="text-sm font-medium text-gray-700 mb-3">Выберите размер:</p>
+                          <div className="grid grid-cols-2 gap-2">
                             {productSizes[item.productId].map((size) => (
                               <button
                                 key={size.id}
                                 onClick={() => handleSizeChange(item.id, item, size.id)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                className={`relative p-3 rounded-xl text-left transition-all ${
                                   item.sizeId === size.id
-                                    ? "bg-primary text-white"
-                                    : "bg-white border border-gray-200 text-gray-700 hover:border-primary"
+                                    ? "bg-primary text-white shadow-md ring-2 ring-primary ring-offset-2"
+                                    : "bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:shadow-sm"
                                 }`}
                               >
-                                {size.name}
+                                <span className="block text-sm font-semibold">{size.name}</span>
                                 {size.priceModifier > 0 && (
-                                  <span className="ml-1 opacity-75">
-                                    +{formatPrice(size.priceModifier)}
+                                  <span className={`block text-lg font-bold mt-1 ${
+                                    item.sizeId === size.id ? "text-white" : "text-primary"
+                                  }`}>
+                                    {formatPrice(size.priceModifier)} TJS
                                   </span>
+                                )}
+                                {item.sizeId === size.id && (
+                                  <div className="absolute top-2 right-2">
+                                    <Icon name="check_circle" size={18} className="text-white" />
+                                  </div>
                                 )}
                               </button>
                             ))}
                           </div>
                         </>
                       ) : (
-                        <p className="text-xs text-gray-500">Размеры недоступны для этого товара</p>
+                        <p className="text-sm text-gray-500 text-center py-2">Размеры недоступны</p>
                       )}
                     </div>
                   )}
