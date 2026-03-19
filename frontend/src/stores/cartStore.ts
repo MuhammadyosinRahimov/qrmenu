@@ -9,6 +9,7 @@ interface CartState {
   removeItem: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   updateItemNote: (itemId: string, note: string) => void;
+  updateItemSize: (itemId: string, sizeId: string, sizeName: string, newUnitPrice: number) => void;
   clearCart: () => void;
   getSubtotal: () => number;
   getTax: () => number;
@@ -71,6 +72,50 @@ export const useCartStore = create<CartState>()(
             i.id === itemId ? { ...i, note } : i
           ),
         });
+      },
+
+      updateItemSize: (itemId, sizeId, sizeName, newUnitPrice) => {
+        const item = get().items.find((i) => i.id === itemId);
+        if (!item) return;
+
+        // Generate new ID based on new size
+        const newId = `${item.productId}-${sizeId || "default"}-${item.addonIds.sort().join(",")}`;
+
+        // Check if item with new ID already exists
+        const existingItem = get().items.find((i) => i.id === newId && i.id !== itemId);
+
+        if (existingItem) {
+          // Merge quantities and remove old item
+          set({
+            items: get().items
+              .filter((i) => i.id !== itemId)
+              .map((i) =>
+                i.id === newId
+                  ? {
+                      ...i,
+                      quantity: i.quantity + item.quantity,
+                      totalPrice: (i.quantity + item.quantity) * i.unitPrice,
+                    }
+                  : i
+              ),
+          });
+        } else {
+          // Update item with new size
+          set({
+            items: get().items.map((i) =>
+              i.id === itemId
+                ? {
+                    ...i,
+                    id: newId,
+                    sizeId,
+                    sizeName,
+                    unitPrice: newUnitPrice,
+                    totalPrice: item.quantity * newUnitPrice,
+                  }
+                : i
+            ),
+          });
+        }
       },
 
       clearCart: () => set({ items: [] }),

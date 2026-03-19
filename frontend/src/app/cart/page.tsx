@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { getImageUrl } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { getImageUrl, getProduct } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useTableStore } from "@/stores/tableStore";
 import { Header } from "@/components/layout/Header";
-import { useCallback } from "react";
+import type { ProductSize } from "@/types";
 
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
@@ -15,10 +16,13 @@ import { Icon } from "@/components/ui/Icon";
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, updateQuantity, updateItemNote, removeItem, getSubtotal, getTax, getTotal } =
+  const { items, updateQuantity, updateItemNote, updateItemSize, removeItem, getSubtotal, getTax, getTotal } =
     useCartStore();
   const { mode, deliveryFee } = useOrderModeStore();
   const { tableId, tableNumber, menuId } = useTableStore();
+  const [expandedSizeSelector, setExpandedSizeSelector] = useState<string | null>(null);
+  const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
+  const [productSizes, setProductSizes] = useState<Record<string, ProductSize[]>>({});
 
   // Navigate to menu with QR params preserved
   const navigateToMenu = useCallback(() => {
@@ -96,6 +100,57 @@ export default function CartPage() {
     });
   };
 
+  // Load product sizes for size selector
+  const handleOpenSizeSelector = async (itemId: string, productId: string) => {
+    if (expandedSizeSelector === itemId) {
+      setExpandedSizeSelector(null);
+      return;
+    }
+
+    // If we already have sizes for this product, just open
+    if (productSizes[productId]) {
+      setExpandedSizeSelector(itemId);
+      return;
+    }
+
+    // Fetch product to get sizes
+    setLoadingProductId(productId);
+    try {
+      const product = await getProduct(productId);
+      if (product && product.sizes.length > 0) {
+        setProductSizes(prev => ({ ...prev, [productId]: product.sizes }));
+        setExpandedSizeSelector(itemId);
+      }
+    } catch (error) {
+      console.error("Failed to load product sizes:", error);
+    } finally {
+      setLoadingProductId(null);
+    }
+  };
+
+  // Handle size change
+  const handleSizeChange = (itemId: string, item: typeof items[0], sizeId: string) => {
+    const sizes = productSizes[item.productId];
+    if (!sizes) return;
+
+    const newSize = sizes.find(s => s.id === sizeId);
+    if (!newSize) return;
+
+    // Calculate new unit price: base price + size modifier + addons
+    // We need to recalculate from base price
+    const currentSize = sizes.find(s => s.id === item.sizeId);
+    const currentSizeModifier = currentSize?.priceModifier || 0;
+    const newSizeModifier = newSize.priceModifier;
+
+    // Get base unit price (current unit price - current size modifier)
+    // But we also have addon prices included, so we just adjust the difference
+    const priceDifference = newSizeModifier - currentSizeModifier;
+    const newUnitPrice = item.unitPrice + priceDifference;
+
+    updateItemSize(itemId, sizeId, newSize.name, newUnitPrice);
+    setExpandedSizeSelector(null);
+  };
+
   // Empty cart
   if (items.length === 0) {
     return (
@@ -153,11 +208,49 @@ export default function CartPage() {
                   <h3 className="font-semibold text-gray-800 line-clamp-1">
                     {item.productName}
                   </h3>
+                  {/* Size badge with change option */}
                   {item.sizeName && (
-                    <p className="text-xs text-gray-400">{item.sizeName}</p>
+                    <button
+                      onClick={() => handleOpenSizeSelector(item.id, item.productId)}
+                      className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary-light text-primary-dark rounded-full text-xs font-medium hover:bg-primary-200 transition-colors"
+                    >
+                      <Icon name="straighten" size={12} />
+                      {item.sizeName}
+                      {loadingProductId === item.productId ? (
+                        <Icon name="sync" size={12} className="animate-spin" />
+                      ) : (
+                        <Icon name="expand_more" size={12} />
+                      )}
+                    </button>
+                  )}
+                  {/* Size selector dropdown */}
+                  {expandedSizeSelector === item.id && productSizes[item.productId] && (
+                    <div className="mt-2 p-2 bg-gray-50 rounded-xl border border-gray-200 animate-in slide-in-from-top-2 duration-200">
+                      <p className="text-xs text-gray-500 mb-2">Выберите размер:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {productSizes[item.productId].map((size) => (
+                          <button
+                            key={size.id}
+                            onClick={() => handleSizeChange(item.id, item, size.id)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              item.sizeId === size.id
+                                ? "bg-primary text-white"
+                                : "bg-white border border-gray-200 text-gray-700 hover:border-primary"
+                            }`}
+                          >
+                            {size.name}
+                            {size.priceModifier > 0 && (
+                              <span className="ml-1 opacity-75">
+                                +{formatPrice(size.priceModifier)}
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
                   {item.addonNames.length > 0 && (
-                    <p className="text-xs text-gray-400 line-clamp-1">
+                    <p className="text-xs text-gray-400 line-clamp-1 mt-1">
                       + {item.addonNames.join(", ")}
                     </p>
                   )}
