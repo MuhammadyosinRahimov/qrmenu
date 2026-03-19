@@ -208,45 +208,53 @@ export default function CartPage() {
                   <h3 className="font-semibold text-gray-800 line-clamp-1">
                     {item.productName}
                   </h3>
-                  {/* Size badge with change option */}
-                  {item.sizeName && (
-                    <button
-                      onClick={() => handleOpenSizeSelector(item.id, item.productId)}
-                      className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary-light text-primary-dark rounded-full text-xs font-medium hover:bg-primary-200 transition-colors"
-                    >
-                      <Icon name="straighten" size={12} />
-                      {item.sizeName}
-                      {loadingProductId === item.productId ? (
-                        <Icon name="sync" size={12} className="animate-spin" />
-                      ) : (
-                        <Icon name="expand_more" size={12} />
-                      )}
-                    </button>
-                  )}
+                  {/* Size badge with change option - show if size selected OR sizes available */}
+                  <button
+                    onClick={() => handleOpenSizeSelector(item.id, item.productId)}
+                    className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
+                      item.sizeName
+                        ? 'bg-primary-light text-primary-dark hover:bg-primary-200'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Icon name="straighten" size={12} />
+                    {item.sizeName || 'Выбрать размер'}
+                    {loadingProductId === item.productId ? (
+                      <Icon name="sync" size={12} className="animate-spin" />
+                    ) : (
+                      <Icon name="expand_more" size={12} />
+                    )}
+                  </button>
                   {/* Size selector dropdown */}
-                  {expandedSizeSelector === item.id && productSizes[item.productId] && (
+                  {expandedSizeSelector === item.id && (
                     <div className="mt-2 p-2 bg-gray-50 rounded-xl border border-gray-200 animate-in slide-in-from-top-2 duration-200">
-                      <p className="text-xs text-gray-500 mb-2">Выберите размер:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {productSizes[item.productId].map((size) => (
-                          <button
-                            key={size.id}
-                            onClick={() => handleSizeChange(item.id, item, size.id)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                              item.sizeId === size.id
-                                ? "bg-primary text-white"
-                                : "bg-white border border-gray-200 text-gray-700 hover:border-primary"
-                            }`}
-                          >
-                            {size.name}
-                            {size.priceModifier > 0 && (
-                              <span className="ml-1 opacity-75">
-                                +{formatPrice(size.priceModifier)}
-                              </span>
-                            )}
-                          </button>
-                        ))}
-                      </div>
+                      {productSizes[item.productId] && productSizes[item.productId].length > 0 ? (
+                        <>
+                          <p className="text-xs text-gray-500 mb-2">Выберите размер:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {productSizes[item.productId].map((size) => (
+                              <button
+                                key={size.id}
+                                onClick={() => handleSizeChange(item.id, item, size.id)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                  item.sizeId === size.id
+                                    ? "bg-primary text-white"
+                                    : "bg-white border border-gray-200 text-gray-700 hover:border-primary"
+                                }`}
+                              >
+                                {size.name}
+                                {size.priceModifier > 0 && (
+                                  <span className="ml-1 opacity-75">
+                                    +{formatPrice(size.priceModifier)}
+                                  </span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="text-xs text-gray-500">Размеры недоступны для этого товара</p>
+                      )}
                     </div>
                   )}
                   {item.addonNames.length > 0 && (

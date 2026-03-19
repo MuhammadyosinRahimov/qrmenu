@@ -17,6 +17,8 @@ export interface Product {
   prepTimeMinutes: number;
   isAvailable: boolean;
   categoryId: string;
+  sizesCount?: number;
+  sizes?: ProductSize[];
 }
 
 export interface ProductDetail extends Product {
