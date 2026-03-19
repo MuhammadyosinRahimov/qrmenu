@@ -35,16 +35,21 @@ export default function ProductPage() {
     }
   }, [product?.sizes, selectedSizeId]);
 
-  const totalPrice = useMemo(() => {
+  // Calculate unit price (base + size modifier)
+  const unitPrice = useMemo(() => {
     if (!product) return 0;
-
     let price = product.basePrice;
-
-    // Add size modifier
     if (selectedSizeId) {
       const size = product.sizes.find((s) => s.id === selectedSizeId);
       if (size) price += size.priceModifier;
     }
+    return price;
+  }, [product, selectedSizeId]);
+
+  const totalPrice = useMemo(() => {
+    if (!product) return 0;
+
+    let price = unitPrice;
 
     // Add addons
     selectedAddonIds.forEach((addonId) => {
@@ -53,7 +58,7 @@ export default function ProductPage() {
     });
 
     return price * quantity;
-  }, [product, selectedSizeId, selectedAddonIds, quantity]);
+  }, [product, unitPrice, selectedAddonIds, quantity]);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -63,9 +68,9 @@ export default function ProductPage() {
       selectedAddonIds.includes(a.id)
     );
 
-    let unitPrice = product.basePrice;
-    if (selectedSize) unitPrice += selectedSize.priceModifier;
-    selectedAddons.forEach((a) => (unitPrice += a.price));
+    // Calculate cart unit price (base + size + addons)
+    let cartUnitPrice = unitPrice; // unitPrice already includes size modifier
+    selectedAddons.forEach((a) => (cartUnitPrice += a.price));
 
     addItem({
       productId: product.id,
@@ -76,8 +81,8 @@ export default function ProductPage() {
       addonIds: selectedAddonIds,
       addonNames: selectedAddons.map((a) => a.name),
       quantity,
-      unitPrice,
-      totalPrice: unitPrice * quantity,
+      unitPrice: cartUnitPrice,
+      totalPrice: cartUnitPrice * quantity,
     });
 
     router.push("/cart");
@@ -142,7 +147,7 @@ export default function ProductPage() {
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-2xl font-bold text-foreground">{product.name}</h1>
             <span className="text-xl font-bold text-primary">
-              {formatPrice(product.basePrice)} TJS
+              {formatPrice(unitPrice)} TJS
             </span>
           </div>
           <p className="text-muted mt-2">{product.description}</p>
