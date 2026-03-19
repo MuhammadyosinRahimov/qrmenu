@@ -1719,20 +1719,29 @@ function OrdersPageContent() {
               })}
 
               {/* Order totals */}
-              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-                <div className="flex justify-between text-gray-500">
-                  <span>Подитог</span>
-                  <span>{formatPrice(selectedOrder.subtotal)} TJS</span>
-                </div>
-                <div className="flex justify-between text-gray-500">
-                  <span>Обслуживание</span>
-                  <span>{formatPrice(selectedOrder.serviceFee)} TJS</span>
-                </div>
-                <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-200">
-                  <span>Итого</span>
-                  <span className="text-primary">{formatPrice(selectedOrder.total)} TJS</span>
-                </div>
-              </div>
+              {(() => {
+                // Calculate service fee from session info or default 10%
+                const serviceFeePercent = sessionInfo?.serviceFeePercent || 10;
+                const calculatedServiceFee = Math.round(selectedOrder.subtotal * serviceFeePercent / 100);
+                const calculatedTotal = selectedOrder.subtotal + calculatedServiceFee;
+
+                return (
+                  <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                    <div className="flex justify-between text-gray-500">
+                      <span>Подитог</span>
+                      <span>{formatPrice(selectedOrder.subtotal)} TJS</span>
+                    </div>
+                    <div className="flex justify-between text-gray-500">
+                      <span>Обслуживание ({serviceFeePercent}%)</span>
+                      <span>{formatPrice(calculatedServiceFee)} TJS</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-lg text-gray-800 pt-2 border-t border-gray-200">
+                      <span>Итого</span>
+                      <span className="text-primary">{formatPrice(calculatedTotal)} TJS</span>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Action buttons */}
               <div className="space-y-2">
