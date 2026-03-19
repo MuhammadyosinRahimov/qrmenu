@@ -100,33 +100,27 @@ export default function CartPage() {
     });
   };
 
-  // Load product sizes for size selector
-  const handleOpenSizeSelector = async (itemId: string, productId: string) => {
-    if (expandedSizeSelector === itemId) {
-      setExpandedSizeSelector(null);
-      return;
-    }
-
-    // If we already have sizes for this product, just open
-    if (productSizes[productId]) {
-      setExpandedSizeSelector(itemId);
-      return;
-    }
-
-    // Fetch product to get sizes
-    setLoadingProductId(productId);
-    try {
-      const product = await getProduct(productId);
-      if (product && product.sizes.length > 0) {
-        setProductSizes(prev => ({ ...prev, [productId]: product.sizes }));
-        setExpandedSizeSelector(itemId);
+  // Auto-load sizes for all products in cart
+  useEffect(() => {
+    const loadAllSizes = async () => {
+      const productIds = [...new Set(items.map(item => item.productId))];
+      for (const productId of productIds) {
+        if (!productSizes[productId]) {
+          try {
+            const product = await getProduct(productId);
+            if (product && product.sizes && product.sizes.length > 0) {
+              setProductSizes(prev => ({ ...prev, [productId]: product.sizes }));
+            }
+          } catch (error) {
+            console.error("Failed to load product sizes:", error);
+          }
+        }
       }
-    } catch (error) {
-      console.error("Failed to load product sizes:", error);
-    } finally {
-      setLoadingProductId(null);
+    };
+    if (items.length > 0) {
+      loadAllSizes();
     }
-  };
+  }, [items]);
 
   // Handle size change - size price REPLACES base price
   const handleSizeChange = (itemId: string, item: typeof items[0], sizeId: string) => {
@@ -184,135 +178,130 @@ export default function CartPage() {
       <div className="p-4 space-y-4">
         {items.map((item) => {
           const isNoteExpanded = expandedNotes.has(item.id);
+          const sizes = productSizes[item.productId] || [];
+          const hasSizes = sizes.length > 1;
 
           return (
             <div
               key={item.id}
-              className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex gap-3"
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
             >
-              {/* Изображение слева - квадратное */}
-              <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                {getImageUrl(item.imageUrl) ? (
-                  <img
-                    src={getImageUrl(item.imageUrl)!}
-                    alt={item.productName}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Icon name="restaurant" size={24} className="text-gray-300" />
-                  </div>
-                )}
-              </div>
-
-              {/* Контент справа */}
-              <div className="flex-1 flex flex-col justify-between min-w-0">
-                <div>
-                  <h3 className="font-semibold text-gray-800 line-clamp-1">
-                    {item.productName}
-                  </h3>
-                  {/* Size badge with change option - show if size selected OR sizes available */}
-                  <button
-                    onClick={() => handleOpenSizeSelector(item.id, item.productId)}
-                    className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
-                      item.sizeName
-                        ? 'bg-primary-light text-primary-dark hover:bg-primary-200'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    <Icon name="straighten" size={12} />
-                    {item.sizeName || 'Выбрать размер'}
-                    {loadingProductId === item.productId ? (
-                      <Icon name="sync" size={12} className="animate-spin" />
-                    ) : (
-                      <Icon name="expand_more" size={12} />
-                    )}
-                  </button>
-                  {/* Size selector dropdown */}
-                  {expandedSizeSelector === item.id && (
-                    <div className="mt-3 p-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm animate-in slide-in-from-top-2 duration-200">
-                      {productSizes[item.productId] && productSizes[item.productId].length > 0 ? (
-                        <>
-                          <p className="text-sm font-medium text-gray-700 mb-3">Выберите размер:</p>
-                          <div className="grid grid-cols-2 gap-2">
-                            {productSizes[item.productId].map((size) => (
-                              <button
-                                key={size.id}
-                                onClick={() => handleSizeChange(item.id, item, size.id)}
-                                className={`relative p-3 rounded-xl text-left transition-all ${
-                                  item.sizeId === size.id
-                                    ? "bg-primary text-white shadow-md ring-2 ring-primary ring-offset-2"
-                                    : "bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:shadow-sm"
-                                }`}
-                              >
-                                <span className="block text-sm font-semibold">{size.name}</span>
-                                {size.priceModifier > 0 && (
-                                  <span className={`block text-lg font-bold mt-1 ${
-                                    item.sizeId === size.id ? "text-white" : "text-primary"
-                                  }`}>
-                                    {formatPrice(size.priceModifier)} TJS
-                                  </span>
-                                )}
-                                {item.sizeId === size.id && (
-                                  <div className="absolute top-2 right-2">
-                                    <Icon name="check_circle" size={18} className="text-white" />
-                                  </div>
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        </>
-                      ) : (
-                        <p className="text-sm text-gray-500 text-center py-2">Размеры недоступны</p>
-                      )}
+              {/* Top section: Image + Details */}
+              <div className="p-3 flex gap-3">
+                {/* Image */}
+                <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                  {getImageUrl(item.imageUrl) ? (
+                    <img
+                      src={getImageUrl(item.imageUrl)!}
+                      alt={item.productName}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Icon name="restaurant" size={24} className="text-gray-300" />
                     </div>
                   )}
-                  {item.addonNames.length > 0 && (
-                    <p className="text-xs text-gray-400 line-clamp-1 mt-1">
-                      + {item.addonNames.join(", ")}
-                    </p>
-                  )}
-                  {/* Комментарий */}
-                  {item.note && !isNoteExpanded && (
-                    <p className="text-xs text-gray-400 italic line-clamp-1 mt-0.5">
-                      {item.note}
-                    </p>
-                  )}
                 </div>
 
-                {/* Цена и управление количеством */}
-                <div className="flex items-center justify-between mt-2">
-                  <span className="font-bold text-primary">
-                    {formatPrice(item.totalPrice)} TJS
-                  </span>
+                {/* Content */}
+                <div className="flex-1 flex flex-col justify-between min-w-0">
+                  <div>
+                    <h3 className="font-semibold text-gray-800 line-clamp-1">
+                      {item.productName}
+                    </h3>
+                    {item.addonNames.length > 0 && (
+                      <p className="text-xs text-gray-400 line-clamp-1 mt-1">
+                        + {item.addonNames.join(", ")}
+                      </p>
+                    )}
+                    {item.note && !isNoteExpanded && (
+                      <p className="text-xs text-gray-400 italic line-clamp-1 mt-0.5">
+                        {item.note}
+                      </p>
+                    )}
+                  </div>
 
-                  {/* Кнопки +/- */}
-                  <div className="flex items-center gap-1 bg-gray-100 rounded-full px-1">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                    >
-                      <Icon name="remove" size={16} className="text-gray-600" />
-                    </button>
-                    <span className="w-6 text-center font-medium text-gray-800">
-                      {item.quantity}
+                  {/* Price and quantity */}
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="font-bold text-primary text-lg">
+                      {formatPrice(item.totalPrice)} TJS
                     </span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                    >
-                      <Icon name="add" size={16} className="text-gray-600" />
-                    </button>
+
+                    {/* Quantity buttons */}
+                    <div className="flex items-center gap-1 bg-gray-100 rounded-full px-1">
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                      >
+                        <Icon name="remove" size={16} className="text-gray-600" />
+                      </button>
+                      <span className="w-6 text-center font-medium text-gray-800">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                      >
+                        <Icon name="add" size={16} className="text-gray-600" />
+                      </button>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Кнопка комментария */}
+              {/* Size selection - Professional pill buttons */}
+              {hasSizes && (
+                <div className="px-3 pb-3">
+                  <div className="bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-xl p-2.5">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <Icon name="straighten" size={14} className="text-gray-500" />
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Размер</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {sizes.map((size) => {
+                        const isSelected = item.sizeId === size.id;
+                        return (
+                          <button
+                            key={size.id}
+                            onClick={() => handleSizeChange(item.id, item, size.id)}
+                            className={`
+                              relative flex items-center gap-2 px-3 py-2 rounded-xl font-medium text-sm
+                              transition-all duration-200 ease-out
+                              ${isSelected
+                                ? "bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg shadow-primary/30 scale-[1.02]"
+                                : "bg-white text-gray-700 border border-gray-200 hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm"
+                              }
+                            `}
+                          >
+                            {isSelected && (
+                              <span className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                <Icon name="check" size={10} className="text-primary" />
+                              </span>
+                            )}
+                            <span className={isSelected ? "text-white" : "text-gray-800"}>
+                              {size.name}
+                            </span>
+                            {size.priceModifier > 0 && (
+                              <span className={`text-xs ${isSelected ? "text-white/80" : "text-primary font-semibold"}`}>
+                                {formatPrice(size.priceModifier)} TJS
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Comment section */}
+              <div className="px-3 pb-3">
                 <button
                   onClick={() => toggleNoteExpanded(item.id)}
-                  className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors mt-1"
+                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <Icon name="edit_note" size={14} />
-                  <span>{item.note ? "Изменить" : "Добавить комментарий"}</span>
+                  <span>{item.note ? "Изменить комментарий" : "Добавить комментарий"}</span>
                 </button>
 
                 {isNoteExpanded && (
@@ -321,7 +310,7 @@ export default function CartPage() {
                       value={item.note || ""}
                       onChange={(e) => updateItemNote(item.id, e.target.value)}
                       placeholder="Комментарий к блюду..."
-                      className="w-full px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-foreground placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
                       rows={2}
                     />
                   </div>
