@@ -1112,7 +1112,10 @@ function OrdersPageContent() {
             {/* Pay for table */}
             {sessionInfo && sessionInfo.guestCount > 1 && sessionInfo.tableUnpaidAmount > 0 && (
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-sm text-gray-500 font-medium mb-3">Оплатить за весь стол</p>
+                <div className="flex justify-between items-center mb-3">
+                  <p className="text-sm text-gray-500 font-medium">Оплатить за весь стол</p>
+                  <p className="text-sm font-semibold text-purple-700">Итого за стол: {formatPrice(sessionInfo.tableUnpaidAmount)} TJS</p>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handlePayForTableCash}
@@ -1208,7 +1211,10 @@ function OrdersPageContent() {
             {/* Pay for entire table */}
             {sessionInfo && sessionInfo.tableUnpaidAmount > 0 && (
               <div className={myUnpaidOrders.length > 0 ? "pt-4 border-t border-gray-100" : ""}>
-                <p className="text-sm text-gray-500 font-medium mb-3">Оплатить за весь стол</p>
+                <div className="flex justify-between items-center mb-3">
+                  <p className="text-sm text-gray-500 font-medium">Оплатить за весь стол</p>
+                  <p className="text-sm font-semibold text-purple-700">Итого за стол: {formatPrice(sessionInfo.tableUnpaidAmount)} TJS</p>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {/* Cash for table */}
                   <button
