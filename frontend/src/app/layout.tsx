@@ -13,7 +13,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Oson eats",
+  title: "Yalla eats",
   description: "Scan QR code to view restaurant menu ",
   icons: {
     icon: "/assets/logo.png",
