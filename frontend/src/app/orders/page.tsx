@@ -360,9 +360,9 @@ function OrdersPageContent() {
   // Handle DC card payment using paymentLink
   const handleDcPayment = (order: Order) => {
     if (order.paymentLink) {
-      // Умножаем на 100 для конвертации в тийины (копейки)
-      const amountInTiyn = Math.round(order.total * 0);
-      const finalLink = order.paymentLink.replace('{amount}', amountInTiyn.toString());
+      // DC ожидает сумму в сомони (не тийинах)
+      const amount = Math.round(order.total);
+      const finalLink = order.paymentLink.replace('{amount}', amount.toString());
       window.location.href = finalLink;
     } else {
       showToast("Онлайн оплата недоступна", "error");
@@ -1189,8 +1189,9 @@ function OrdersPageContent() {
                       onClick={() => {
                         const paymentLink = sessionInfo?.paymentLink || myUnpaidOrders[0]?.paymentLink;
                         if (paymentLink) {
-                          const amountInTiyn = Math.round(myUnpaidTotal * 100);
-                          const finalLink = paymentLink.replace('{amount}', amountInTiyn.toString());
+                          // DC ожидает сумму в сомони (не тийинах)
+                          const amount = Math.round(myUnpaidTotal);
+                          const finalLink = paymentLink.replace('{amount}', amount.toString());
                           window.location.href = finalLink;
                         }
                       }}
