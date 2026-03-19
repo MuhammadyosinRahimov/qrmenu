@@ -41,7 +41,7 @@ const itemStatusConfig: Record<
 function OrdersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated, userId } = useAuthStore();
+  const { isAuthenticated, userId, phone: authPhone2, sendOtp, verifyOtp, logout } = useAuthStore();
   const { onlinePaymentAvailable: tableOnlinePayment, tableId, tableNumber, menuId, setTable } = useTableStore();
   const { mode, setMode } = useOrderModeStore();
   const { clearCart } = useCartStore();
@@ -60,6 +60,22 @@ function OrdersPageContent() {
   const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
   const [loadingPublicOrders, setLoadingPublicOrders] = useState(false);
   const [loadingTableFromUrl, setLoadingTableFromUrl] = useState(false);
+
+  // Cancel modal state
+  const [cancelModal, setCancelModal] = useState<{
+    orderId: string;
+    itemId: string;
+    itemName: string;
+  } | null>(null);
+  const [cancelReason, setCancelReason] = useState("");
+
+  // Auth modal state
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authStep, setAuthStep] = useState<'phone' | 'otp'>('phone');
+  const [authPhone, setAuthPhone] = useState("");
+  const [authOtp, setAuthOtp] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
 
   // Read URL params
   const urlTableParam = searchParams.get("table");
@@ -285,11 +301,66 @@ function OrdersPageContent() {
     },
   });
 
-  const handleCancelItem = (orderId: string, itemId: string) => {
-    if (confirm("Вы уверены, что хотите отменить это блюдо?")) {
-      setCancellingItemId(itemId);
-      cancelItemMutation.mutate({ orderId, itemId });
+  // Open cancel modal instead of using confirm()
+  const openCancelModal = (orderId: string, itemId: string, itemName: string) => {
+    setCancelModal({ orderId, itemId, itemName });
+    setCancelReason("");
+  };
+
+  // Confirm cancellation from modal
+  const confirmCancelItem = () => {
+    if (cancelModal) {
+      setCancellingItemId(cancelModal.itemId);
+      cancelItemMutation.mutate({ orderId: cancelModal.orderId, itemId: cancelModal.itemId });
+      setCancelModal(null);
+      setCancelReason("");
     }
+  };
+
+  // Auth modal handlers
+  const handleSendOtp = async () => {
+    if (!authPhone || authPhone.length < 9) {
+      setAuthError("Введите корректный номер телефона");
+      return;
+    }
+    setAuthLoading(true);
+    setAuthError("");
+    try {
+      const formattedPhone = authPhone.startsWith("+992") ? authPhone : `+992${authPhone.replace(/\D/g, '')}`;
+      await sendOtp(formattedPhone);
+      setAuthStep('otp');
+    } catch {
+      setAuthError("Ошибка отправки SMS. Попробуйте снова.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!authOtp || authOtp.length < 4) {
+      setAuthError("Введите 4-значный код");
+      return;
+    }
+    setAuthLoading(true);
+    setAuthError("");
+    try {
+      const formattedPhone = authPhone.startsWith("+992") ? authPhone : `+992${authPhone.replace(/\D/g, '')}`;
+      await verifyOtp(formattedPhone, authOtp);
+      setAuthModalOpen(false);
+      setAuthStep('phone');
+      setAuthPhone("");
+      setAuthOtp("");
+      showToast("Вы успешно авторизованы!", "success");
+    } catch {
+      setAuthError("Неверный код. Попробуйте снова.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    showToast("Вы вышли из аккаунта", "success");
   };
 
   // Handle cash payment
@@ -361,10 +432,12 @@ function OrdersPageContent() {
   };
 
   // Handle DC card payment using paymentLink
-  const handleDcPayment = (order: Order) => {
+  // amountOverride allows passing sessionInfo.myTotal which includes service fee
+  const handleDcPayment = (order: Order, amountOverride?: number) => {
     if (order.paymentLink) {
       // DC ожидает сумму в сомони (не тийинах)
-      const amount = Math.round(order.total);
+      // Use amountOverride (e.g. sessionInfo.myTotal) if provided, otherwise order.total
+      const amount = Math.round(amountOverride ?? order.total);
       const finalLink = order.paymentLink.replace('{amount}', amount.toString());
       window.location.href = finalLink;
     } else {
@@ -638,6 +711,51 @@ function OrdersPageContent() {
     <div className="min-h-screen bg-gradient-to-b from-primary-light via-white to-primary-light/30 pb-20">
       <Header title="Мои заказы" />
 
+      {/* Auth section - show login button or user info */}
+      <div className="p-4 bg-gradient-to-r from-primary-light to-primary-50 border-b border-primary-100">
+        <div className="flex items-center justify-between max-w-lg mx-auto">
+          {isAuthenticated ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
+                  <Icon name="person" size={20} className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium text-primary-dark">{authPhone2 || "Авторизован"}</p>
+                  <p className="text-sm text-primary">Вы вошли в систему</p>
+                </div>
+              </div>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                size="sm"
+                className="!border-primary-200 !text-primary-dark hover:!bg-primary-100"
+              >
+                Выйти
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
+                  <Icon name="person_add" size={20} className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium text-primary-dark">Авторизуйтесь</p>
+                  <p className="text-sm text-primary">Чтобы сделать заказ</p>
+                </div>
+              </div>
+              <Button
+                onClick={() => setAuthModalOpen(true)}
+                size="sm"
+              >
+                Авторизовать
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+
       {/* Tab buttons */}
       <div className="flex gap-2 p-4 bg-white border-b">
         <button
@@ -721,9 +839,19 @@ function OrdersPageContent() {
                       })}
                     </div>
                   ))}
-                  <div className="flex justify-between text-sm pt-2 border-t border-gray-100 mt-2">
-                    <span className="text-gray-600">Ваш итого:</span>
-                    <span className="font-semibold text-gray-800">{formatPrice(sessionInfo.myTotal)} TJS</span>
+                  <div className="space-y-1 pt-2 border-t border-gray-100 mt-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500">Подитог:</span>
+                      <span className="text-gray-600">{formatPrice(sessionInfo.myOrderSubtotal)} TJS</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500">Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
+                      <span className="text-gray-600">{formatPrice(sessionInfo.myServiceFeeShare)} TJS</span>
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold">
+                      <span className="text-gray-700">Ваш итого:</span>
+                      <span className="text-primary">{formatPrice(sessionInfo.myTotal)} TJS</span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -736,9 +864,9 @@ function OrdersPageContent() {
                     <span className="text-sm font-medium text-gray-500">Другие гости</span>
                   </div>
                   {sessionInfo.otherOrders.map((guestOrder, idx) => (
-                    <div key={guestOrder.orderId} className="mb-3">
+                    <div key={guestOrder.orderId} className="mb-3 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 font-medium">
                           {guestOrder.maskedPhone || `Гость ${idx + 2}`}
                         </span>
                         {guestOrder.isPaid && (
@@ -756,6 +884,21 @@ function OrdersPageContent() {
                           <span className="text-gray-600">{formatPrice(item.totalPrice)} TJS</span>
                         </div>
                       ))}
+                      {/* Show subtotal and service fee for each guest */}
+                      <div className="mt-2 pt-1 space-y-0.5 text-xs">
+                        <div className="flex justify-between text-gray-400">
+                          <span>Подитог:</span>
+                          <span>{formatPrice(guestOrder.subtotal)} TJS</span>
+                        </div>
+                        <div className="flex justify-between text-gray-400">
+                          <span>Обслуживание:</span>
+                          <span>{formatPrice(guestOrder.serviceFeeShare)} TJS</span>
+                        </div>
+                        <div className="flex justify-between text-gray-600 font-medium">
+                          <span>Итого:</span>
+                          <span>{formatPrice(guestOrder.total)} TJS</span>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1069,6 +1212,19 @@ function OrdersPageContent() {
             {/* Payment buttons */}
             <div className="space-y-3">
               <p className="text-sm text-gray-500 font-medium">Мой заказ</p>
+              {/* Show amount breakdown when session info available */}
+              {sessionInfo && (
+                <div className="text-xs text-gray-500 space-y-0.5 mb-1">
+                  <div className="flex justify-between">
+                    <span>Подитог:</span>
+                    <span>{formatPrice(sessionInfo.myOrderSubtotal)} TJS</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
+                    <span>{formatPrice(sessionInfo.myServiceFeeShare)} TJS</span>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 {/* Cash payment */}
                 <button
@@ -1085,16 +1241,17 @@ function OrdersPageContent() {
                   </div>
                   <span className="font-semibold text-primary-dark">Наличными</span>
                   <span className="text-xs text-primary">
-                    {sessionInfo && sessionInfo.guestCount > 1
-                      ? formatPrice(sessionInfo.myTotal)
-                      : formatPrice(paymentModalOrder.total)} TJS
+                    {formatPrice(sessionInfo?.myTotal || paymentModalOrder.total)} TJS
                   </span>
                 </button>
 
                 {/* Online payment */}
                 {(paymentModalOrder.onlinePaymentAvailable || tableOnlinePayment) && (
                   <button
-                    onClick={() => handleDcPayment(paymentModalOrder)}
+                    onClick={() => handleDcPayment(
+                      paymentModalOrder,
+                      sessionInfo?.myTotal // Always use myTotal when available (includes service fee)
+                    )}
                     disabled={!!processingPayment}
                     className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 hover:border-green-400 transition-all disabled:opacity-50"
                   >
@@ -1103,9 +1260,7 @@ function OrdersPageContent() {
                     </div>
                     <span className="font-semibold text-green-700">Картой DC</span>
                     <span className="text-xs text-green-500">
-                      {sessionInfo && sessionInfo.guestCount > 1
-                        ? formatPrice(sessionInfo.myTotal)
-                        : formatPrice(paymentModalOrder.total)} TJS
+                      {formatPrice(sessionInfo?.myTotal || paymentModalOrder.total)} TJS
                     </span>
                   </button>
                 )}
@@ -1167,6 +1322,19 @@ function OrdersPageContent() {
             {myUnpaidOrders.length > 0 && (
               <div className="space-y-3 mb-4">
                 <p className="text-sm text-gray-500 font-medium">Оплатить мой заказ</p>
+                {/* Show amount breakdown */}
+                {sessionInfo && (
+                  <div className="text-xs text-gray-500 space-y-0.5 mb-2">
+                    <div className="flex justify-between">
+                      <span>Подитог:</span>
+                      <span>{formatPrice(sessionInfo.myOrderSubtotal)} TJS</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
+                      <span>{formatPrice(sessionInfo.myServiceFeeShare)} TJS</span>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-3">
                   {/* Cash for my order - pay all unpaid orders */}
                   <button
@@ -1183,7 +1351,7 @@ function OrdersPageContent() {
                       <Icon name="payments" size={24} className="text-primary" />
                     </div>
                     <span className="font-semibold text-primary-dark">Наличными</span>
-                    <span className="text-xs text-primary">{formatPrice(myUnpaidTotal)} TJS</span>
+                    <span className="text-xs text-primary">{formatPrice(sessionInfo?.myTotal || myUnpaidTotal)} TJS</span>
                   </button>
 
                   {/* DC for my order */}
@@ -1192,8 +1360,8 @@ function OrdersPageContent() {
                       onClick={() => {
                         const paymentLink = sessionInfo?.paymentLink || myUnpaidOrders[0]?.paymentLink;
                         if (paymentLink) {
-                          // DC ожидает сумму в сомони (не тийинах)
-                          const amount = Math.round(myUnpaidTotal);
+                          // Use sessionInfo.myTotal (includes service fee) when available
+                          const amount = Math.round(sessionInfo?.myTotal || myUnpaidTotal);
                           const finalLink = paymentLink.replace('{amount}', amount.toString());
                           window.location.href = finalLink;
                         }
@@ -1205,7 +1373,7 @@ function OrdersPageContent() {
                         <Icon name="credit_card" size={24} className="text-green-500" />
                       </div>
                       <span className="font-semibold text-green-700">Картой DC</span>
-                      <span className="text-xs text-green-500">{formatPrice(myUnpaidTotal)} TJS</span>
+                      <span className="text-xs text-green-500">{formatPrice(sessionInfo?.myTotal || myUnpaidTotal)} TJS</span>
                     </button>
                   )}
                 </div>
@@ -1345,7 +1513,7 @@ function OrdersPageContent() {
                         </span>
                         {canCancel && (
                           <button
-                            onClick={() => handleCancelItem(selectedOrder.id, item.id)}
+                            onClick={() => openCancelModal(selectedOrder.id, item.id, item.productName)}
                             disabled={cancellingItemId === item.id}
                             className="p-2 text-red-500 hover:bg-red-100 rounded-lg disabled:opacity-50 transition-colors"
                           >
@@ -1401,6 +1569,147 @@ function OrdersPageContent() {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel item modal */}
+      {cancelModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setCancelModal(null)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+                <Icon name="delete_outline" size={32} className="text-red-500" />
+              </div>
+            </div>
+            <h3 className="text-lg font-bold text-gray-800 text-center mb-2">Отмена блюда</h3>
+            <p className="text-gray-500 text-center mb-4">
+              Вы уверены, что хотите отменить <span className="font-semibold text-gray-700">{cancelModal.itemName}</span>?
+            </p>
+
+            <div className="mb-4">
+              <label className="text-sm text-gray-600 mb-1 block">Причина отмены (необязательно)</label>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Укажите причину..."
+                className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                rows={2}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setCancelModal(null)}
+              >
+                Отмена
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1 !bg-red-500 hover:!bg-red-600"
+                onClick={confirmCancelItem}
+                disabled={cancellingItemId === cancelModal.itemId}
+              >
+                {cancellingItemId === cancelModal.itemId ? "Отменяем..." : "Подтвердить"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auth modal */}
+      {authModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setAuthModalOpen(false)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-800">
+                {authStep === 'phone' ? 'Авторизация' : 'Введите код'}
+              </h3>
+              <button
+                onClick={() => {
+                  setAuthModalOpen(false);
+                  setAuthStep('phone');
+                  setAuthPhone("");
+                  setAuthOtp("");
+                  setAuthError("");
+                }}
+                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+              >
+                <Icon name="close" size={18} className="text-gray-500" />
+              </button>
+            </div>
+
+            {authStep === 'phone' ? (
+              <>
+                <p className="text-gray-500 text-sm mb-4">
+                  Введите номер телефона для получения SMS кода
+                </p>
+                <div className="mb-4">
+                  <label className="text-sm text-gray-600 mb-1 block">Номер телефона</label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm">
+                      +992
+                    </span>
+                    <input
+                      type="tel"
+                      value={authPhone}
+                      onChange={(e) => setAuthPhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                      placeholder="XX XXX XXXX"
+                      className="flex-1 px-3 py-3 border border-gray-200 rounded-r-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                {authError && (
+                  <p className="text-red-500 text-sm mb-4">{authError}</p>
+                )}
+                <Button
+                  className="w-full"
+                  onClick={handleSendOtp}
+                  disabled={authLoading || authPhone.length < 9}
+                >
+                  {authLoading ? "Отправка..." : "Получить код"}
+                </Button>
+              </>
+            ) : (
+              <>
+                <p className="text-gray-500 text-sm mb-4">
+                  Мы отправили SMS код на номер +992{authPhone}
+                </p>
+                <div className="mb-4">
+                  <label className="text-sm text-gray-600 mb-1 block">Код из SMS</label>
+                  <input
+                    type="text"
+                    value={authOtp}
+                    onChange={(e) => setAuthOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    placeholder="XXXX"
+                    maxLength={4}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-center text-2xl tracking-widest font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                {authError && (
+                  <p className="text-red-500 text-sm mb-4">{authError}</p>
+                )}
+                <Button
+                  className="w-full mb-3"
+                  onClick={handleVerifyOtp}
+                  disabled={authLoading || authOtp.length < 4}
+                >
+                  {authLoading ? "Проверка..." : "Войти"}
+                </Button>
+                <button
+                  onClick={() => {
+                    setAuthStep('phone');
+                    setAuthOtp("");
+                    setAuthError("");
+                  }}
+                  className="w-full text-sm text-gray-500 hover:text-primary transition-colors"
+                >
+                  Изменить номер
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
