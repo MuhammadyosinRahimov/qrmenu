@@ -506,7 +506,7 @@ function OrdersPageContent() {
             <div className="flex items-center justify-between max-w-lg mx-auto">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
-                  <Icon name="person_add" size={20} className="text-primary" />
+                  <Icon name="login" size={20} className="text-primary" />
                 </div>
                 <div>
                   <p className="font-medium text-primary-dark">Войдите, чтобы сделать заказ</p>
@@ -514,10 +514,10 @@ function OrdersPageContent() {
                 </div>
               </div>
               <Button
-                onClick={() => router.push("/checkout")}
+                onClick={() => setAuthModalOpen(true)}
                 size="sm"
               >
-                Войти
+                Авторизовать
               </Button>
             </div>
           </div>
@@ -620,6 +620,102 @@ function OrdersPageContent() {
               </>
             )}
           </div>
+
+          {/* Auth modal */}
+          {authModalOpen && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setAuthModalOpen(false)}>
+              <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {authStep === 'phone' ? 'Авторизация' : 'Введите код'}
+                  </h3>
+                  <button
+                    onClick={() => {
+                      setAuthModalOpen(false);
+                      setAuthStep('phone');
+                      setAuthPhone("");
+                      setAuthOtp("");
+                      setAuthError("");
+                    }}
+                    className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  >
+                    <Icon name="close" size={18} className="text-gray-500" />
+                  </button>
+                </div>
+
+                {authStep === 'phone' ? (
+                  <>
+                    <p className="text-gray-500 text-sm mb-4">
+                      Введите номер телефона для получения SMS кода
+                    </p>
+                    <div className="mb-4">
+                      <label className="text-sm text-gray-600 mb-1 block">Номер телефона</label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm">
+                          +992
+                        </span>
+                        <input
+                          type="tel"
+                          value={authPhone}
+                          onChange={(e) => setAuthPhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                          placeholder="XX XXX XXXX"
+                          className="flex-1 px-3 py-3 border border-gray-200 rounded-r-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+                    </div>
+                    {authError && (
+                      <p className="text-red-500 text-sm mb-4">{authError}</p>
+                    )}
+                    <Button
+                      className="w-full"
+                      onClick={handleSendOtp}
+                      disabled={authLoading || authPhone.length < 9}
+                    >
+                      {authLoading ? "Отправка..." : "Получить код"}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-gray-500 text-sm mb-4">
+                      Мы отправили SMS код на номер +992{authPhone}
+                    </p>
+                    <div className="mb-4">
+                      <label className="text-sm text-gray-600 mb-1 block">Код из SMS</label>
+                      <input
+                        type="text"
+                        value={authOtp}
+                        onChange={(e) => setAuthOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                        placeholder="XXXX"
+                        maxLength={4}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl text-center text-2xl tracking-widest font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    {authError && (
+                      <p className="text-red-500 text-sm mb-4">{authError}</p>
+                    )}
+                    <Button
+                      className="w-full mb-3"
+                      onClick={handleVerifyOtp}
+                      disabled={authLoading || authOtp.length < 4}
+                    >
+                      {authLoading ? "Проверка..." : "Войти"}
+                    </Button>
+                    <button
+                      onClick={() => {
+                        setAuthStep('phone');
+                        setAuthOtp("");
+                        setAuthError("");
+                      }}
+                      className="w-full text-sm text-gray-500 hover:text-primary transition-colors"
+                    >
+                      Изменить номер
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
           <BottomNav />
         </div>
       );
@@ -638,20 +734,20 @@ function OrdersPageContent() {
             Войдите для просмотра заказов
           </h2>
           <p className="text-gray-500 text-center mb-8">
-            Зарегистрируйтесь, чтобы видеть историю заказов и отслеживать их статус
+            Авторизуйтесь, чтобы видеть историю заказов и отслеживать их статус
           </p>
 
-          {/* Registration button */}
+          {/* Auth button */}
           <button
-            onClick={() => router.push("/checkout")}
+            onClick={() => setAuthModalOpen(true)}
             className="w-full bg-gradient-to-r from-primary-300 to-primary text-white rounded-2xl p-5 flex items-center justify-between shadow-lg shadow-primary-200/50 hover:shadow-xl hover:scale-[1.02] transition-all mb-4"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                <Icon name="person_add" size={26} className="text-white" />
+                <Icon name="login" size={26} className="text-white" />
               </div>
               <div className="text-left">
-                <p className="font-bold text-lg">Регистрация</p>
+                <p className="font-bold text-lg">Авторизовать</p>
                 <p className="text-sm text-white/80">Войдите по номеру телефона</p>
               </div>
             </div>
@@ -663,6 +759,102 @@ function OrdersPageContent() {
             Перейти в меню
           </Button>
         </div>
+
+        {/* Auth modal */}
+        {authModalOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setAuthModalOpen(false)}>
+            <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-800">
+                  {authStep === 'phone' ? 'Авторизация' : 'Введите код'}
+                </h3>
+                <button
+                  onClick={() => {
+                    setAuthModalOpen(false);
+                    setAuthStep('phone');
+                    setAuthPhone("");
+                    setAuthOtp("");
+                    setAuthError("");
+                  }}
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                >
+                  <Icon name="close" size={18} className="text-gray-500" />
+                </button>
+              </div>
+
+              {authStep === 'phone' ? (
+                <>
+                  <p className="text-gray-500 text-sm mb-4">
+                    Введите номер телефона для получения SMS кода
+                  </p>
+                  <div className="mb-4">
+                    <label className="text-sm text-gray-600 mb-1 block">Номер телефона</label>
+                    <div className="flex">
+                      <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 text-sm">
+                        +992
+                      </span>
+                      <input
+                        type="tel"
+                        value={authPhone}
+                        onChange={(e) => setAuthPhone(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                        placeholder="XX XXX XXXX"
+                        className="flex-1 px-3 py-3 border border-gray-200 rounded-r-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  {authError && (
+                    <p className="text-red-500 text-sm mb-4">{authError}</p>
+                  )}
+                  <Button
+                    className="w-full"
+                    onClick={handleSendOtp}
+                    disabled={authLoading || authPhone.length < 9}
+                  >
+                    {authLoading ? "Отправка..." : "Получить код"}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-500 text-sm mb-4">
+                    Мы отправили SMS код на номер +992{authPhone}
+                  </p>
+                  <div className="mb-4">
+                    <label className="text-sm text-gray-600 mb-1 block">Код из SMS</label>
+                    <input
+                      type="text"
+                      value={authOtp}
+                      onChange={(e) => setAuthOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                      placeholder="XXXX"
+                      maxLength={4}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-center text-2xl tracking-widest font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  {authError && (
+                    <p className="text-red-500 text-sm mb-4">{authError}</p>
+                  )}
+                  <Button
+                    className="w-full mb-3"
+                    onClick={handleVerifyOtp}
+                    disabled={authLoading || authOtp.length < 4}
+                  >
+                    {authLoading ? "Проверка..." : "Войти"}
+                  </Button>
+                  <button
+                    onClick={() => {
+                      setAuthStep('phone');
+                      setAuthOtp("");
+                      setAuthError("");
+                    }}
+                    className="w-full text-sm text-gray-500 hover:text-primary transition-colors"
+                  >
+                    Изменить номер
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         <BottomNav />
       </div>
     );
