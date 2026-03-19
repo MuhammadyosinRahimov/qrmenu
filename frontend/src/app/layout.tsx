@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { StoreHydration } from "@/components/StoreHydration";
 import { CacheManager } from "@/components/layout/CacheManager";
+import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -41,6 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jakarta.variable} antialiased`}>
+        <ConnectionStatus />
         <CacheManager />
         <StoreHydration />
         <Providers>{children}</Providers>
