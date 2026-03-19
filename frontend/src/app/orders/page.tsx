@@ -673,8 +673,8 @@ function OrdersPageContent() {
           </div>
         )}
 
-        {/* QR режим: одна объединённая карточка */}
-        {isQrContext && activeTab === 'active' && sessionInfo && !loadingSessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.length > 0) && (
+        {/* QR режим: одна объединённая карточка - показываем только если есть позиции */}
+        {isQrContext && activeTab === 'active' && sessionInfo && !loadingSessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.some(o => !o.isPaid)) && (
           <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
             {/* Заголовок с номером стола и количеством гостей */}
             <div className="px-4 py-3 bg-gradient-to-r from-primary-light to-primary-50 flex items-center justify-between">
@@ -758,32 +758,46 @@ function OrdersPageContent() {
                 </div>
               )}
 
-              {/* Итого за стол */}
-              <div className="pt-3 border-t border-gray-200 space-y-1">
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Подитог</span>
-                  <span>{formatPrice(sessionInfo.tableSubtotal)} TJS</span>
-                </div>
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Обслуживание ({sessionInfo.serviceFeePercent}%)</span>
-                  <span>{formatPrice(sessionInfo.tableServiceFee)} TJS</span>
-                </div>
-                {sessionInfo.tablePaidAmount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>Оплачено</span>
-                    <span>-{formatPrice(sessionInfo.tablePaidAmount)} TJS</span>
-                  </div>
-                )}
-                <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-100">
-                  <span className="text-gray-800">
-                    {sessionInfo.tablePaidAmount > 0 ? "К оплате" : "Итого за стол"}
-                  </span>
-                  <span className="text-primary">{formatPrice(sessionInfo.tableUnpaidAmount)} TJS</span>
-                </div>
-              </div>
+              {/* Итого за стол - рассчитываем из myTotal + otherOrders */}
+              {(() => {
+                // Сумма неоплаченных заказов других гостей
+                const othersUnpaidTotal = sessionInfo.otherOrders
+                  .filter(o => !o.isPaid)
+                  .reduce((sum, o) => sum + o.total, 0);
+                // Полная сумма к оплате за стол
+                const fullTableTotal = sessionInfo.myTotal + othersUnpaidTotal;
+                // Рассчитываем подитог и сервисный сбор
+                const fullTableSubtotal = Math.round(fullTableTotal / (1 + sessionInfo.serviceFeePercent / 100));
+                const fullTableServiceFee = fullTableTotal - fullTableSubtotal;
 
-              {/* Кнопки */}
-              {sessionInfo.tableUnpaidAmount > 0 && (
+                return (
+                  <div className="pt-3 border-t border-gray-200 space-y-1">
+                    <div className="flex justify-between text-sm text-gray-500">
+                      <span>Подитог</span>
+                      <span>{formatPrice(fullTableSubtotal)} TJS</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-500">
+                      <span>Обслуживание ({sessionInfo.serviceFeePercent}%)</span>
+                      <span>{formatPrice(fullTableServiceFee)} TJS</span>
+                    </div>
+                    {sessionInfo.tablePaidAmount > 0 && (
+                      <div className="flex justify-between text-sm text-green-600">
+                        <span>Оплачено</span>
+                        <span>-{formatPrice(sessionInfo.tablePaidAmount)} TJS</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-100">
+                      <span className="text-gray-800">
+                        {sessionInfo.tablePaidAmount > 0 ? "К оплате" : "Итого за стол"}
+                      </span>
+                      <span className="text-primary">{formatPrice(fullTableTotal - sessionInfo.tablePaidAmount)} TJS</span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Кнопки - показываем если есть неоплаченные заказы */}
+              {(sessionInfo.myTotal > 0 || sessionInfo.otherOrders.some(o => !o.isPaid)) && (
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <Button variant="outline" size="sm" onClick={navigateToMenu}>
                     <Icon name="add" size={18} className="mr-1" />
@@ -800,7 +814,7 @@ function OrdersPageContent() {
         )}
 
         {/* Empty state for current tab - only show when no orders at all */}
-        {filteredOrders.length === 0 && !(isQrContext && activeTab === 'active' && sessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.length > 0)) && (
+        {filteredOrders.length === 0 && !(isQrContext && activeTab === 'active' && sessionInfo && (myUnpaidOrders.length > 0 || sessionInfo.otherOrders.some(o => !o.isPaid))) && (
           <div className="flex flex-col items-center justify-center py-12 px-4">
             <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
               <Icon name={activeTab === 'active' ? "receipt_long" : "history"} size={32} className="text-gray-400" />
