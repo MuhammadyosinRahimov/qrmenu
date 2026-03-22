@@ -11,7 +11,7 @@ import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useOrderStore } from "@/stores/orderStore";
 import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, getTableByNumber, type PublicTableOrders } from "@/lib/api";
 import { Header } from "@/components/layout/Header";
-
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -60,6 +60,9 @@ function OrdersPageContent() {
   const [publicOrders, setPublicOrders] = useState<PublicTableOrders | null>(null);
   const [loadingPublicOrders, setLoadingPublicOrders] = useState(false);
   const [loadingTableFromUrl, setLoadingTableFromUrl] = useState(false);
+
+  // Track recently updated items for visual highlighting
+  const [recentlyUpdatedItems, setRecentlyUpdatedItems] = useState<Set<string>>(new Set());
 
   // Cancel modal state
   const [cancelModal, setCancelModal] = useState<{
@@ -224,7 +227,14 @@ function OrdersPageContent() {
     });
 
     // Handle order updates
-    connection.on("MyOrderUpdated", () => {
+    connection.on("MyOrderUpdated", (data: { Order?: { items?: Array<{ id: string }> } }) => {
+      // Track updated items for visual highlighting
+      if (data?.Order?.items) {
+        const updatedItemIds = new Set(data.Order.items.map((i: { id: string }) => i.id));
+        setRecentlyUpdatedItems(updatedItemIds);
+        // Clear highlighting after 3 seconds
+        setTimeout(() => setRecentlyUpdatedItems(new Set()), 3000);
+      }
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       loadSessionInfo();
     });
@@ -236,7 +246,18 @@ function OrdersPageContent() {
     });
 
     // Handle table order updates (for shared table orders)
-    connection.on("TableOrderUpdated", () => {
+    connection.on("TableOrderUpdated", (data: { Order?: { items?: Array<{ id: string }>; userId?: string }; IsExtraOrder?: boolean }) => {
+      // Track updated items for visual highlighting
+      if (data.Order?.items) {
+        const updatedItemIds = new Set(data.Order.items.map((i: { id: string }) => i.id));
+        setRecentlyUpdatedItems(updatedItemIds);
+        // Clear highlighting after 3 seconds
+        setTimeout(() => setRecentlyUpdatedItems(new Set()), 3000);
+      }
+      // Show toast when another guest adds items
+      if (data.IsExtraOrder && data.Order?.userId !== userId) {
+        showToast("Другой гость добавил позиции", "success");
+      }
       // Refresh orders and session info when another guest updates the table order
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       loadSessionInfo();
@@ -290,8 +311,8 @@ function OrdersPageContent() {
   }, [tableId, isQrContext]);
 
   const cancelItemMutation = useMutation({
-    mutationFn: ({ orderId, itemId }: { orderId: string; itemId: string }) =>
-      cancelOrderItem(orderId, itemId),
+    mutationFn: ({ orderId, itemId, reason }: { orderId: string; itemId: string; reason?: string }) =>
+      cancelOrderItem(orderId, itemId, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       setSelectedOrder(null);
@@ -311,7 +332,11 @@ function OrdersPageContent() {
   const confirmCancelItem = () => {
     if (cancelModal) {
       setCancellingItemId(cancelModal.itemId);
-      cancelItemMutation.mutate({ orderId: cancelModal.orderId, itemId: cancelModal.itemId });
+      cancelItemMutation.mutate({
+        orderId: cancelModal.orderId,
+        itemId: cancelModal.itemId,
+        reason: cancelReason || undefined,
+      });
       setCancelModal(null);
       setCancelReason("");
     }
@@ -582,15 +607,19 @@ function OrdersPageContent() {
                         </span>
                       </div>
                       <div className="p-4 space-y-2">
-                        {order.items.map((item, i) => (
-                          <div key={i} className="flex justify-between text-sm">
-                            <span className="text-gray-600">
-                              {item.quantity}x {item.productName}
-                              {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
-                            </span>
-                            <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
-                          </div>
-                        ))}
+                        {order.items.map((item, i) => {
+                          const itemId = (item as { id?: string }).id;
+                          const isRecentlyUpdated = itemId ? recentlyUpdatedItems.has(itemId) : false;
+                          return (
+                            <div key={i} className={`flex justify-between text-sm transition-colors duration-300 rounded px-1 -mx-1 ${isRecentlyUpdated ? "bg-green-50 animate-pulse" : ""}`}>
+                              <span className="text-gray-600">
+                                {item.quantity}x {item.productName}
+                                {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                              </span>
+                              <span className="text-gray-800 font-medium">{formatPrice(item.totalPrice)} TJS</span>
+                            </div>
+                          );
+                        })}
                         <div className="flex justify-between pt-2 border-t border-gray-100">
                           <span className="text-sm font-medium text-gray-600">Итого:</span>
                           <span className="font-semibold text-gray-800">{formatPrice(order.subtotal)} TJS</span>
@@ -1017,8 +1046,9 @@ function OrdersPageContent() {
                       {order.items.map(item => {
                         const normalizedItemStatus = normalizeItemStatus(item.status);
                         const isCancelled = normalizedItemStatus === "Cancelled";
+                        const isRecentlyUpdated = recentlyUpdatedItems.has(item.id);
                         return (
-                          <div key={item.id} className={`flex justify-between text-sm ${isCancelled ? "opacity-50" : ""}`}>
+                          <div key={item.id} className={`flex justify-between text-sm transition-colors duration-300 rounded px-1 -mx-1 ${isCancelled ? "opacity-50" : ""} ${isRecentlyUpdated ? "bg-green-50 animate-pulse" : ""}`}>
                             <span className={`text-gray-600 ${isCancelled ? "line-through" : ""}`}>
                               {item.productName} <span className="text-gray-400">x{item.quantity}</span>
                               {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
@@ -1067,15 +1097,19 @@ function OrdersPageContent() {
                           </span>
                         )}
                       </div>
-                      {guestOrder.items.map((item, i) => (
-                        <div key={i} className="flex justify-between text-sm">
-                          <span className="text-gray-500">
-                            {item.productName} <span className="text-gray-400">x{item.quantity}</span>
-                            {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
-                          </span>
-                          <span className="text-gray-600">{formatPrice(item.totalPrice)} TJS</span>
-                        </div>
-                      ))}
+                      {guestOrder.items.map((item, i) => {
+                        const itemId = (item as { id?: string }).id;
+                        const isRecentlyUpdated = itemId ? recentlyUpdatedItems.has(itemId) : false;
+                        return (
+                          <div key={i} className={`flex justify-between text-sm transition-colors duration-300 rounded px-1 -mx-1 ${isRecentlyUpdated ? "bg-green-50 animate-pulse" : ""}`}>
+                            <span className="text-gray-500">
+                              {item.productName} <span className="text-gray-400">x{item.quantity}</span>
+                              {item.sizeName && <span className="text-gray-400"> ({item.sizeName})</span>}
+                            </span>
+                            <span className="text-gray-600">{formatPrice(item.totalPrice)} TJS</span>
+                          </div>
+                        );
+                      })}
                       {/* Show subtotal and service fee for each guest */}
                       <div className="mt-2 pt-1 space-y-0.5 text-xs">
                         <div className="flex justify-between text-gray-400">
@@ -1621,14 +1655,10 @@ function OrdersPageContent() {
       )}
 
       {/* Order details modal */}
-      {selectedOrder && (
-        <div className="fixed inset-0 bg-black/50 flex items-end justify-center z-50" onClick={() => setSelectedOrder(null)}>
-          <div
-            className="bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="sticky top-0 bg-white p-4 border-b border-gray-100">
-              <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
+      <BottomSheet isOpen={!!selectedOrder} onClose={() => setSelectedOrder(null)}>
+        {selectedOrder && (
+          <>
+            <div className="px-4 pb-2 border-b border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
@@ -1643,9 +1673,6 @@ function OrdersPageContent() {
                   <Badge variant={statusConfig[normalizeOrderStatus(selectedOrder.status)]?.variant || "default"}>
                     {statusConfig[normalizeOrderStatus(selectedOrder.status)]?.label || String(selectedOrder.status)}
                   </Badge>
-                  {selectedOrder.isPaid && (
-                    <Badge variant="success" size="sm">Оплачено</Badge>
-                  )}
                 </div>
               </div>
             </div>
@@ -1770,9 +1797,9 @@ function OrdersPageContent() {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </BottomSheet>
 
       {/* Cancel item modal */}
       {cancelModal && (

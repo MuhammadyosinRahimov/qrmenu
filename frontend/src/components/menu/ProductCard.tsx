@@ -26,7 +26,15 @@ export function ProductCard({
   const isInactive = !product.isAvailable;
 
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+    <div
+      className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 ${isInactive ? "cursor-not-allowed" : ""}`}
+      onClick={(e) => {
+        if (isInactive) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+    >
       {/* Image */}
       <div className="relative aspect-square bg-gray-100">
         {getImageUrl(product.imageUrl) ? (
