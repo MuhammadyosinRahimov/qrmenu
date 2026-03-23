@@ -1,15 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { StoreHydration } from "@/components/StoreHydration";
 import { CacheManager } from "@/components/layout/CacheManager";
 import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 
-const jakarta = Plus_Jakarta_Sans({
+// Use Inter as a more reliable fallback font
+const inter = Inter({
   variable: "--font-jakarta",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+  fallback: ["system-ui", "arial"],
 });
 
 export const metadata: Metadata = {
@@ -41,7 +44,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
         />
       </head>
-      <body className={`${jakarta.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <ConnectionStatus />
         <CacheManager />
         <StoreHydration />

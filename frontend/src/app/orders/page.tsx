@@ -1328,16 +1328,31 @@ function OrdersPageContent() {
                 </div>
 
                 {/* Divider and total */}
-                <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
-                    <span>Итого</span>
-                    {isDelivery && order.deliveryFee && order.deliveryFee > 0 && (
-                      <span className="text-xs">(+{formatPrice(order.deliveryFee)} доставка)</span>
-                    )}
+                <div className="pt-3 border-t border-gray-100">
+                  {/* For DineIn orders (QR mode), show service fee breakdown */}
+                  {!isDelivery && !isTakeaway && order.serviceFee > 0 && (
+                    <div className="space-y-1 mb-2">
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>Сумма заказа</span>
+                        <span>{formatPrice(order.subtotal)} TJS</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>Обслуживание</span>
+                        <span>{formatPrice(order.serviceFee)} TJS</span>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                      <span>Итого</span>
+                      {isDelivery && order.deliveryFee && order.deliveryFee > 0 && (
+                        <span className="text-xs">(+{formatPrice(order.deliveryFee)} доставка)</span>
+                      )}
+                    </div>
+                    <span className="text-xl font-bold text-primary">
+                      {formatPrice(order.total)} TJS
+                    </span>
                   </div>
-                  <span className="text-xl font-bold text-primary">
-                    {formatPrice(order.total)} TJS
-                  </span>
                 </div>
               </div>
 

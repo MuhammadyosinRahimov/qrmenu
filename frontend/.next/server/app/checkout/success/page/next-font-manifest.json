@@ -2,9 +2,10 @@
   "pages": {},
   "app": {
     "[project]/src/app/checkout/success/page": [
-      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+      "static/media/9c72aa0f40e4eef8.p.18a48cbc.woff2",
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
     ]
   },
-  "appUsingSizeAdjust": true,
+  "appUsingSizeAdjust": false,
   "pagesUsingSizeAdjust": false
 }
