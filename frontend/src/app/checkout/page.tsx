@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useTableStore } from "@/stores/tableStore";
@@ -29,6 +30,7 @@ type Step = "phone" | "otp" | "details";
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { items, getSubtotal, getTax, getTotal, clearCart } = useCartStore();
   const { isAuthenticated, sendOtp, verifyOtp, isLoading, error, clearError, phone: authPhone, checkAuth } =
@@ -231,6 +233,8 @@ export default function CheckoutPage() {
 
   // Handle order completion - always redirect to orders page
   const handlePaymentRedirect = (order: Order) => {
+    // Invalidate the orders cache so the orders page shows fresh data
+    queryClient.invalidateQueries({ queryKey: ["orders"] });
     // Всегда редирект на страницу заказов (без редиректа в банк)
     showToast("Заказ оформлен!", "success");
     navigateToOrders();

@@ -142,6 +142,8 @@ function OrdersPageContent() {
     queryFn: getOrders,
     enabled: isAuthenticated,
     refetchInterval: 30000, // Auto-refresh every 30 seconds as backup
+    refetchOnMount: "always", // Always refetch when page mounts
+    staleTime: 0, // Consider data stale immediately
   });
 
   // Callback to load session info - used by initial load and SignalR updates
