@@ -466,16 +466,56 @@ function OrdersPageContent() {
   };
 
   // Handle DC card payment using paymentLink
-  // URL should contain placeholders: {amount} and {comment}
-  // Example: http://pay.expresspay.tj/?A=xxx&s={amount}&c={comment}&f1=133
+  // Поддерживает два формата URL:
+  // 1. С плейсхолдерами: s={amount}&c={comment}
+  // 2. С пустыми параметрами: s=&c=
   const handleDcPayment = (order: Order, amountOverride?: number) => {
     if (order.paymentLink) {
       const amount = Math.round(amountOverride ?? order.total);
-      const tableComment = order.tableName || (order.tableNumber ? `Стол ${order.tableNumber}` : (tableNumber ? `Стол ${tableNumber}` : ''));
 
-      let finalLink = order.paymentLink
-        .replace('{amount}', amount.toString())
-        .replace('{comment}', encodeURIComponent(tableComment));
+      // Получаем номер стола из order или из store
+      let tableComment = '';
+      if (order.tableName) {
+        tableComment = order.tableName;
+      } else if (order.tableNumber !== undefined && order.tableNumber !== null) {
+        tableComment = `Стол ${order.tableNumber}`;
+      } else if (tableNumber) {
+        tableComment = `Стол ${tableNumber}`;
+      }
+
+      const encodedComment = encodeURIComponent(tableComment);
+
+      let finalLink = order.paymentLink;
+
+      // Заполняем сумму (s=)
+      if (finalLink.includes('{amount}')) {
+        finalLink = finalLink.replace('{amount}', amount.toString());
+      } else if (finalLink.includes('s=&')) {
+        finalLink = finalLink.replace('s=&', `s=${amount}&`);
+      } else if (finalLink.endsWith('s=')) {
+        finalLink = finalLink + amount.toString();
+      }
+
+      // Заполняем комментарий (c=)
+      if (tableComment) {
+        if (finalLink.includes('{comment}')) {
+          finalLink = finalLink.replace('{comment}', encodedComment);
+        } else if (finalLink.includes('c=&')) {
+          finalLink = finalLink.replace('c=&', `c=${encodedComment}&`);
+        } else if (finalLink.endsWith('c=')) {
+          finalLink = finalLink + encodedComment;
+        }
+      }
+
+      // Debug: показываем что отправляем
+      console.log('DC Payment Debug:', {
+        amount,
+        tableComment,
+        orderTableNumber: order.tableNumber,
+        orderTableName: order.tableName,
+        storeTableNumber: tableNumber,
+        finalLink
+      });
 
       window.location.href = finalLink;
     } else {
