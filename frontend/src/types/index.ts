@@ -110,6 +110,9 @@ export interface Order {
   customerName?: string;
   customerPhone?: string;
   deliveryFee?: number;
+  // Waiter call feature
+  waiterCalled?: boolean;
+  waiterCalledAt?: string;
 }
 
 export type OrderItemStatus = 'Pending' | 'Active' | 'Cancelled';

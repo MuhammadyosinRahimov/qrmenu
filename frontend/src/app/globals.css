@@ -3,13 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #1b4332;
-  --primary: #2d6a4f;
-  --primary-dark: #1b4332;
-  --primary-light: #d8f3dc;
-  --primary-50: #e9f5ec;
-  --primary-100: #b7e4c7;
-  --primary-200: #95d5b2;
-  --primary-300: #52b788;
+  --primary: #00b867;
+  --primary-dark: #004b3e;
+  --primary-light: #e6f9f1;
+  --primary-50: #e6f9f1;
+  --primary-100: #b3ecd5;
+  --primary-200: #80dfb9;
+  --primary-300: #4dd29d;
   --secondary: #dda15e;
   --secondary-dark: #bc6c25;
   --secondary-light: #fefae0;
@@ -17,7 +17,7 @@
   --surface-light: #f3f4f6;
   --border: #e5e7eb;
   --muted: #6b7280;
-  --success: #40916c;
+  --success: #00b867;
   --warning: #dda15e;
   --error: #ef4444;
 }

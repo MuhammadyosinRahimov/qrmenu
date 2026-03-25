@@ -9,7 +9,7 @@ import { useTableStore } from "@/stores/tableStore";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useOrderStore } from "@/stores/orderStore";
-import { getOrders, cancelOrderItem, requestCashPayment, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, getTableByNumber, type PublicTableOrders } from "@/lib/api";
+import { getOrders, cancelOrderItem, requestCashPayment, callWaiter, getMySessionInfo, payForTable, getSignalRUrl, getPublicTableOrders, getTableByNumber, type PublicTableOrders } from "@/lib/api";
 import { Header } from "@/components/layout/Header";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -270,6 +270,12 @@ function OrdersPageContent() {
       loadSessionInfo();
     });
 
+    // Universal event - always refresh on any order change
+    connection.on("OrdersChanged", () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
+    });
+
     connection.start()
       .then(() => {
         connection.invoke("JoinCustomerGroup", userId);
@@ -388,15 +394,16 @@ function OrdersPageContent() {
     showToast("Вы вышли из аккаунта", "success");
   };
 
-  // Handle cash payment
-  const handleCashPayment = async (order: Order) => {
+  // Handle waiter call - replaces cash payment, now calls waiter for any assistance
+  const handleCallWaiter = async (order: Order) => {
     setProcessingPayment(order.id);
     try {
-      await requestCashPayment(order.id);
-      showToast("Официант скоро подойдёт для оплаты", "success");
+      await callWaiter(order.id);
+      showToast("Официант скоро подойдёт к вашему столу", "success");
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      loadSessionInfo();
     } catch (error) {
-      showToast("Ошибка запроса оплаты", "error");
+      showToast("Ошибка вызова официанта", "error");
     } finally {
       setProcessingPayment(null);
     }
@@ -463,7 +470,12 @@ function OrdersPageContent() {
       // DC ожидает сумму в сомони (не тийинах)
       // Use amountOverride (e.g. sessionInfo.myTotal) if provided, otherwise order.total
       const amount = Math.round(amountOverride ?? order.total);
-      const finalLink = order.paymentLink.replace('{amount}', amount.toString());
+      let finalLink = order.paymentLink.replace('{amount}', amount.toString());
+      // Add table number to /c parameter if available
+      if (order.tableNumber) {
+        const separator = finalLink.includes('?') ? '&' : '?';
+        finalLink = `${finalLink}${separator}c=${order.tableNumber}`;
+      }
       window.location.href = finalLink;
     } else {
       showToast("Онлайн оплата недоступна", "error");
@@ -1110,19 +1122,11 @@ function OrdersPageContent() {
                           </div>
                         );
                       })}
-                      {/* Show subtotal and service fee for each guest */}
+                      {/* Show subtotal for each guest (service fee shown only in total) */}
                       <div className="mt-2 pt-1 space-y-0.5 text-xs">
-                        <div className="flex justify-between text-gray-400">
-                          <span>Подитог:</span>
-                          <span>{formatPrice(guestOrder.subtotal)} TJS</span>
-                        </div>
-                        <div className="flex justify-between text-gray-400">
-                          <span>Обслуживание:</span>
-                          <span>{formatPrice(guestOrder.serviceFeeShare)} TJS</span>
-                        </div>
                         <div className="flex justify-between text-gray-600 font-medium">
-                          <span>Итого:</span>
-                          <span>{formatPrice(guestOrder.total)} TJS</span>
+                          <span>Сумма:</span>
+                          <span>{formatPrice(guestOrder.subtotal)} TJS</span>
                         </div>
                       </div>
                     </div>
@@ -1467,21 +1471,21 @@ function OrdersPageContent() {
                 </div>
               )}
               <div className="grid grid-cols-2 gap-3">
-                {/* Cash payment */}
+                {/* Call waiter */}
                 <button
                   onClick={() => {
-                    handleCashPayment(paymentModalOrder);
+                    handleCallWaiter(paymentModalOrder);
                     setPaymentModalOrder(null);
                     setSessionInfo(null);
                   }}
                   disabled={!!processingPayment}
-                  className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-primary-light to-primary-50 border-2 border-primary-200 hover:border-primary-300 transition-all disabled:opacity-50"
+                  className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 hover:border-amber-400 transition-all disabled:opacity-50"
                 >
                   <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-2">
-                    <Icon name="payments" size={24} className="text-primary" />
+                    <Icon name="support_agent" size={24} className="text-amber-500" />
                   </div>
-                  <span className="font-semibold text-primary-dark">Наличными</span>
-                  <span className="text-xs text-primary">
+                  <span className="font-semibold text-amber-700">Вызов официанта</span>
+                  <span className="text-xs text-amber-500">
                     {formatPrice(sessionInfo?.myTotal || paymentModalOrder.total)} TJS
                   </span>
                 </button>
@@ -1582,17 +1586,17 @@ function OrdersPageContent() {
                     onClick={async () => {
                       setSelectedGuestOrder(null);
                       for (const order of myUnpaidOrders) {
-                        await handleCashPayment(order);
+                        await handleCallWaiter(order);
                       }
                     }}
                     disabled={!!processingPayment}
-                    className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-primary-light to-primary-50 border-2 border-primary-200 hover:border-primary-300 transition-all disabled:opacity-50"
+                    className="flex flex-col items-center p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 hover:border-amber-400 transition-all disabled:opacity-50"
                   >
                     <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-2">
-                      <Icon name="payments" size={24} className="text-primary" />
+                      <Icon name="support_agent" size={24} className="text-amber-500" />
                     </div>
-                    <span className="font-semibold text-primary-dark">Наличными</span>
-                    <span className="text-xs text-primary">{formatPrice(sessionInfo?.myTotal || myUnpaidTotal)} TJS</span>
+                    <span className="font-semibold text-amber-700">Вызов официанта</span>
+                    <span className="text-xs text-amber-500">{formatPrice(sessionInfo?.myTotal || myUnpaidTotal)} TJS</span>
                   </button>
 
                   {/* DC for my order */}

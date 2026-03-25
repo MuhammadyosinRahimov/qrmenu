@@ -225,6 +225,18 @@ export const requestCashPayment = async (orderId: string): Promise<{
   return data;
 };
 
+// Call waiter - notifies admin via SignalR
+export const callWaiter = async (orderId: string): Promise<Order> => {
+  const { data } = await api.post(`/orders/${orderId}/call-waiter`);
+  return data;
+};
+
+// Dismiss waiter call
+export const dismissWaiter = async (orderId: string): Promise<Order> => {
+  const { data } = await api.post(`/orders/${orderId}/dismiss-waiter`);
+  return data;
+};
+
 // Table Sessions
 export const getMySessionInfo = async (tableId: string): Promise<GuestSessionInfo | null> => {
   try {
