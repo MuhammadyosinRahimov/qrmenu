@@ -360,7 +360,7 @@ export default function CartPage() {
 
           <Button
             onClick={() => router.push("/checkout")}
-            className="w-full"
+            className="w-full !py-4"
             variant="navy"
             size="md"
           >

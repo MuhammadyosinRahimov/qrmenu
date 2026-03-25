@@ -473,17 +473,10 @@ function OrdersPageContent() {
     if (order.paymentLink) {
       const amount = Math.round(amountOverride ?? order.total);
 
-      // Получаем номер стола из order или из store
-      let tableComment = '';
-      if (order.tableName) {
-        tableComment = order.tableName;
-      } else if (order.tableNumber !== undefined && order.tableNumber !== null) {
-        tableComment = `Стол ${order.tableNumber}`;
-      } else if (tableNumber) {
-        tableComment = `Стол ${tableNumber}`;
-      }
-
-      const encodedComment = encodeURIComponent(tableComment);
+      // Формат как в бэкенде: ClientNumber: {phone} & OrderId: {orderId}
+      const phone = order.customerPhone || authPhone2 || '';
+      const paymentComment = `ClientNumber: ${phone} & OrderId: ${order.id}`;
+      const encodedComment = encodeURIComponent(paymentComment);
 
       let finalLink = order.paymentLink;
 
@@ -497,23 +490,20 @@ function OrdersPageContent() {
       }
 
       // Заполняем комментарий (c=)
-      if (tableComment) {
-        if (finalLink.includes('{comment}')) {
-          finalLink = finalLink.replace('{comment}', encodedComment);
-        } else if (finalLink.includes('c=&')) {
-          finalLink = finalLink.replace('c=&', `c=${encodedComment}&`);
-        } else if (finalLink.endsWith('c=')) {
-          finalLink = finalLink + encodedComment;
-        }
+      if (finalLink.includes('{comment}')) {
+        finalLink = finalLink.replace('{comment}', encodedComment);
+      } else if (finalLink.includes('c=&')) {
+        finalLink = finalLink.replace('c=&', `c=${encodedComment}&`);
+      } else if (finalLink.endsWith('c=')) {
+        finalLink = finalLink + encodedComment;
       }
 
       // Debug: показываем что отправляем
       console.log('DC Payment Debug:', {
         amount,
-        tableComment,
-        orderTableNumber: order.tableNumber,
-        orderTableName: order.tableName,
-        storeTableNumber: tableNumber,
+        paymentComment,
+        orderId: order.id,
+        phone,
         finalLink
       });
 
@@ -989,25 +979,15 @@ function OrdersPageContent() {
       <div className="p-4 bg-gradient-to-r from-primary-light to-primary-50 border-b border-primary-100">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           {isAuthenticated ? (
-            <>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
-                  <Icon name="person" size={20} className="text-primary" />
-                </div>
-                <div>
-                  <p className="font-medium text-primary-dark">{authPhone2 || "Авторизован"}</p>
-                  <p className="text-sm text-primary">Вы вошли в систему</p>
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/80 flex items-center justify-center">
+                <Icon name="check_circle" size={20} className="text-green-600" />
               </div>
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-                size="sm"
-                className="!border-primary-200 !text-primary-dark hover:!bg-primary-100"
-              >
-                Выйти
-              </Button>
-            </>
+              <div>
+                <p className="font-medium text-primary-dark">Авторизован</p>
+                <p className="text-sm text-primary">Вы вошли в систему</p>
+              </div>
+            </div>
           ) : (
             <>
               <div className="flex items-center gap-3">
