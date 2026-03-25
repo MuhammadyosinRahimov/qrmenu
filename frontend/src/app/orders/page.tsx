@@ -471,10 +471,27 @@ function OrdersPageContent() {
       // Use amountOverride (e.g. sessionInfo.myTotal) if provided, otherwise order.total
       const amount = Math.round(amountOverride ?? order.total);
       let finalLink = order.paymentLink.replace('{amount}', amount.toString());
-      // Add table number to /c parameter if available
+      // Add table number to c= parameter if available (format: "Стол X")
       if (order.tableNumber) {
-        const separator = finalLink.includes('?') ? '&' : '?';
-        finalLink = `${finalLink}${separator}c=${order.tableNumber}`;
+        const tableParam = encodeURIComponent(`Стол ${order.tableNumber}`);
+        // Handle various c= patterns in URL
+        if (finalLink.includes('c=&')) {
+          // c= is empty and followed by another param: c=& -> c=Стол%201&
+          finalLink = finalLink.replace('c=&', `c=${tableParam}&`);
+        } else if (finalLink.match(/c=$/)) {
+          // c= is at the end with empty value
+          finalLink = finalLink + tableParam;
+        } else if (finalLink.match(/[&?]c=[^&]*&/)) {
+          // c= has some value in middle, replace it
+          finalLink = finalLink.replace(/([&?])c=[^&]*&/, `$1c=${tableParam}&`);
+        } else if (finalLink.match(/[&?]c=[^&]*$/)) {
+          // c= has some value at end, replace it
+          finalLink = finalLink.replace(/([&?])c=[^&]*$/, `$1c=${tableParam}`);
+        } else {
+          // No c= parameter, add it
+          const separator = finalLink.includes('?') ? '&' : '?';
+          finalLink = `${finalLink}${separator}c=${tableParam}`;
+        }
       }
       window.location.href = finalLink;
     } else {
@@ -1073,19 +1090,9 @@ function OrdersPageContent() {
                       })}
                     </div>
                   ))}
-                  <div className="space-y-1 pt-2 border-t border-gray-100 mt-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Подитог:</span>
-                      <span className="text-gray-600">{formatPrice(sessionInfo.myOrderSubtotal)} TJS</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Обслуживание ({sessionInfo.serviceFeePercent}%):</span>
-                      <span className="text-gray-600">{formatPrice(sessionInfo.myServiceFeeShare)} TJS</span>
-                    </div>
-                    <div className="flex justify-between text-sm font-semibold">
-                      <span className="text-gray-700">Ваш итого:</span>
-                      <span className="text-primary">{formatPrice(sessionInfo.myTotal)} TJS</span>
-                    </div>
+                  <div className="flex justify-between text-sm font-semibold pt-2 border-t border-gray-100 mt-2">
+                    <span className="text-gray-700">Ваша сумма:</span>
+                    <span className="text-primary">{formatPrice(sessionInfo.myOrderSubtotal)} TJS</span>
                   </div>
                 </div>
               )}

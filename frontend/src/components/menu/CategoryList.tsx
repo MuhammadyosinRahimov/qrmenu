@@ -59,7 +59,7 @@ export function CategoryList({
           {/* Burger menu button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center w-10 h-10 my-1 rounded-xl bg-[#1b4332] text-white hover:bg-[#14532d] transition-all duration-200 flex-shrink-0"
+            className="flex items-center justify-center w-10 h-10 my-1 rounded-xl bg-gradient-to-r from-[#00b867] to-[#009e58] text-white hover:shadow-md transition-all duration-200 flex-shrink-0"
           >
             <Icon name="menu" size={20} />
           </button>
@@ -69,13 +69,13 @@ export function CategoryList({
             onClick={() => handleSelect(null)}
             className={`relative flex items-center gap-1.5 px-4 py-3 whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
               selectedId === null
-                ? "text-[#1b4332] font-bold"
+                ? "text-[#00b867] font-bold"
                 : "text-gray-500 hover:text-gray-800"
             }`}
           >
             <span className="text-sm">{selectedId === null ? "Все" : "Все"}</span>
             {selectedId === null && (
-              <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#1b4332] to-[#dda15e] rounded-full" />
+              <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#00b867] to-[#dda15e] rounded-full" />
             )}
           </button>
 
@@ -86,13 +86,13 @@ export function CategoryList({
               onClick={() => handleSelect(category.id)}
               className={`relative flex items-center gap-1.5 px-4 py-3 whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
                 selectedId === category.id
-                  ? "text-[#1b4332] font-bold"
+                  ? "text-[#00b867] font-bold"
                   : "text-gray-500 hover:text-gray-800"
               }`}
             >
               <span className="text-sm">{category.name}</span>
               {selectedId === category.id && (
-                <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#1b4332] to-[#dda15e] rounded-full" />
+                <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-[#00b867] to-[#dda15e] rounded-full" />
               )}
             </button>
           ))}
