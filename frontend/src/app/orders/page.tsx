@@ -466,34 +466,16 @@ function OrdersPageContent() {
   };
 
   // Handle DC card payment using paymentLink
-  // amountOverride allows passing sessionInfo.myTotal which includes service fee
+  // URL should contain placeholders: {amount} and {comment}
+  // Example: http://pay.expresspay.tj/?A=xxx&s={amount}&c={comment}&f1=133
   const handleDcPayment = (order: Order, amountOverride?: number) => {
     if (order.paymentLink) {
       const amount = Math.round(amountOverride ?? order.total);
-      const tableComment = order.tableName || (order.tableNumber ? `Стол ${order.tableNumber}` : '');
+      const tableComment = order.tableName || (order.tableNumber ? `Стол ${order.tableNumber}` : (tableNumber ? `Стол ${tableNumber}` : ''));
 
-      let finalLink = order.paymentLink;
-
-      // Заполняем параметр s= суммой
-      if (finalLink.includes('s=&')) {
-        finalLink = finalLink.replace('s=&', `s=${amount}&`);
-      } else if (finalLink.match(/s=$/)) {
-        finalLink = finalLink + amount.toString();
-      } else if (finalLink.match(/[&?]s=[^&]*$/)) {
-        finalLink = finalLink.replace(/([&?])s=[^&]*$/, `$1s=${amount}`);
-      }
-
-      // Заполняем параметр c= номером стола
-      if (tableComment) {
-        const encodedTable = encodeURIComponent(tableComment);
-        if (finalLink.includes('c=&')) {
-          finalLink = finalLink.replace('c=&', `c=${encodedTable}&`);
-        } else if (finalLink.match(/c=$/)) {
-          finalLink = finalLink + encodedTable;
-        } else if (finalLink.match(/[&?]c=[^&]*$/)) {
-          finalLink = finalLink.replace(/([&?])c=[^&]*$/, `$1c=${encodedTable}`);
-        }
-      }
+      let finalLink = order.paymentLink
+        .replace('{amount}', amount.toString())
+        .replace('{comment}', encodeURIComponent(tableComment));
 
       window.location.href = finalLink;
     } else {
