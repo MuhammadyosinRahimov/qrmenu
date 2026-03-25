@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getImageUrl, getProduct } from "@/lib/api";
+import { getImageUrl, getProduct, getPublicTableOrders } from "@/lib/api";
 import { useCartStore } from "@/stores/cartStore";
 import { useOrderModeStore } from "@/stores/orderModeStore";
 import { useTableStore } from "@/stores/tableStore";
@@ -79,13 +79,31 @@ export default function CartPage() {
   const isDelivery = mode === "delivery";
   const isQrMode = mode === "qr";
 
-  // Service fee percent (default 10%)
-  const sessionServiceFeePercent = 10;
-  const serviceFee = isQrMode ? Math.round(getSubtotal() * sessionServiceFeePercent / 100) : 0;
+  // Service fee percent from restaurant settings
+  const [sessionServiceFeePercent, setSessionServiceFeePercent] = useState(0);
+
+  // Fetch service fee percent from API
+  useEffect(() => {
+    if (isQrMode && tableId) {
+      getPublicTableOrders(tableId).then(data => {
+        if (data) {
+          setSessionServiceFeePercent(data.serviceFeePercent);
+        }
+      });
+    }
+  }, [isQrMode, tableId]);
+
+  // Calculate service fee with proper decimal rounding (2 decimal places)
+  const serviceFee = isQrMode
+    ? Math.round(getSubtotal() * sessionServiceFeePercent) / 100
+    : 0;
   const finalTotal = getSubtotal() + serviceFee + (isDelivery ? deliveryFee : 0);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("ru-RU").format(price);
+    return new Intl.NumberFormat("ru-RU", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }).format(price);
   };
 
   const toggleNoteExpanded = (itemId: string) => {
@@ -344,7 +362,7 @@ export default function CartPage() {
             onClick={() => router.push("/checkout")}
             className="w-full"
             variant="navy"
-            size="lg"
+            size="md"
           >
             <Icon name="shopping_cart_checkout" size={22} className="mr-2 text-[#40916c]" />
             Оформить заказ

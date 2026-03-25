@@ -469,32 +469,32 @@ function OrdersPageContent() {
   // amountOverride allows passing sessionInfo.myTotal which includes service fee
   const handleDcPayment = (order: Order, amountOverride?: number) => {
     if (order.paymentLink) {
-      // DC ожидает сумму в сомони (не тийинах)
-      // Use amountOverride (e.g. sessionInfo.myTotal) if provided, otherwise order.total
       const amount = Math.round(amountOverride ?? order.total);
-      let finalLink = order.paymentLink.replace('{amount}', amount.toString());
-      // Add table number to c= parameter if available (format: "Стол X")
-      if (order.tableNumber) {
-        const tableParam = encodeURIComponent(`Стол ${order.tableNumber}`);
-        // Handle various c= patterns in URL
+      const tableComment = order.tableName || (order.tableNumber ? `Стол ${order.tableNumber}` : '');
+
+      let finalLink = order.paymentLink;
+
+      // Заполняем параметр s= суммой
+      if (finalLink.includes('s=&')) {
+        finalLink = finalLink.replace('s=&', `s=${amount}&`);
+      } else if (finalLink.match(/s=$/)) {
+        finalLink = finalLink + amount.toString();
+      } else if (finalLink.match(/[&?]s=[^&]*$/)) {
+        finalLink = finalLink.replace(/([&?])s=[^&]*$/, `$1s=${amount}`);
+      }
+
+      // Заполняем параметр c= номером стола
+      if (tableComment) {
+        const encodedTable = encodeURIComponent(tableComment);
         if (finalLink.includes('c=&')) {
-          // c= is empty and followed by another param: c=& -> c=Стол%201&
-          finalLink = finalLink.replace('c=&', `c=${tableParam}&`);
+          finalLink = finalLink.replace('c=&', `c=${encodedTable}&`);
         } else if (finalLink.match(/c=$/)) {
-          // c= is at the end with empty value
-          finalLink = finalLink + tableParam;
-        } else if (finalLink.match(/[&?]c=[^&]*&/)) {
-          // c= has some value in middle, replace it
-          finalLink = finalLink.replace(/([&?])c=[^&]*&/, `$1c=${tableParam}&`);
+          finalLink = finalLink + encodedTable;
         } else if (finalLink.match(/[&?]c=[^&]*$/)) {
-          // c= has some value at end, replace it
-          finalLink = finalLink.replace(/([&?])c=[^&]*$/, `$1c=${tableParam}`);
-        } else {
-          // No c= parameter, add it
-          const separator = finalLink.includes('?') ? '&' : '?';
-          finalLink = `${finalLink}${separator}c=${tableParam}`;
+          finalLink = finalLink.replace(/([&?])c=[^&]*$/, `$1c=${encodedTable}`);
         }
       }
+
       window.location.href = finalLink;
     } else {
       showToast("Онлайн оплата недоступна", "error");
